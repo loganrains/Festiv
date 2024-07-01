@@ -1,4 +1,13 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Festiv.Areas.Identity.Data;
 var builder = WebApplication.CreateBuilder(args);
+   var connectionString = "server=localhost;user=festiv;password=festiv;database=festiv";
+   var serverVersion = new MySqlServerVersion(new Version(8, 0, 36));
+
+builder.Services.AddDbContext<FestivDbContext>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<FestivDbContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
