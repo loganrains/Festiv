@@ -1,0 +1,13 @@
+@{
+    ViewData["Title"] = "Party";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Party Page</h1>
+
+<ul>
+    @foreach(Party party in ViewBag.dummyContext)
+    {
+        <li>@party.ToString()</li>
+    }
+</ul>
