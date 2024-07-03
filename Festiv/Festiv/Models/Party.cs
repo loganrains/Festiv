@@ -11,7 +11,7 @@ public class Party
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
 
-    public Party(string name, string description, string location, DateTime start, DateTime end )
+    public Party(string name, string description, string location, DateTime start, DateTime end)
     {
         Name = name;
         Description = description;
@@ -22,6 +22,6 @@ public class Party
 
     public override string ToString()
     {
-        return "The " + Name + " will be " + Description + " that takes place at " + Location;
+        return Name;
     }
 }

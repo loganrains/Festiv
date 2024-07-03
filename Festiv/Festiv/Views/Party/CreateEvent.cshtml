@@ -9,22 +9,20 @@
 <div>
     <form method="post">
         
-        <label for="EventName">Event Name:</label>
-        <input type="text" id="EventName" name="EventName"><br>
+        <label for="Name">Event Name:</label>
+        <input type="text" id="Name" name="Name"><br>
 
-        <label for="EventDesc">Event Description:</label>
-        <input type="text" id="EventDesc" name="EventDesc"><br>
+        <label for="Description">Event Description:</label>
+        <input type="text" id="Description" name="Description"><br>
 
         <label for="Location">Location:</label>
         <input type="text" id="Location" name="Location"><br>
 
-        <label for="StartDate">Start Date:</label>
-        <input type="date" id="StartDate" name="StartDate">
-        <input type="time" id="StartTime" name="StartTime"><br>
+        <label for="Start">Start:</label>
+        <input type="datetime-local" id="Start" name="Start"><br>
 
-        <label for="EndDate">End Date:</label>
-        <input type="date" id="EndDate" name="EndDate">
-        <input type="time" id="EndTime" name="EndTime"><br>
+        <label for="End">End:</label>
+        <input type="datetime-local" id="End" name="End"><br>
 
         @*Find a way to catch the date and time of both start and end and combine them prior to form submission*@
 
