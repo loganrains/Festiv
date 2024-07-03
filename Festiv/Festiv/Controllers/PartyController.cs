@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Festiv.Models;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Festiv.Controllers;
 
@@ -16,6 +17,12 @@ public class PartyController : Controller
         Parties.Add(birthday);
         ViewBag.dummyContext = Parties;
 
+        return View();
+    }
+
+    [HttpGet]
+    public IActionResult CreateEvent()
+    {
         return View();
     }
 }

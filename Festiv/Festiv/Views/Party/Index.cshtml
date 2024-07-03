@@ -4,10 +4,33 @@
 
 <div class="text-center">
     <h1 class="display-4">Party Page</h1>
+</div>
 
-<ul>
-    @foreach(Party party in ViewBag.dummyContext)
-    {
-        <li>@party.ToString()</li>
-    }
-</ul>
+<div>
+    <h2>Your Invites</h2>
+    @* assign class *@
+    @* <ul> Somewhat ready to be wired up with a Invite Model
+        @foreach(Invite invite in Context)
+        {
+            <a href="@invite.link">
+                <li>@invite.ToString()</li>
+            </a>
+        }
+    </ul> *@
+</div>
+
+<div>
+    <h2>Create Your Own Event</h2>
+    <a href="Party/CreateEvent">Click Here</a>
+
+</div>
+
+<div> @* assign class *@
+    <ul>
+        @foreach(Party party in ViewBag.dummyContext)
+        {
+            <li>@party.ToString()</li>
+        }
+    </ul>
+</div>  
+
