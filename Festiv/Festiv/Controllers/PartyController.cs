@@ -31,4 +31,10 @@ public class PartyController : Controller
         
         return Redirect("/Party");
     }
+
+    [HttpGet]
+    public IActionResult Event()
+    {
+        return View();
+    }
 }

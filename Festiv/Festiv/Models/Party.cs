@@ -10,6 +10,9 @@ public class Party
     public string Location { get; set; }
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
+    public Host PartyHost { get; set; }
+    public List<Guest> GuestList { get; set; }
+
 
     public Party(string name, string description, string location, DateTime start, DateTime end)
     {
