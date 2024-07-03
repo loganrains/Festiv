@@ -11,17 +11,20 @@ namespace Festiv.Models
 
         public List<User> CurrentPlayers { get; set; }
 
-        public List<List<User> Teams { get; set; }
+        public List<List<User>> Teams { get; set; }
 
         public Game(string name, List<User> currentPlayers, List<User>teams)
         {
             Name = name;
-            CurrentPlayers =  new List<currentPlayers>();
-            Teams = new List<teams>();
+            CurrentPlayers = new List<currentPlayers>();
+            Teams = new List<List<teams>>();
         }
 
         public Game()
         {
+            Users = new List<User>();
+            CurrentPlayers = new List<User>();
+            Teams = new List<List<User>();
         }
 
         public override string ToString()
