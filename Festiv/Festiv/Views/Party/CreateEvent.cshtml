@@ -1,0 +1,53 @@
+@{
+    ViewData["Title"] = "Create Event Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Create Event</h1>
+</div>
+
+<div>
+    <form method="post">
+        
+        <label for="Name">Event Name:</label>
+        <input type="text" id="Name" name="Name"><br>
+
+        <label for="Description">Event Description:</label>
+        <input type="text" id="Description" name="Description"><br>
+
+        <label for="Location">Location:</label>
+        <input type="text" id="Location" name="Location"><br>
+
+        <label for="Start">Start:</label>
+        <input type="datetime-local" id="Start" name="Start"><br>
+
+        <label for="End">End:</label>
+        <input type="datetime-local" id="End" name="End"><br>
+
+        @*Make the Host the one who submits the form*@
+
+        @* Causing trouble for commented out for now
+        <label for="AddGuest">Add Guest</label>
+        <input type="email" id="AddGuest" name="AddGuest"><br>
+
+        <label for="AddGame">Add Games</label>
+        <input type="text" id="AddGame" name="AddGame"><br> *@
+
+        <input type="submit" value="Create"/>
+
+    </form>
+</div>
+
+@*Name of Event
+Short Description
+
+Location
+
+Start Date (Calendar)
+Start Time
+End Date (Calendar)
+ End Time
+
+Add Guest (User Id or Email) 
+
+Add Games *@
