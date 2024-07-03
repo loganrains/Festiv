@@ -1,6 +1,27 @@
-﻿namespace Festiv;
+﻿@model IEnumerable<Festiv.Models.Game>
 
-public class Index.cshtml
-{
+<h1>Activities Board</h1>
 
-}
+<p>
+    <a asp action = "Create">Create New Game</a>
+</p>
+
+<table class = "table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var game in Model)
+            {
+                <tr>
+                    <td>@game.Name</td>
+                    <td>
+                        <a asp-action = "Details" asp-route-id = "@game.Id">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+</table>
