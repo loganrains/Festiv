@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 namespace Festiv.Models
 {
     public class Game
@@ -16,8 +17,9 @@ namespace Festiv.Models
         public Game(string name, List<User> currentPlayers, List<User>teams)
         {
             Name = name;
-            CurrentPlayers = new List<currentPlayers>();
-            Teams = new List<List<teams>>();
+            CurrentPlayers = currentPlayers ?? new List<User>();
+            // CurrentPlayers = new List<CurrentPlayers>();
+            Teams = new List<List<User>>();
         }
 
         public Game()
@@ -43,5 +45,13 @@ namespace Festiv.Models
             return HashCode.Combine(Id);
         }
 
+    }
+
+    internal class Teams
+    {
+    }
+
+    internal class CurrentPlayers
+    {
     }
 }

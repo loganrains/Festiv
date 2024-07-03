@@ -7,7 +7,7 @@ namespace Festiv.Controllers
 {
     public class GameBoardController : Controller
     {
-        private static List<Game> games = new List<Game>(); // In-memory list to store games
+        private static List<Game> games = new List<Game>(); 
 
         public IActionResult Index()
         {
