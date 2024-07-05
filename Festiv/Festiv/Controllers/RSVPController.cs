@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PartyRsvp.Models;
 
-namespace Festiv.Controllers
+namespace Festiv.Controllers;
 public class RsvpController : Controller
 {
 
