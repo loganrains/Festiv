@@ -1,9 +1,10 @@
-﻿@model IEnumerable<Festiv.Models.Game>
+﻿@using Festiv.Models;
+@model List<Game>;
 
 <h1>Activities Board</h1>
 
 <p>
-    <a asp action = "Create">Create New Game</a>
+    <a asp-action = "Create">Create New Game</a>
 </p>
 
 <table class = "table">
