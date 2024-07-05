@@ -2,8 +2,6 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Festiv.Models;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc;
-
 
 namespace PartyRsvp.Models
 {
