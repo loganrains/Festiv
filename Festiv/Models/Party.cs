@@ -12,7 +12,14 @@ public class Party
     public DateTime End { get; set; }
     public Host PartyHost { get; set; }
     public List<Guest> GuestList { get; set; }
+    public int Id { get; set; }
+    static private int nextId = 1;
 
+    public Party()
+    {
+        Id = nextId;
+        nextId++;
+    }
 
     public Party(string name, string description, string location, DateTime start, DateTime end)
     {
@@ -21,10 +28,22 @@ public class Party
         Location = location;
         Start = start;
         End = end;
+        Id = nextId;
+        nextId++;
     }
 
     public override string ToString()
     {
         return Name;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is Party @party && Id == @party.Id;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Id);
     }
 }

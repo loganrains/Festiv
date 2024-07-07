@@ -25,9 +25,9 @@ public class PartyController : Controller
 
     [HttpPost]
     [Route("/Party/CreateEvent")]
-    public IActionResult NewEvent(string name, string description, string location, DateTime start, DateTime end)
+    public IActionResult NewEvent(Party newParty)
     {
-        Parties.Add(new Party(name, description, location, start, end));
+        Parties.Add(newParty);
         
         return Redirect("/Party");
     }
