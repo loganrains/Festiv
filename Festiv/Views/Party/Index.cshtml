@@ -39,7 +39,7 @@
     <ul>
         @foreach(Party party in ViewBag.dummyContext)
         {
-            <li>@party.ToString()</li>
+            <a href="Party/@party"><li>@party.ToString()</li></a>
             @*^ Make this a link to an Event Page*@
         }
     </ul>
