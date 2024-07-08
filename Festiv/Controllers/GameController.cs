@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Festiv.Models;
+using Festiv.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,7 +12,14 @@ namespace Festiv.Controllers
 
         public IActionResult Index()
         {
-            return View(games);
+            // List<Game> games = new List<Game>();
+            // List<
+            // games.Add(new Game ("cornhole", , ));
+            var viewModel = new GameViewModel
+            {
+                Games = games
+            };
+            return View(viewModel);
         }
 
         public IActionResult Create()

@@ -1,3 +1,4 @@
+@using Festiv.Models
 @model Festiv.Models.Game
 
 <h1>@Model.Name</h1>
@@ -16,7 +17,7 @@
             <li>
                 @foreach(var player in team)
                 {
-                    @player.Name <br />
+                    @player.FirstName <br />
                 }
             </li>
         }
