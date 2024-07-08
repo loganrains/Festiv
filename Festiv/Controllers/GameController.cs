@@ -11,6 +11,9 @@ namespace Festiv.Controllers
 
         public IActionResult Index()
         {
+            // List<Game> games = new List<Game>();
+            // List<
+            // games.Add(new Game ("cornhole", , ));
             return View(games);
         }
 
