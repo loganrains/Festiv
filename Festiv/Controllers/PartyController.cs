@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Festiv.Models;
+using Festiv.ViewModels;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Festiv.Controllers;
@@ -12,21 +13,29 @@ public class PartyController : Controller
     // GET /<controller>
     public IActionResult Index()
     {
-        ViewBag.dummyContext = Parties;
-
-        return View();
+        return View(Parties);
     }
 
     [HttpGet]
     public IActionResult CreateEvent()
     {
-        return View();
+        AddPartyViewModel addPartyViewModel = new AddPartyViewModel();
+
+        return View(addPartyViewModel);
     }
 
     [HttpPost]
-    [Route("/Party/CreateEvent")]
-    public IActionResult NewEvent(Party newParty)
+    public IActionResult CreateEvent(AddPartyViewModel addPartyViewModel)
     {
+        Party newParty = new Party
+        {
+            Name = addPartyViewModel.Name,
+            Description = addPartyViewModel.Description,
+            Location = addPartyViewModel.Description,
+            Start = addPartyViewModel.Start,
+            End = addPartyViewModel.End
+        };
+        
         Parties.Add(newParty);
         
         return Redirect("/Party");

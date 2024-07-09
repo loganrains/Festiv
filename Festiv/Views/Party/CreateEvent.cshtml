@@ -1,3 +1,6 @@
+@using Festiv.ViewModels
+@model AddPartyViewModel
+
 @{
     ViewData["Title"] = "Create Event Page";
 }
@@ -7,10 +10,10 @@
 </div>
 
 <div>
-    <form method="post">
+    <form asp-controller="Party" asp-action="CreateEvent" method="post">
 
-        <label for="Name">Event Name:</label>
-        <input type="text" id="Name" name="Name"><br>
+        <label asp-for="Name">Event Name:</label>
+        <input asp-for="Name"><br>
 
         <label for="Description">Event Description:</label>
         <input type="text" id="Description" name="Description"><br>
