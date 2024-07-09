@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Festiv.Models;
 using Festiv.ViewModels;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Festiv.Controllers;
 
@@ -27,18 +28,24 @@ public class PartyController : Controller
     [HttpPost]
     public IActionResult CreateEvent(AddPartyViewModel addPartyViewModel)
     {
-        Party newParty = new Party
+        if(ModelState.IsValid)
         {
-            Name = addPartyViewModel.Name,
-            Description = addPartyViewModel.Description,
-            Location = addPartyViewModel.Description,
-            Start = addPartyViewModel.Start,
-            End = addPartyViewModel.End
-        };
-        
-        Parties.Add(newParty);
-        
-        return Redirect("/Party");
+            Party newParty = new Party
+            {
+                Name = addPartyViewModel.Name,
+                Description = addPartyViewModel.Description,
+                Location = addPartyViewModel.Description,
+                Start = addPartyViewModel.Start,
+                End = addPartyViewModel.End
+            };
+            
+            Parties.Add(newParty);
+            
+            return Redirect("/Party");
+        }
+
+        return View(addPartyViewModel);
+
     }
 
     [HttpGet]
