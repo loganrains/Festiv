@@ -1,0 +1,32 @@
+@model List<Festiv.Models.GuestRespond>
+
+<h1>Guest List</h1>
+
+@if (Model != null && Model.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var guest in Model)
+            {
+                <tr>
+                    <td>@guest.FirstName</td>
+                    <td>@guest.LastName</td>
+                    <td>@guest.Email</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+        <a asp-controller="Rsvp" asp-action="Index"  class="btn btn-primary">Add more Guests</a>
+
+}
+else
+{
+    <p>No guests have responded yet.</p>
+}
