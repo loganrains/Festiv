@@ -15,6 +15,7 @@
   <ItemGroup>
     <Compile Include="Views\Game\Index.cshtml" />
   </ItemGroup> -->
+  
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.6" />

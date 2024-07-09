@@ -6,8 +6,10 @@ using System.Linq;
 
 namespace Festiv.Controllers
 {
-    public class GameBoardController : Controller
+    public class GameController : Controller
     {
+        [HttpGet]
+        [Route("/Party")]
         private static List<Game> games = new List<Game>(); 
 
         public IActionResult Index()
@@ -15,14 +17,14 @@ namespace Festiv.Controllers
             // List<Game> games = new List<Game>();
             // List<
             // games.Add(new Game ("cornhole", , ));
-            var viewModel = new GameViewModel
+            var model = new AddPartyViewModel
             {
                 Games = games
             };
-            return View(viewModel);
+            return View(model);
         }
 
-        public IActionResult Create()
+        public IActionResult CreateGame()
         {
             return View();
         }
@@ -32,20 +34,32 @@ namespace Festiv.Controllers
         {
             if (ModelState.IsValid)
             {
+                game.Id = games.Count + 1;
                 games.Add(game);
                 return RedirectToAction("Index");
             }
             return View(game);
         }
 
-        public IActionResult Details(int id)
+        public IActionResult GameDetails(int id)
         {
             var game = games.FirstOrDefault(g => g.Id == id);
             if (game == null)
             {
                 return NotFound();
             }
-            return View(game);
+            
+            var viewModel = new GameViewModel
+            {
+                GameId = game.Id,
+                GameName = game.Name,
+                MinPlayers = game.MinPlayers,
+                MaxPlayers = game.MaxPlayers,
+                WaitingPlayers = game.WaitingPlayers
+                CurrentPlayers = game.CurrentPlayers
+                Teams = game.Teams
+            };
+            return View(viewModel)
         }
 
         [HttpPost]
@@ -57,6 +71,10 @@ namespace Festiv.Controllers
                 return NotFound();
             }
 
+            var playersToAdd = game.WaitingPlayers.Take(game.MaxPlayers).ToList();
+            game.CurrentPlayers.AddRange(playersToAdd);
+            game.WaitingPlayers = game.WaitingPlayers.Skip(game.MaxPlayers).ToList();
+
             if (randomizerType == "split")
             {
                 game.Teams = SplitIntoTwoTeams(game.CurrentPlayers);
@@ -66,7 +84,20 @@ namespace Festiv.Controllers
                 game.Teams = GroupIntoPairs(game.CurrentPlayers);
             }
 
-            return RedirectToAction("Details", new { id = game.Id });
+            return RedirectToAction("GameDetails", new { id = game.Id });
+        }
+
+        [HttpPost]
+        public IActionResult SignUp(int id, string user)
+        {
+            var game = games.FirstOrDefault(g => g.Id == id);
+            if(game == null)
+            {
+                return NotFound();
+            }
+
+            game.CurrentPlayers.Add(new User { Name = user});
+            return RedirectToAction("Details", new { id = game.Id});
         }
 
         private List<List<User>> SplitIntoTwoTeams(List<User> players)

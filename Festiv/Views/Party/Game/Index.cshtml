@@ -1,12 +1,15 @@
-﻿@using Festiv.Models
-@model List<Game>
+@using Festiv.VieModels.GameViewModel
 
+@{
+    Layout = "~/View/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Game Board";
+}
 
 
 <h1>Activities Board</h1>
 
 <p>
-    <a asp-action = "Create">Create New Game</a>
+    <a asp-action = "Create">You Got Games?</a>
 </p>
 
 <table class = "table">

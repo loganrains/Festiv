@@ -1,0 +1,62 @@
+@model Festiv.ViewModels.PartyViewModel
+
+@{
+    ViewData["Title"] = "Name of Event";
+}
+
+<div class="text-center">
+    <h1 class="display-4">"Name of Event"</h1>
+</div>
+
+<div>
+    <h2>Create Your Own Game</h2>
+    <p>
+        <a asp-action = "CreateGame" class = "btn btn-primary">Click Here</a>
+    </p>
+</div>
+
+<div>
+    @if(ViewBag.dummyContext.Count == 0)
+    {
+        <p>Got any games on your phone?</p>
+    }
+    else
+    {
+        <h3>Games</h3>
+        <ul>
+            @foreach (var game in Model.Games)
+            {
+                <li>
+                    <a asp-action ="GameDetails" asp-route-id = "@game.Id">@game.Name</a>
+                </li>
+            }
+        </ul>
+    }
+</div>
+
+@* <h1>@Model.Name</h1>
+
+<div>
+    <h4>Teams</h4>
+    <form asp-action="RandomizeTeams" method="post">
+        <input type="hidden" asp-for = "Id" />
+        <button type = "submit" name="randomizerType" value="split">Split into 2 Teams</button>
+        <button type = "submit" name="randomizerType" value="pairs">Group into Pairs</button>
+    </form>
+
+    <ul>
+        @foreach (var team in Model.Teams)
+        {
+            <li>
+                @foreach(var player in team)
+                {
+                    @player.FirstName <br />
+                }
+            </li>
+        }
+    </ul>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div> *@
