@@ -4,6 +4,7 @@ using Festiv.Models;
 using Festiv.ViewModels;
 using Festiv.Data;
 using Microsoft.AspNetCore.SignalR;
+using System.Configuration;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ namespace Festiv.Controllers;
 public class PartyController : Controller
 {
     private static List<Party> Parties = new List<Party>();
+    
 
     // GET /<controller>
     public IActionResult Index()

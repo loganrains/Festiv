@@ -1,0 +1,52 @@
+@using Festiv.Models;
+@using Festiv.ViewModels;
+@using Festiv.Controllers;
+@using Festiv.Data;
+@model List<User>
+
+@if (Model.Count == 0)
+{
+    <p>No guests yet!</p>
+}
+else
+{
+    <table class="table">
+        <tr>
+            <th>
+                First Name
+            </th>
+            <th>
+                Last Name
+        </tr>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.FirstName</td>
+                <td>@user.LastName</td>
+            </tr>
+        }
+
+    </table>
+}
+
+
+
+
+
+
+
+<h1>Select Guest</h1>
+<div>
+   <form id="guestSelector" method="post">
+            <label>Which guest are you rating?
+      <!-- includes empty value "Select One" option -->
+      <select name="guest">
+      <option value="">* Select One *</option>
+      <option value="1">Guest 1</option>
+      <option value="2">Guest 2</option>
+      <option value="3">Guest 3</option>
+      </select>
+      <button type="submit">Choose Guest</button>
+      </label>
+   </form>
+</div>
