@@ -2,12 +2,14 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Festiv.Models;
 using Microsoft.AspNetCore.SignalR;
+using System.Configuration;
 
 namespace Festiv.Controllers;
 
 public class PartyController : Controller
 {
     private static List<Party> Parties = new List<Party>();
+    
 
     // GET /<controller>
     public IActionResult Index()
