@@ -40,7 +40,7 @@
     <ul>
         @foreach(Party party in Model)
         {
-            <a href="Party/@party"><li>@party.ToString()</li></a>
+            <a asp-controller="Party" asp-action="PartyDetails" asp-route-id="@party.Id"><li>@party.ToString()</li></a>
             @*^ Make this a link to an Event Page*@
         }
     </ul>
