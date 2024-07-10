@@ -27,14 +27,6 @@ namespace Festiv.Models
             CurrentPlayers = currentPlayers ?? new List<User>();
             Teams = new List<List<User>>();
         }
-
-        // public Game()
-        // {
-        //     WaitingPlayers = new List<User>();
-        //     CurrentPlayers = new List<User>();
-        //     Teams = new List<List<User>>();
-        // }
-
         
 
         public override string ToString()
