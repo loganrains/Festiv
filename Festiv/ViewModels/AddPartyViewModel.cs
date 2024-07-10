@@ -19,10 +19,10 @@ public class AddPartyViewModel
     public string? Location { get; set; }
 
     [Required(ErrorMessage = "Start is Required")]
-    public DateTime Start { get; set; } = DateTime.Now;
+    public DateTime Start { get; set; }
 
     [Required(ErrorMessage = "End is Required")]
-    public DateTime End { get; set; } = DateTime.Now;
+    public DateTime End { get; set; }
 
     public Models.Host? PartyHost { get; set; }
     public List<Guest>? GuestList { get; set; }
