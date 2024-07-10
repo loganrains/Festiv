@@ -1,0 +1,10 @@
+@using Festiv.Models;
+@using Festiv.ViewModels;
+@using Festiv.Controllers;
+@model UserViewModel;
+
+   <form id="ratingUpdate" method="post">
+      <label>Did confirmed guest show up?<input type="checkbox" name="confirmedGuestShowedUp"/></label>
+      <label>Did they bring the gift they committed to?<input type="checkbox" name="guestBroughtGift"/></label>
+      <button type="submit">Rate!</button>
+   </form>
