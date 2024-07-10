@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Collections.Generic
+using System.Collections.Generic;
 using Festiv.Models;
 
 namespace Festiv.ViewModels
@@ -17,8 +17,5 @@ namespace Festiv.ViewModels
         public List<User> WaitingPlayers { get; set; }
         public List<User> CurrentPlayers { get; set; } 
         public List<List<User>> Teams { get; set; }
-
-        public string NewPlayerName  { get; set; }
-
     }
 }

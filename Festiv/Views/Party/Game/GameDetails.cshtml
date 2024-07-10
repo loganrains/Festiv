@@ -1,5 +1,5 @@
 @using Festiv.Models
-@model Festiv.ViewModels.GameDetailVviewModel
+@using Festiv.ViewModels
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -37,28 +37,31 @@
 </table>
 
 <h3>Current Players and Teams</h3>
-
-<div>
-    <h4>Teams</h4>
-    <form asp-action="RandomizeTeams" method="post">
-        <input type="hidden" asp-for = "Id" />
-        <button type = "submit" name="randomizerType" value="split">Split into 2 Teams</button>
-        <button type = "submit" name="randomizerType" value="pairs">Group into Pairs</button>
+<div class = "form-group">
+    <form asp-action = "RandomizeTeams" method = "post">
+        <input type = "hidden" name = "id" value = "@Model.GameId" />
+        <button type = "submit" name = "randomizerType" value = "split" class = "btn btn-secondary">Split into 2 teams</button>
+        <button type = "submit" name = "randomizerType" value = "pairs" class = "btn btn-secondary">Group into pairs</button>
     </form>
+</div>
 
-    <ul>
+<table class = "table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Team/Partner</th>
+        </tr>
+    </thead>
+    <tbody>
         @foreach (var team in Model.Teams)
         {
-            <li>
-                @foreach(var player in team)
-                {
-                    @player.FirstName <br />
-                }
-            </li>
+            @foreach (var player in team)
+            {
+                <tr>
+                    <td>@player.Name</td>
+                    <td>@team.Count > 1 ? team[1 - team.IndexOf(player)].Name : "No Partner"</td>
+                </tr>
+            }
         }
-    </ul>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    </tbody>
+</table>

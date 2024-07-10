@@ -1,4 +1,5 @@
-@model Festiv.ViewModels.PartyViewModel
+@using Festiv.ViewModels
+@model AddPartyViewModel
 
 @{
     ViewData["Title"] = "Name of Event";
@@ -27,7 +28,7 @@
             @foreach (var game in Model.Games)
             {
                 <li>
-                    <a asp-action ="GameDetails" asp-route-id = "@game.Id">@game.Name</a>
+                    <a asp-action ="GameDetails" asp-route-id = "@game.Id">@game.GameName</a>
                 </li>
             }
         </ul>
