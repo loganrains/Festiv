@@ -1,0 +1,23 @@
+@using Festiv
+@model Party
+
+@{
+    ViewData["Title"] = "Party Details";
+}
+
+<div class="text-center">
+    <h1 class="display-4">"@Model.Name at @Model.Details?.Location"</h1>
+
+    <p>@Model.Details?.Description</p>
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <p>Start: @Model.Details?.Start</p>
+            </div>
+            <div class="col">
+                <p>End: @Model.Details?.End</p>
+            </div>
+        </div>
+    </div>
+</div>

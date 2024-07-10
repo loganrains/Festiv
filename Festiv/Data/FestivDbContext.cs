@@ -10,8 +10,10 @@ namespace Festiv.Data;
 
 public class FestivDbContext: IdentityDbContext<User>
 {
-    public DbSet<Event> Events { get; set; }
-    public DbSet<User> UserList {get; set;}
+    public DbSet<Party> Parties { get; set; }
+    public DbSet<User> UserList { get; set; }
+
+    public DbSet<PartyDetails> PartyDetails { get; set; }
 
             public FestivDbContext(DbContextOptions<FestivDbContext> options) : base(options)
         {
