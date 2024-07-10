@@ -13,19 +13,24 @@
     <form asp-controller="Party" asp-action="CreateEvent" method="post">
 
         <label asp-for="Name">Event Name:</label>
-        <input asp-for="Name"><br>
+        <input asp-for="Name">
+        <span asp-validation-for="Name" class="text-danger"></span><br>
 
         <label asp-for="Description">Event Description:</label>
-        <input asp-for="Description"><br>
+        <input asp-for="Description">
+        <span asp-validation-for="Description" class="text-danger"></span><br>
 
         <label asp-for="Location">Location:</label>
-        <input asp-for="Location"><br>
+        <input asp-for="Location">
+        <span asp-validation-for="Location" class="text-danger"></span><br>
 
         <label asp-for="Start">Start:</label>
-        <input asp-for="Start"><br>
+        <input asp-for="Start">
+        <span asp-validation-for="Start" class="text-danger"></span><br>
 
         <label asp-for="End">End:</label>
-        <input asp-for="End"><br>
+        <input asp-for="End">
+        <span asp-validation-for="End" class="text-danger"></span><br>
 
         @* Make the Host the one who submits the form *@
 
