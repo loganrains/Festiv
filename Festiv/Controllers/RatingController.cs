@@ -9,7 +9,7 @@ namespace Festiv.Controllers;
 
 public class RatingController : Controller
 {
-    private FestivDbContext context;
+    private readonly FestivDbContext context;
     private List<User> GuestList = [];
     private User dummyUser = new User(false, "dummy","mcDumbFace", "no pic");
 
