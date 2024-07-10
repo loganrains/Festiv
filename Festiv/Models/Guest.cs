@@ -10,6 +10,11 @@ public class Guest
     public string LastName { get; set; }
     public string Email { get; set; }
 
+    public int Id { get; set; }
+    static private int nextId = 1;
+
+    public Guest() { }
+
     public Guest(string firstname, string lastname, string email)
     {
         FirstName = firstname;
