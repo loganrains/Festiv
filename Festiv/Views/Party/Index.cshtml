@@ -1,0 +1,48 @@
+@using Festiv.Models;
+@model List<Party>
+
+@{
+    ViewData["Title"] = "Party";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Party Page</h1>
+</div>
+
+<div>
+    <h2>Your Invites</h2>
+    @* assign class *@
+    @* <ul> Somewhat ready to be wired up with a Invite Model
+        @foreach(Invite invite in Context)
+        {
+            <a href="@invite.link">
+                <li>@invite.ToString()</li>
+            </a>
+        }
+    </ul> *@
+</div>
+
+<div>
+    <h2>Create Your Own Event</h2>
+    <p>
+        <a href="Party/CreateEvent">Click Here</a>
+    </p>
+</div>
+
+<div>
+    @if(Model.Count == 0)
+    {
+        <p>How about you get this party started by creating a new event?</p>
+    }
+</div>
+
+<div> @* assign class *@
+    <ul>
+        @foreach(Party party in Model)
+        {
+            <a asp-controller="Party" asp-action="PartyDetails" asp-route-id="@party.Id"><li>@party.ToString()</li></a>
+            @*^ Make this a link to an Event Page*@
+        }
+    </ul>
+</div>  
+
