@@ -33,6 +33,7 @@ public class FestivDbContext: IdentityDbContext<User>
         {
             builder.Property(x=> x.FirstName);
             builder.Property(x=> x.LastName);
+            builder.Property(x=> x.Rating);
         }
     }
 }

@@ -18,13 +18,19 @@ public class RatingController : Controller
         context = dbContext;
     }
 
-            public IActionResult Index()
-        {
-            List<User> users = context.Users
-                .ToList();
+    public IActionResult Index()
+    {
+        List<User> users = context.Users
+            .ToList();
 
-            return View(users);
-        }
+        return View(users);
+    }
+    // [HttpPost]
+    // [Route("/UpdateGuestRating")]
+    // public IActionResult Index()
+    // {
+
+    // }
     
     [HttpPost]
     public IActionResult UpdateGuestRating(int guest, bool confirmedGuestShowedUp, bool guestBroughtGift)
