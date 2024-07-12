@@ -33,16 +33,16 @@ public class RatingController : Controller
     // }
     
     [HttpPost]
-    public IActionResult UpdateGuestRating(int guest, bool confirmedGuestShowedUp, bool guestBroughtGift)
+    public IActionResult Update(int UserId, bool confirmedGuestShowedUp, bool guestBroughtGift)
     {
-        GuestList.Add(dummyUser);
+        User theUser = context.Users.Find(UserId);
         if(confirmedGuestShowedUp)
         {
-            GuestList[guest].Rating += 50;
+            theUser.Rating += 50;
         }
         if(guestBroughtGift)
         {
-            GuestList[guest].Rating += 100;
+            theUser.Rating += 100;
         }
         return Redirect("/Party");
     }
