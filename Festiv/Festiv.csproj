@@ -32,5 +32,10 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
   </ItemGroup>
+  <ItemGroup>
+  <PackageReference Include="SpotifyAPI.Web" Version="7.1.1" />
+  <!-- Optional Auth module, which includes an embedded HTTP Server for OAuth2 -->
+  <PackageReference Include="SpotifyAPI.Web.Auth" Version="7.1.1" />
+</ItemGroup>
 
 </Project>

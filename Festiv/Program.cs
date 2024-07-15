@@ -4,6 +4,9 @@ using Festiv.Data;
 using Festiv.Models;
 using Festiv.Controllers;
 using Festiv.ViewModels;
+using SpotifyAPI.Web;
+using SpotifyAPI.Web.Auth;
+
 var builder = WebApplication.CreateBuilder(args);
    var connectionString = "server=localhost;user=festiv;password=festiv;database=festiv";
    var serverVersion = new MySqlServerVersion(new Version(8, 0, 36));
