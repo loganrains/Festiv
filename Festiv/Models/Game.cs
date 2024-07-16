@@ -18,14 +18,14 @@ namespace Festiv.Models
         public Game()
         {
         }
-        public Game(string gameName, List<User> waitingPlayers, List<User> currentPlayers, List<User>teams, int minPlayers, int maxplayers)
+        public Game(string gameName, List<User> waitingPlayers, List<User> currentPlayers, List<List<User>> teams, int minPlayers, int maxplayers)
         {
             GameName = gameName;
             MinPlayers = minPlayers;
             MaxPlayers = maxplayers;
-            WaitingPlayers = waitingPlayers ?? new List<User>();
-            CurrentPlayers = currentPlayers ?? new List<User>();
-            Teams = new List<List<User>>();
+            WaitingPlayers = waitingPlayers;
+            CurrentPlayers = currentPlayers;
+            Teams = teams;
         }
         
 
@@ -36,8 +36,8 @@ namespace Festiv.Models
 
         public override bool Equals(object? obj)
         {
-            return obj is Game @game && 
-                Id == @game.Id;
+            return obj is Game game && 
+                Id == game.Id;
         }
 
         public override int GetHashCode()

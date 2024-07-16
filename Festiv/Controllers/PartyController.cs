@@ -32,12 +32,7 @@ namespace Festiv.Controllers
                 return View("PartyDetails", requestedParty);
             }
 
-            var model = new AddPartyViewModel
-            {
-                Games = games
-            };
-
-            return View(model);
+            return View();
         }
 
         [HttpGet]
@@ -53,14 +48,15 @@ namespace Festiv.Controllers
         {
             if(ModelState.IsValid)
             {
-                PartyDetails theDetails = new()
+                PartyDetails theDetails = new PartyDetails
                 {
                     Description = addPartyViewModel.Description,
                     Location = addPartyViewModel.Location,
                     Start = addPartyViewModel.Start,
                     End = addPartyViewModel.End
                 };
-                Party newParty = new()
+
+                Party newParty = new Party
                 {
                     Name = addPartyViewModel.Name,
                     Details = theDetails
@@ -68,7 +64,7 @@ namespace Festiv.Controllers
             
                 Parties.Add(newParty);
             
-                return Redirect("/Party");
+                return RedirectToAction("/PartyDetails", new { partyId = newParty.Id });
             }
 
             return View(addPartyViewModel);
@@ -93,7 +89,7 @@ namespace Festiv.Controllers
             {
                 game.Id = games.Count + 1;
                 games.Add(game);
-                return RedirectToAction("Index");
+                return RedirectToAction("PartyDetails");
             }
             return View(game);
         }
