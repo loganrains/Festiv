@@ -27,18 +27,16 @@ public class UserController : Controller
     }
 
     [HttpPost]
-    [Route("/User/GetProfile")]
     public IActionResult GetProfile(IFormCollection form)
     {
         string UserId = form["guest"];
-        User UserToView = context.Users.Where(x => x.Id.ToString() == UserId).SingleOrDefault();
-        return Redirect("Profile");
+        return RedirectToAction("Profile", new {id = UserId});
     }
 
-    [HttpGet]
-    [Route("/User/GetProfile")]
-    public IActionResult Profile(User UserToView)
+    [HttpGet("/User/Profile/{id}")]
+    public IActionResult Profile(string id)
     {
+        User UserToView = context.Users.Where(x => x.Id.ToString() == id).SingleOrDefault();
         return View(UserToView);
     }
 }
