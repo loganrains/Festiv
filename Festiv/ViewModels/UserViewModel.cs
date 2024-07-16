@@ -8,12 +8,7 @@ namespace Festiv.ViewModels;
 
 public class UserViewModel
 {
-
     public string? FirstName {get; set;}
     public string? LastName {get; set;}
-    //     public UserViewModel(User userToBeUpdated)
-    // {
-    //     FirstName = userToBeUpdated.FirstName;
-    //     LastName = userToBeUpdated.LastName;
-    // }
+    public int? Rating {get; set;}
 }

@@ -5,6 +5,8 @@ using Festiv.Models;
 using Microsoft.Extensions.Hosting;
 using System;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http.Abstractions;
 
 
 namespace Festiv.Data;
@@ -17,7 +19,7 @@ public class FestivDbContext: IdentityDbContext<User, Role, Guid>
 
     public DbSet<PartyDetails> PartyDetails { get; set; }
 
-            public FestivDbContext(DbContextOptions<FestivDbContext> options) : base(options)
+            public FestivDbContext(DbContextOptions<FestivDbContext> options): base(options)
         {
         }
 

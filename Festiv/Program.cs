@@ -5,6 +5,7 @@ using Festiv.Data;
 using Festiv.Models;
 using Festiv.Controllers;
 using Festiv.ViewModels;
+using Microsoft.AspNetCore.Http;
 var builder = WebApplication.CreateBuilder(args);
    var connectionString = "server=localhost;user=festiv;password=festiv;database=festiv";
    var serverVersion = new MySqlServerVersion(new Version(8, 0, 36));
@@ -29,6 +30,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddHttpContextAccessor();
 
 
 var app = builder.Build();
