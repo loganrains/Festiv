@@ -11,12 +11,9 @@ public class Party
     public int DetailsId { get; set; }
     
     public int Id { get; set; }
-    static private int nextId = 1;
 
     public Party()
     {
-        Id = nextId;
-        nextId++;
     }
 
     public Party(string name, string description, string location, DateTime start, DateTime end, PartyDetails partyDetails)
@@ -24,8 +21,6 @@ public class Party
         Name = name;
         Details = partyDetails;
         DetailsId = Details.Id;
-        Id = nextId;
-        nextId++;
     }
 
     public override string ToString()
