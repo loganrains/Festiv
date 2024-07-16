@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Festiv.Data;
 using Festiv.Models;
@@ -10,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
    builder.Services.AddDbContext<FestivDbContext>(dbContextOptions => dbContextOptions.UseMySql(connectionString, serverVersion));
    builder.Services.AddControllersWithViews();
-   builder.Services.AddIdentity<User, IdentityRole>(
+   builder.Services.AddIdentity<User, Role>(
     options => {   
         options.Password.RequiredUniqueChars = 0;
         options.Password.RequireUppercase = false;
@@ -23,10 +24,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
         builder.Services.AddScoped<Festiv.Models.User>();
-//    builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
-//     .AddEntityFrameworkStores<FestivDbContext>();
-
-// builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<FestivDbContext>();
+        builder.Services.AddScoped<IUserStore<User>, UserStore<User, Role, FestivDbContext, Guid>>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

@@ -9,10 +9,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Festiv.Data;
 
-public class FestivDbContext: IdentityDbContext<User>
+public class FestivDbContext: IdentityDbContext<User, IdentityRole<Guid>, Guid>  
 {
     public DbSet<Party> Parties { get; set; }
     public DbSet<User> UserList { get; set; }
+    public IdentityRole<Guid>? IdentityRole {get; set;}
 
     public DbSet<PartyDetails> PartyDetails { get; set; }
 
