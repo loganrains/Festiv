@@ -51,10 +51,8 @@ namespace Festiv.Migrations
 
                     b.ToTable("Guest");
                 });
-            modelBuilder.Entity("Festiv.Models.Host", b =>
 
             modelBuilder.Entity("Festiv.Models.GuestRespond", b =>
-
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -75,6 +73,7 @@ namespace Festiv.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
+
                     b.ToTable("GuestResponds");
                 });
 
@@ -99,7 +98,6 @@ namespace Festiv.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
 
                     b.ToTable("Host");
                 });
@@ -145,7 +143,6 @@ namespace Festiv.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
 
-
                     b.Property<int?>("PartyHostId")
                         .HasColumnType("int");
 
@@ -184,7 +181,6 @@ namespace Festiv.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
-
                 });
 
             modelBuilder.Entity("Festiv.Models.User", b =>
@@ -378,27 +374,6 @@ namespace Festiv.Migrations
                 });
 
             modelBuilder.Entity("Festiv.Models.Party", b =>
-                {
-                    b.HasOne("Festiv.Models.PartyDetails", "Details")
-                        .WithMany()
-                        .HasForeignKey("DetailsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Details");
-                });
-
-            modelBuilder.Entity("Festiv.Models.PartyDetails", b =>
-                {
-                    b.HasOne("Festiv.Models.Host", "PartyHost")
-                        .WithMany()
-                        .HasForeignKey("PartyHostId");
-
-                    b.Navigation("PartyHost");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-
                 {
                     b.HasOne("Festiv.Models.PartyDetails", "Details")
                         .WithMany()
