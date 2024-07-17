@@ -22,6 +22,7 @@ public class RatingController : Controller
         context = dbContext;
     }
 
+
     public IActionResult Index()
     {
         List<User> users = context.Users.ToList();

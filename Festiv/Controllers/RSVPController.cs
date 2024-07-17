@@ -1,12 +1,20 @@
 using Microsoft.AspNetCore.Mvc;
 using Festiv.Models;
+using Festiv.Data; // Ensure to include the namespace for FestivDbContext
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
+
 
 namespace Festiv.Controllers
 {
     public class RsvpController : Controller
     {
-        private static List<GuestRespond> GuestResponses = new List<GuestRespond>();
+        private readonly FestivDbContext _context;
+
+        public RsvpController(FestivDbContext context)
+        {
+            _context = context;
+        }
 
         // GET: /Rsvp/Index
         public IActionResult Index()
@@ -16,14 +24,13 @@ namespace Festiv.Controllers
 
         // POST: /Rsvp/Add
         [HttpPost]
-        public IActionResult Add(string firstName, string lastName, string email)
+        public IActionResult Add(GuestRespond guestRespond)
         {
-            var guestRespond = new GuestRespond(firstName, lastName, email);
-
             if (ModelState.IsValid)
             {
-                // Add guest to the list
-                GuestResponses.Add(guestRespond);
+                // Save guest response to the database
+                _context.GuestResponds.Add(guestRespond);
+                _context.SaveChanges();
 
                 // Redirect to guest list action
                 return RedirectToAction("GuestList");
@@ -33,6 +40,7 @@ namespace Festiv.Controllers
             return View(guestRespond);
         }
 
+      
         // GET: /Rsvp/ThankYou
         public IActionResult ThankYou()
         {
@@ -42,7 +50,8 @@ namespace Festiv.Controllers
         // GET: /Rsvp/GuestList (Display list of guests)
         public IActionResult GuestList()
         {
-            return View(GuestResponses);
+            var guestResponses = _context.GuestResponds.ToList();
+            return View(guestResponses);
         }
     }
 }
