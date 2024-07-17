@@ -12,23 +12,30 @@ using Microsoft.EntityFrameworkCore;
 namespace Festiv.Controllers;
 
 public class PartyController : Controller
-{
-    private static List<Party> Parties = new List<Party>();
-    
+{   
+    private FestivDbContext context;
+
+    public PartyController (FestivDbContext dbContext)
+    {
+        context = dbContext;
+    }
 
     // GET /<controller>
     public IActionResult Index()
     {
+        List<Party> Parties = context.Parties.ToList();
+        
         return View(Parties);
     }
 
     [HttpGet("Party/PartyDetails/{partyId}")]
     public IActionResult PartyDetails(int partyId)
     {
-        Party? requestedParty = Parties.Find(x => x.Id.Equals(partyId));
+        PartyDetails? requestedParty = context.PartyDetails.Find(partyId);
 
         if (requestedParty != null)
         {
+            ViewBag.Name = context.PartyDetails.Find(partyId);
             return View("PartyDetails", requestedParty);
         }
 
@@ -51,6 +58,7 @@ public class PartyController : Controller
         {
             PartyDetails theDetails = new()
             {
+                Name = addPartyViewModel.Name,
                 Description = addPartyViewModel.Description,
                 Location = addPartyViewModel.Location,
                 Start = addPartyViewModel.Start,
@@ -62,7 +70,8 @@ public class PartyController : Controller
                 Details = theDetails
             };
             
-            Parties.Add(newParty);
+            context.Parties.Add(newParty);
+            context.SaveChanges();
             
             return Redirect("/Party");
         }

@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Festiv.Controllers
 {
-    public class GameBoardController : Controller
+    public class GameController : Controller
     {
         private static List<Game> games = new List<Game>(); 
 

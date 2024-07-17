@@ -15,10 +15,9 @@ namespace Festiv.Data;
 public class FestivDbContext: IdentityDbContext<User, Role, Guid>  
 
 {
-    public DbSet<Party> Parties { get; set; }
     public DbSet<User> UserList { get; set; }
+    public DbSet<Party> Parties { get; set; }
     public Role? Role {get; set;}
-
     public DbSet<PartyDetails> PartyDetails { get; set; }
     public DbSet<GuestRespond> GuestResponds { get; set; }
 
@@ -26,7 +25,6 @@ public class FestivDbContext: IdentityDbContext<User, Role, Guid>
     public FestivDbContext(DbContextOptions<FestivDbContext> options): base(options)
     {
     }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

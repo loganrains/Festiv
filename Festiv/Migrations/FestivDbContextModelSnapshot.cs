@@ -140,6 +140,9 @@ namespace Festiv.Migrations
                     b.Property<string>("Location")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
                     b.Property<int?>("PartyHostId")
                         .HasColumnType("int");
 
