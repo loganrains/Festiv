@@ -1,4 +1,6 @@
 @using Festiv.Models;
+@model List<Party>
+
 @{
     ViewData["Title"] = "Party";
 }
@@ -28,18 +30,17 @@
 </div>
 
 <div>
-    @if(ViewBag.dummyContext.Count == 0)
+    @if(Model.Count == 0)
     {
         <p>How about you get this party started by creating a new event?</p>
     }
 </div>
 
-
 <div> @* assign class *@
     <ul>
-        @foreach(Party party in ViewBag.dummyContext)
+        @foreach(Party party in Model)
         {
-            <li>@party.ToString()</li>
+            <a asp-controller="Party" asp-action="PartyDetails" asp-route-id="@party.Id"><li>@party.ToString()</li></a>
             @*^ Make this a link to an Event Page*@
         }
     </ul>

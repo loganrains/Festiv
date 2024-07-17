@@ -1,0 +1,27 @@
+@using Festiv;
+@using Festiv.Controllers;
+@model PartyDetails
+
+
+@{
+    ViewData["Title"] = "Party Details";
+}
+
+<div class="text-center">
+    <h1 class="display-4">"@Model.Name at @Model.Location"</h1>
+
+    <p>@Model.Description</p>
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <p>Start: @Model.Start</p>
+            </div>
+            <div class="col">
+                <p>End: @Model.End</p>
+            </div>
+        </div>
+    </div>
+    <a asp-controller="Rating" asp-action="Index">Rate Guests</a>
+
+</div>
