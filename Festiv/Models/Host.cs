@@ -11,9 +11,6 @@ public class Host
     public string LastName { get; set; }
     public string Email { get; set; }
 
-    public int Id { get; set; }
-    static private int nextId = 1;
-
     public Host() { }
 
     public Host(string firstname, string lastname, string email)
@@ -22,10 +19,6 @@ public class Host
         LastName = lastname;
         Email = email;
 
-    }
-
-    public Host()
-    {
     }
 
     public override string ToString()
