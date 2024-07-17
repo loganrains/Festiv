@@ -79,4 +79,30 @@ public class PartyController : Controller
         return View(addPartyViewModel);
 
     }
+
+        [HttpGet("Party/Delete/{partyId}")]
+        public IActionResult Delete(int partyId)
+        {
+            var partyToDelete = context.Parties.Include(p => p.Details).FirstOrDefault(x => x.Id == partyId);
+            if (partyToDelete == null)
+            {
+                return NotFound();
+            }
+
+            return View(partyToDelete);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var partyToDelete = context.Parties.Include(p => p.Details).FirstOrDefault(x => x.Id == id);
+            if (partyToDelete != null)
+            {
+                context.Parties.Remove(partyToDelete);
+                context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+
+            return NotFound();
+        }
 }
