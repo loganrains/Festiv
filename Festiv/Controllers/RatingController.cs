@@ -20,10 +20,10 @@ public class RatingController : Controller
 
             public IActionResult Index()
         {
-            List<User> users = context.Users
-                .ToList();
+            /*List<User> users = context.Users
+                .ToList();*/
 
-            return View(users);
+            return View();
         }
     
     [HttpPost]
