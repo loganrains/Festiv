@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <!-- <AssemblyName>FestivApp</AssemblyName> -->
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-  </PropertyGroup
+  </PropertyGroup>
    <ItemGroup>
     <Content Remove="Views\Game\Index.cshtml" />
   </ItemGroup>
