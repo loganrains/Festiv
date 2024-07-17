@@ -397,3 +397,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+#ignore Migrations
+dir_to_ignore/Migrations
