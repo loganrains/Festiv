@@ -4,6 +4,7 @@ using Festiv.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Festiv.Migrations
 {
     [DbContext(typeof(FestivDbContext))]
-    partial class FestivDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240717163124_DoopyMigration")]
+    partial class DoopyMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,10 +54,8 @@ namespace Festiv.Migrations
 
                     b.ToTable("Guest");
                 });
-            modelBuilder.Entity("Festiv.Models.Host", b =>
 
             modelBuilder.Entity("Festiv.Models.GuestRespond", b =>
-
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -75,6 +76,7 @@ namespace Festiv.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
+
                     b.ToTable("GuestResponds");
                 });
 
@@ -99,7 +101,6 @@ namespace Festiv.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
 
                     b.ToTable("Host");
                 });
@@ -142,10 +143,6 @@ namespace Festiv.Migrations
                     b.Property<string>("Location")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext");
-
-
                     b.Property<int?>("PartyHostId")
                         .HasColumnType("int");
 
@@ -184,7 +181,6 @@ namespace Festiv.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
-
                 });
 
             modelBuilder.Entity("Festiv.Models.User", b =>
@@ -378,27 +374,6 @@ namespace Festiv.Migrations
                 });
 
             modelBuilder.Entity("Festiv.Models.Party", b =>
-                {
-                    b.HasOne("Festiv.Models.PartyDetails", "Details")
-                        .WithMany()
-                        .HasForeignKey("DetailsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Details");
-                });
-
-            modelBuilder.Entity("Festiv.Models.PartyDetails", b =>
-                {
-                    b.HasOne("Festiv.Models.Host", "PartyHost")
-                        .WithMany()
-                        .HasForeignKey("PartyHostId");
-
-                    b.Navigation("PartyHost");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-
                 {
                     b.HasOne("Festiv.Models.PartyDetails", "Details")
                         .WithMany()

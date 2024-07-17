@@ -1,5 +1,7 @@
-@using Festiv
+@using Festiv;
+@using Festiv.Controllers;
 @model PartyDetails
+
 
 @{
     ViewData["Title"] = "Party Details";
@@ -20,4 +22,6 @@
             </div>
         </div>
     </div>
+    <a asp-controller="Rating" asp-action="Index">Rate Guests</a>
+
 </div>
