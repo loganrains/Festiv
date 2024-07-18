@@ -4,6 +4,7 @@ using Festiv.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Festiv.Migrations
 {
     [DbContext(typeof(FestivDbContext))]
-    partial class FestivDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240717192613_DevMigrationUpdate")]
+    partial class DevMigrationUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -181,20 +184,6 @@ namespace Festiv.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("d1d524f6-8297-4dd4-bff2-cf744c7e7b92"),
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = new Guid("46f9e298-b395-4299-8366-a1f87f554111"),
-                            Name = "User",
-                            NormalizedName = "USER"
-                        });
                 });
 
             modelBuilder.Entity("Festiv.Models.User", b =>
@@ -275,28 +264,6 @@ namespace Festiv.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("13792d3e-72b2-412e-baf1-5bfb514e1bfe"),
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "b25a3a31-60f7-4768-8d9b-f1e266511369",
-                            Email = "admin@festiv.com",
-                            EmailConfirmed = true,
-                            FirstName = "Admin",
-                            LastName = "User",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@FESTIV.COM",
-                            NormalizedUserName = "ADMIN@FESTIV.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJ6+qzX9WySB2lOeMFOWgZ5Or94IBcCfmfXj2OBqi2ZVak9LGWOPcsHE/V2LKL5Xyg==",
-                            PhoneNumberConfirmed = false,
-                            Rating = 0,
-                            SecurityStamp = "",
-                            TwoFactorEnabled = false,
-                            UserName = "admin@festiv.com",
-                            UserType = true
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -381,13 +348,6 @@ namespace Festiv.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = new Guid("13792d3e-72b2-412e-baf1-5bfb514e1bfe"),
-                            RoleId = new Guid("d1d524f6-8297-4dd4-bff2-cf744c7e7b92")
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
