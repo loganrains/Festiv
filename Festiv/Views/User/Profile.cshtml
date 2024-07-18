@@ -1,0 +1,23 @@
+@using Festiv.Models;
+@using Festiv.Controllers;
+@using Festiv.Data;
+@model User
+
+<div>Profile Page</div>
+
+<div>
+    <h1>@Model.FirstName @Model.LastName</h1>
+    <h3>Rating: @Model.Rating</h3>
+</div>
+
+@if (ViewData["IsAdmin"] as bool? == true && @Model.UserType == false)
+{
+    <form asp-action="DeleteUser" method="post">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button type="submit">Delete User</button>
+    </form>
+}
+else
+{
+    <p>You do not have permission to delete this user.</p>
+}

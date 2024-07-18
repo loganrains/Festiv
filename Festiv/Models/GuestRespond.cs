@@ -4,6 +4,8 @@ namespace  Festiv.Models
 {
     public class GuestRespond
     {
+        public int Id { get; set; }
+        
         [Required(ErrorMessage = "Please enter your First Name")]
         public string FirstName { get; set; }
 
@@ -14,6 +16,11 @@ namespace  Festiv.Models
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string Email { get; set; }
 
+        
+         public GuestRespond()
+        {
+            // Parameterless constructor for model binding
+        }
 
         // Constructor to initialize the object
         public GuestRespond(string firstName, string lastName, string email)
