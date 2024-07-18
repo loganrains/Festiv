@@ -21,6 +21,10 @@ public class Host
 
     }
 
+    public Host()
+    {
+    }
+
     public override string ToString()
     {
         return FirstName + " " + LastName;

@@ -6,6 +6,7 @@ using Festiv.Controllers;
 namespace Festiv.ViewModels;
 
 
+
 public class UserViewModel
 {
     public string? FirstName {get; set;}

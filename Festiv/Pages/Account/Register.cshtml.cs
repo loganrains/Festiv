@@ -11,6 +11,7 @@ using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using Festiv.Models;
+using Festiv.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -28,10 +29,21 @@ namespace Festiv.Areas.Identity.Pages.Account
         private readonly UserManager<User> _userManager;
         private readonly IUserStore<User> _userStore;
         private readonly IUserEmailStore<User> _emailStore;
+        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly IUserStore<User> _userStore;
+        private readonly IUserEmailStore<User> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
+        // private readonly IEmailSender _emailSender;
         // private readonly IEmailSender _emailSender;
 
         public RegisterModel(
+            UserManager<User> userManager,
+            IUserStore<User> userStore,
+            SignInManager<User> signInManager,
+            ILogger<RegisterModel> logger
+            // IEmailSender emailSender
+            )
             UserManager<User> userManager,
             IUserStore<User> userStore,
             SignInManager<User> signInManager,
@@ -44,6 +56,7 @@ namespace Festiv.Areas.Identity.Pages.Account
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
+            // _emailSender = emailSender;
             // _emailSender = emailSender;
         }
 
@@ -107,6 +120,14 @@ namespace Festiv.Areas.Identity.Pages.Account
             [Required]
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
+
+            [Required]
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
         }
 
 
@@ -130,6 +151,7 @@ namespace Festiv.Areas.Identity.Pages.Account
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
@@ -145,6 +167,8 @@ namespace Festiv.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
+                    // await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                    //     $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
                     // await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                     //     $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
@@ -169,13 +193,17 @@ namespace Festiv.Areas.Identity.Pages.Account
         }
 
         private User CreateUser()
+        private User CreateUser()
         {
             try
             {
                 return Activator.CreateInstance<User>();
+                return Activator.CreateInstance<User>();
             }
             catch
             {
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(User)}'. " +
+                    $"Ensure that '{nameof(User)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                 throw new InvalidOperationException($"Can't create an instance of '{nameof(User)}'. " +
                     $"Ensure that '{nameof(User)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
@@ -183,11 +211,13 @@ namespace Festiv.Areas.Identity.Pages.Account
         }
 
         private IUserEmailStore<User> GetEmailStore()
+        private IUserEmailStore<User> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
+            return (IUserEmailStore<User>)_userStore;
             return (IUserEmailStore<User>)_userStore;
         }
     }

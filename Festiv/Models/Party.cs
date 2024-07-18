@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Festiv.Models;
 
@@ -18,6 +19,7 @@ public class Party
     }
 
     public Party(string name, string description, string location, DateTime start, DateTime end, PartyDetails partyDetails)
+    public Party(string name, string description, string location, DateTime start, DateTime end, PartyDetails partyDetails)
     {
         Name = name;
         Details = partyDetails;
@@ -27,6 +29,16 @@ public class Party
     public override string ToString()
     {
         return Name;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is Party @party && Id == @party.Id;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Id);
     }
 
     public override bool Equals(object? obj)
