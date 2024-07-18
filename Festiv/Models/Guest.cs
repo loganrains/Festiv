@@ -11,7 +11,7 @@ public class Guest
     public string LastName { get; set; }
     public string Email { get; set; }
 
-    public Guest() { }
+    // public Guest() { }
 
     public Guest(string firstname, string lastname, string email)
     {

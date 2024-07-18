@@ -52,6 +52,31 @@ namespace Festiv.Migrations
                     b.ToTable("Guest");
                 });
 
+            modelBuilder.Entity("Festiv.Models.GuestRespond", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GuestResponds");
+                });
+
             modelBuilder.Entity("Festiv.Models.Host", b =>
                 {
                     b.Property<int>("Id")
@@ -93,8 +118,6 @@ namespace Festiv.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DetailsId");
-
                     b.ToTable("Parties");
                 });
 
@@ -115,7 +138,13 @@ namespace Festiv.Migrations
                     b.Property<string>("Location")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
                     b.Property<int?>("PartyHostId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PartyId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("Start")
@@ -125,7 +154,37 @@ namespace Festiv.Migrations
 
                     b.HasIndex("PartyHostId");
 
+                    b.HasIndex("PartyId")
+                        .IsUnique();
+
                     b.ToTable("PartyDetails");
+                });
+
+            modelBuilder.Entity("Festiv.Models.Role", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex");
+
+                    b.ToTable("AspNetRoles", (string)null);
                 });
 
             modelBuilder.Entity("Festiv.Models.User", b =>
@@ -318,31 +377,19 @@ namespace Festiv.Migrations
                         .HasForeignKey("PartyDetailsId");
                 });
 
-            modelBuilder.Entity("Festiv.Models.Party", b =>
-                {
-                    b.HasOne("Festiv.Models.PartyDetails", "Details")
-                        .WithMany()
-                        .HasForeignKey("DetailsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Details");
-                });
-
             modelBuilder.Entity("Festiv.Models.PartyDetails", b =>
                 {
                     b.HasOne("Festiv.Models.Host", "PartyHost")
                         .WithMany()
                         .HasForeignKey("PartyHostId");
 
-                    b.Navigation("PartyHost");
-                });
+                    b.HasOne("Festiv.Models.Party", "Party")
+                        .WithOne("Details")
+                        .HasForeignKey("Festiv.Models.PartyDetails", "PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.HasOne("Festiv.Models.Host", "PartyHost")
-                        .WithMany()
-                        .HasForeignKey("PartyHostId");
+                    b.Navigation("Party");
 
                     b.Navigation("PartyHost");
                 });
@@ -398,9 +445,9 @@ namespace Festiv.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Festiv.Models.PartyDetails", b =>
+            modelBuilder.Entity("Festiv.Models.Party", b =>
                 {
-                    b.Navigation("GuestList");
+                    b.Navigation("Details");
                 });
 
             modelBuilder.Entity("Festiv.Models.PartyDetails", b =>

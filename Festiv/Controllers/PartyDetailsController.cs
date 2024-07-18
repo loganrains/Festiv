@@ -11,93 +11,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Festiv.Controllers
 {
-    public class PartyController : Controller
-    {   
+    public class PartyDetailsController : Controller
+    {
         private FestivDbContext context;
 
-        public PartyController (FestivDbContext dbContext)
+        public PartyDetailsController (FestivDbContext dbContext)
         {
             context = dbContext;
         }
-
-        private static List<Party> Parties = new List<Party>();
         private static List<Game> games = new List<Game>(); 
 
-        // GET /<controller>
         public IActionResult Index()
         {
-            List<Party> Parties = context.Parties.ToList();
-        
-            return View(Parties);
-        }
-
-        [HttpGet("Party/PartyDetails/{partyId}")]
-        public IActionResult PartyDetails(int partyId)
-        {
-            PartyDetails? requestedParty = context.PartyDetails.Find(partyId);
-
-            if (requestedParty != null)
+            var model = new AddPartyViewModel
             {
-                ViewBag.Name = context.PartyDetails.Find(partyId);
-                return View("PartyDetails", requestedParty);
-            }
-
-           return View();
-        
-        }   
-
-        [HttpGet]
-        public IActionResult CreateEvent()
-        {
-            AddPartyViewModel addPartyViewModel = new AddPartyViewModel();
-
-            return View(addPartyViewModel);
-        }   
-
-        [HttpPost]
-        public async Task<IActionResult> CreateEvent(AddPartyViewModel addPartyViewModel)
-        {
-            if(ModelState.IsValid)
-            {
-                 Party newParty = new Party
-                {
-                    Name = addPartyViewModel.Name,
-                };
-
-                PartyDetails theDetails = new PartyDetails
-                {
-                    Name = addPartyViewModel.Name,
-                    Description = addPartyViewModel.Description,
-                    Location = addPartyViewModel.Location,
-                    Start = addPartyViewModel.Start,
-                    End = addPartyViewModel.End
-                };
-
-                newParty.Details = theDetails;
-                theDetails.Party = newParty;
-
-                context.Parties.Add(newParty);
-                await context.SaveChangesAsync();
-                return RedirectToAction("Index");
-
-
-
-            
-                Parties.Add(newParty);
-                context.SaveChanges();
-            
-                return RedirectToAction("Index", "Party");
-            }
-
-            return View(addPartyViewModel);
-
-        }
-    
-
-        [HttpGet]
-        public IActionResult Event()
-        {
-            return View();
+                Games = games
+            };
+            return View(model);
         }
 
         public IActionResult CreateGame()
@@ -112,7 +42,7 @@ namespace Festiv.Controllers
             {
                 game.Id = games.Count + 1;
                 games.Add(game);
-                return RedirectToAction("/PartyDetails/{newParty.Id}");
+                return RedirectToAction("Index");
             }
             return View(game);
         }
@@ -194,39 +124,9 @@ namespace Festiv.Controllers
                 {
                     pair.Add(shuffled[i + 1]);
                 }
-                    pairs.Add(pair);
+                pairs.Add(pair);
             }
             return pairs;
         }
     }
 }
-// ------------------------------------------
-
-//     [HttpPost]
-//     public IActionResult CreateEvent(AddPartyViewModel addPartyViewModel)
-//     {
-//         if(ModelState.IsValid)
-//         {
-//             PartyDetails theDetails = new()
-//             {
-//                 Name = addPartyViewModel.Name,
-//                 Description = addPartyViewModel.Description,
-//                 Location = addPartyViewModel.Location,
-//                 Start = addPartyViewModel.Start,
-//                 End = addPartyViewModel.End
-//             };
-//             Party newParty = new()
-//             {
-//                 Name = addPartyViewModel.Name,
-//                 Details = theDetails
-//             };
-            
-//             context.Parties.Add(newParty);
-//             context.SaveChanges();
-            
-//             return Redirect("/Party");
-//         }
-
-//         return View(addPartyViewModel);
-
-//     }

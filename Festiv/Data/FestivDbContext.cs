@@ -31,6 +31,8 @@ public class FestivDbContext: IdentityDbContext<User, Role, Guid>
 
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
+
+            modelBuilder.Entity<Party>().HasOne(p => p.Details).WithOne(d => d.Party).HasForeignKey<PartyDetails>(d => d.PartyId);
         }
 
     internal class UserEntityConfiguration : IEntityTypeConfiguration<User>

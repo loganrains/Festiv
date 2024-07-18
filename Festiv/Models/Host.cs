@@ -11,7 +11,7 @@ public class Host
     public string LastName { get; set; }
     public string Email { get; set; }
 
-    public Host() { }
+    // public Host() { }
 
     public Host(string firstname, string lastname, string email)
     {
