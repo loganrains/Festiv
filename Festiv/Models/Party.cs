@@ -12,19 +12,18 @@ namespace Festiv.Models
         public PartyDetails? Details { get; set; }
         public int DetailsId { get; set; }
     
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        public Party()
-        {
-        }   
+    public Party()
+    {
+    }
 
-    
-        public Party(string name, string description, string location, DateTime start, DateTime end, PartyDetails partyDetails)
-        {
-            Name = name;
-            Details = partyDetails;
-            DetailsId = Details.Id;
-        }
+    public Party(string name, string description, string location, DateTime start, DateTime end, PartyDetails partyDetails)
+    {
+        Name = name;
+        Details = partyDetails;
+        DetailsId = Details.Id;
+    }
 
         public override string ToString()
         {

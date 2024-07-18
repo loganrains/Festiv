@@ -31,10 +31,10 @@ namespace Festiv.Controllers
             return View(Parties);
         }
 
-        [HttpGet("Party/PartyDetails/{partyId}")]
-        public IActionResult PartyDetails(int partyId)
-        {
-            PartyDetails? requestedParty = context.PartyDetails.Find(partyId);
+    [HttpGet("Party/PartyDetails/{partyId}")]
+    public IActionResult PartyDetails(int partyId)
+    {
+        PartyDetails? requestedParty = context.PartyDetails.Find(partyId);
 
             if (requestedParty != null)
             {
@@ -83,150 +83,40 @@ namespace Festiv.Controllers
 
 
             
-                Parties.Add(newParty);
-                context.SaveChanges();
+            context.Parties.Add(newParty);
+            context.SaveChanges();
             
                 return RedirectToAction("Index", "Party");
             }
 
             return View(addPartyViewModel);
 
-        }
-    
+    }
 
-        [HttpGet]
-        public IActionResult Event()
+        [HttpGet("Party/Delete/{partyId}")]
+        public IActionResult Delete(int partyId)
         {
-            return View();
-        }
-
-        public IActionResult CreateGame()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult Create(Game game)
-        {
-            if (ModelState.IsValid)
-            {
-                game.Id = games.Count + 1;
-                games.Add(game);
-                return RedirectToAction("/PartyDetails/{newParty.Id}");
-            }
-            return View(game);
-        }
-
-        public IActionResult GameDetails(int id)
-        {
-            var game = games.FirstOrDefault(g => g.Id == id);
-            if (game == null)
-            {
-                return NotFound();
-            }
-            
-            var viewModel = new GameDetailsViewModel
-            {
-                GameId = game.Id,
-                GameName = game.GameName,
-                MinPlayers = game.MinPlayers,
-                MaxPlayers = game.MaxPlayers,
-                WaitingPlayers = game.WaitingPlayers,
-                CurrentPlayers = game.CurrentPlayers,
-                Teams = game.Teams
-            };
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        public IActionResult RandomizeTeams(int id, string randomizerType)
-        {
-            var game = games.FirstOrDefault(g => g.Id == id);
-            if (game == null)
+            var partyToDelete = context.Parties.Include(p => p.Details).FirstOrDefault(x => x.Id == partyId);
+            if (partyToDelete == null)
             {
                 return NotFound();
             }
 
-            var playersToAdd = game.WaitingPlayers.Take(game.MaxPlayers).ToList();
-            game.CurrentPlayers.AddRange(playersToAdd);
-            game.WaitingPlayers = game.WaitingPlayers.Skip(game.MaxPlayers).ToList();
-
-            if (randomizerType == "split")
-            {
-                game.Teams = SplitIntoTwoTeams(game.CurrentPlayers);
-            }
-            else if (randomizerType == "pairs")
-            {
-                game.Teams = GroupIntoPairs(game.CurrentPlayers);
-            }
-
-            return RedirectToAction("GameDetails", new { id = game.Id });
+            return View(partyToDelete);
         }
 
         [HttpPost]
-        public IActionResult SignUp(int id, string firstName, string lastName)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var game = games.FirstOrDefault(g => g.Id == id);
-            if (game == null)
+            var partyToDelete = context.Parties.Include(p => p.Details).FirstOrDefault(x => x.Id == id);
+            if (partyToDelete != null)
             {
-                return NotFound();
+                context.Parties.Remove(partyToDelete);
+                context.SaveChanges();
+                return RedirectToAction(nameof(Index));
             }
 
-            game.CurrentPlayers.Add(new User { FirstName = firstName, LastName = lastName });
-            return RedirectToAction("GameDetails", new { id = game.Id });
-        }
-
-        private List<List<User>> SplitIntoTwoTeams(List<User> players)
-        {
-            var shuffled = players.OrderBy(p => Guid.NewGuid()).ToList();
-            int mid = shuffled.Count / 2;
-            return new List<List<User>> { shuffled.Take(mid).ToList(), shuffled.Skip(mid).ToList() };
-        }
-
-        private List<List<User>> GroupIntoPairs(List<User> players)
-        {
-            var shuffled = players.OrderBy(p => Guid.NewGuid()).ToList();
-            var pairs = new List<List<User>>();
-            for (int i = 0; i < shuffled.Count; i += 2)
-            {
-                var pair = new List<User> { shuffled[i] };
-                if (i + 1 < shuffled.Count)
-                {
-                    pair.Add(shuffled[i + 1]);
-                }
-                    pairs.Add(pair);
-            }
-            return pairs;
+            return NotFound();
         }
     }
 }
-// ------------------------------------------
-
-//     [HttpPost]
-//     public IActionResult CreateEvent(AddPartyViewModel addPartyViewModel)
-//     {
-//         if(ModelState.IsValid)
-//         {
-//             PartyDetails theDetails = new()
-//             {
-//                 Name = addPartyViewModel.Name,
-//                 Description = addPartyViewModel.Description,
-//                 Location = addPartyViewModel.Location,
-//                 Start = addPartyViewModel.Start,
-//                 End = addPartyViewModel.End
-//             };
-//             Party newParty = new()
-//             {
-//                 Name = addPartyViewModel.Name,
-//                 Details = theDetails
-//             };
-            
-//             context.Parties.Add(newParty);
-//             context.SaveChanges();
-            
-//             return Redirect("/Party");
-//         }
-
-//         return View(addPartyViewModel);
-
-//     }

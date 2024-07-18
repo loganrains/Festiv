@@ -4,8 +4,8 @@ namespace Festiv.Models
 {
     public class Role : IdentityRole<Guid>
     {
-        public Role()
-        {
-        }
+        public Role() : base() { }
+
+        public Role(string roleName) : base(roleName) { }
     }
 }

@@ -27,10 +27,16 @@ var builder = WebApplication.CreateBuilder(args);
         builder.Services.AddScoped<Festiv.Models.User>();
         builder.Services.AddScoped<IUserStore<User>, UserStore<User, Role, FestivDbContext, Guid>>();
 
+    // Register UserManager and SignInManager
+    builder.Services.AddScoped<UserManager<User>>();
+    builder.Services.AddScoped<SignInManager<User>>();
+
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddHttpContextAccessor();
+
 
 var app = builder.Build();
 
@@ -47,7 +53,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapRazorPages();
 app.MapControllers();
 
