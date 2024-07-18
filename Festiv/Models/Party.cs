@@ -2,14 +2,14 @@ using System.ComponentModel;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Festiv.Models;
-
-public class Party
+namespace Festiv.Models
 {
-    public string? Name { get; set; }
+    public class Party
+    {
+        public string? Name { get; set; }
 
-    public PartyDetails? Details { get; set; }
-    public int DetailsId { get; set; }
+        public PartyDetails? Details { get; set; }
+        public int DetailsId { get; set; }
     
     public int Id { get; set; }
 
@@ -24,18 +24,15 @@ public class Party
         DetailsId = Details.Id;
     }
 
-    public override string ToString()
-    {
-        return Name;
-    }
+        public override string ToString()
+        {
+            return Name;
+        }
 
-    public override bool Equals(object? obj)
-    {
-        return obj is Party @party && Id == @party.Id;
-    }
+        public override bool Equals(object? obj)
+        {
+            return obj is Party @party && Id == @party.Id;
+        }
 
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(Id);
     }
 }

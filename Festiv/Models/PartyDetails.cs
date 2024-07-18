@@ -14,8 +14,10 @@ public class PartyDetails
 
     public Host? PartyHost { get; set; }
     public List<Guest>? GuestList { get; set; }
+    public Party Party { get; set; }
 
     public int Id { get; set; }
+    public int PartyId { get; set; }
 
     public PartyDetails() { }
 

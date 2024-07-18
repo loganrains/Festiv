@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Festiv.Migrations
 {
     [DbContext(typeof(FestivDbContext))]
-    [Migration("20240718162728_RolesUpdateMigration")]
-    partial class RolesUpdateMigration
+    [Migration("20240718215242_InitialMigration11")]
+    partial class InitialMigration11
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -121,8 +121,6 @@ namespace Festiv.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DetailsId");
-
                     b.ToTable("Parties");
                 });
 
@@ -149,12 +147,18 @@ namespace Festiv.Migrations
                     b.Property<int?>("PartyHostId")
                         .HasColumnType("int");
 
+                    b.Property<int>("PartyId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("Start")
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PartyHostId");
+
+                    b.HasIndex("PartyId")
+                        .IsUnique();
 
                     b.ToTable("PartyDetails");
                 });
@@ -188,13 +192,13 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d1d524f6-8297-4dd4-bff2-cf744c7e7b92"),
+                            Id = new Guid("596cf31c-770a-4fee-97d2-3aeac9ae8bd2"),
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("46f9e298-b395-4299-8366-a1f87f554111"),
+                            Id = new Guid("eb4a059e-5d16-4494-9c25-d47be6758540"),
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -282,9 +286,9 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("13792d3e-72b2-412e-baf1-5bfb514e1bfe"),
+                            Id = new Guid("698d8490-1398-4a3f-b321-993a2c7fd8e0"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b25a3a31-60f7-4768-8d9b-f1e266511369",
+                            ConcurrencyStamp = "cdf1c47e-e15e-4701-b7a1-56b342328ff3",
                             Email = "admin@festiv.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -292,7 +296,7 @@ namespace Festiv.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@FESTIV.COM",
                             NormalizedUserName = "ADMIN@FESTIV.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJ6+qzX9WySB2lOeMFOWgZ5Or94IBcCfmfXj2OBqi2ZVak9LGWOPcsHE/V2LKL5Xyg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENEMnypZ2YBVRmWf0s3hGGYp/B+3lomGqkQRH0rtTmS1JVfui9RTMN5/aFRmdBdIlg==",
                             PhoneNumberConfirmed = false,
                             Rating = 0,
                             SecurityStamp = "",
@@ -388,8 +392,8 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("13792d3e-72b2-412e-baf1-5bfb514e1bfe"),
-                            RoleId = new Guid("d1d524f6-8297-4dd4-bff2-cf744c7e7b92")
+                            UserId = new Guid("698d8490-1398-4a3f-b321-993a2c7fd8e0"),
+                            RoleId = new Guid("596cf31c-770a-4fee-97d2-3aeac9ae8bd2")
                         });
                 });
 
@@ -419,22 +423,19 @@ namespace Festiv.Migrations
                         .HasForeignKey("PartyDetailsId");
                 });
 
-            modelBuilder.Entity("Festiv.Models.Party", b =>
-                {
-                    b.HasOne("Festiv.Models.PartyDetails", "Details")
-                        .WithMany()
-                        .HasForeignKey("DetailsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Details");
-                });
-
             modelBuilder.Entity("Festiv.Models.PartyDetails", b =>
                 {
                     b.HasOne("Festiv.Models.Host", "PartyHost")
                         .WithMany()
                         .HasForeignKey("PartyHostId");
+
+                    b.HasOne("Festiv.Models.Party", "Party")
+                        .WithOne("Details")
+                        .HasForeignKey("Festiv.Models.PartyDetails", "PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
 
                     b.Navigation("PartyHost");
                 });
@@ -488,6 +489,11 @@ namespace Festiv.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Festiv.Models.Party", b =>
+                {
+                    b.Navigation("Details");
                 });
 
             modelBuilder.Entity("Festiv.Models.PartyDetails", b =>

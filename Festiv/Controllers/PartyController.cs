@@ -9,74 +9,87 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using Microsoft.EntityFrameworkCore;
 
-namespace Festiv.Controllers;
+namespace Festiv.Controllers
+{
+    public class PartyController : Controller
+    {   
+        private FestivDbContext context;
 
-public class PartyController : Controller
-{   
-    private FestivDbContext context;
+        public PartyController (FestivDbContext dbContext)
+        {
+            context = dbContext;
+        }
 
-    public PartyController (FestivDbContext dbContext)
-    {
-        context = dbContext;
-    }
+        private static List<Party> Parties = new List<Party>();
+        private static List<Game> games = new List<Game>(); 
 
-    // GET /<controller>
-    public IActionResult Index()
-    {
-        List<Party> Parties = context.Parties.ToList();
+        // GET /<controller>
+        public IActionResult Index()
+        {
+            List<Party> Parties = context.Parties.ToList();
         
-        return View(Parties);
-    }
+            return View(Parties);
+        }
 
     [HttpGet("Party/PartyDetails/{partyId}")]
     public IActionResult PartyDetails(int partyId)
     {
         PartyDetails? requestedParty = context.PartyDetails.Find(partyId);
 
-        if (requestedParty != null)
-        {
-            ViewBag.Name = context.PartyDetails.Find(partyId);
-            return View("PartyDetails", requestedParty);
-        }
+            if (requestedParty != null)
+            {
+                ViewBag.Name = context.PartyDetails.Find(partyId);
+                return View("PartyDetails", requestedParty);
+            }
 
-        return View();
+           return View();
         
-    }
+        }   
 
-    [HttpGet]
-    public IActionResult CreateEvent()
-    {
-        AddPartyViewModel addPartyViewModel = new AddPartyViewModel();
-
-        return View(addPartyViewModel);
-    }
-
-    [HttpPost]
-    public IActionResult CreateEvent(AddPartyViewModel addPartyViewModel)
-    {
-        if(ModelState.IsValid)
+        [HttpGet]
+        public IActionResult CreateEvent()
         {
-            PartyDetails theDetails = new()
+            AddPartyViewModel addPartyViewModel = new AddPartyViewModel();
+
+            return View(addPartyViewModel);
+        }   
+
+        [HttpPost]
+        public async Task<IActionResult> CreateEvent(AddPartyViewModel addPartyViewModel)
+        {
+            if(ModelState.IsValid)
             {
-                Name = addPartyViewModel.Name,
-                Description = addPartyViewModel.Description,
-                Location = addPartyViewModel.Location,
-                Start = addPartyViewModel.Start,
-                End = addPartyViewModel.End
-            };
-            Party newParty = new()
-            {
-                Name = addPartyViewModel.Name,
-                Details = theDetails
-            };
+                 Party newParty = new Party
+                {
+                    Name = addPartyViewModel.Name,
+                };
+
+                PartyDetails theDetails = new PartyDetails
+                {
+                    Name = addPartyViewModel.Name,
+                    Description = addPartyViewModel.Description,
+                    Location = addPartyViewModel.Location,
+                    Start = addPartyViewModel.Start,
+                    End = addPartyViewModel.End
+                };
+
+                newParty.Details = theDetails;
+                theDetails.Party = newParty;
+
+                context.Parties.Add(newParty);
+                await context.SaveChangesAsync();
+                return RedirectToAction("Index");
+
+
+
             
             context.Parties.Add(newParty);
             context.SaveChanges();
             
-            return Redirect("/Party");
-        }
+                return RedirectToAction("Index", "Party");
+            }
 
-        return View(addPartyViewModel);
+            return View(addPartyViewModel);
 
     }
 
@@ -105,4 +118,5 @@ public class PartyController : Controller
 
             return NotFound();
         }
+    }
 }
