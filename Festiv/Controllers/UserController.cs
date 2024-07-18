@@ -73,20 +73,6 @@ public class UserController : Controller
 
         return View("Error");
     }
-
-    [HttpPost]
-    public IActionResult GetProfile(IFormCollection form)
-    {
-        string UserId = form["guest"];
-        return RedirectToAction("Profile", new {id = UserId});
-    }
-
-    [HttpGet("/User/Profile/{id}")]
-    public IActionResult Profile(string id)
-    {
-        User UserToView = context.Users.Where(x => x.Id.ToString() == id).SingleOrDefault();
-        return View(UserToView);
-    }
 }
 
         // string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;

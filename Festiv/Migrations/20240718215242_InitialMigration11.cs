@@ -4,14 +4,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Festiv.Migrations
 {
     /// <inheritdoc />
-<<<<<<<< HEAD:Festiv/Migrations/20240718190459_InitialMigration10.cs
-    public partial class InitialMigration10 : Migration
-========
-    public partial class FreshMigration : Migration
->>>>>>>> development:Festiv/Migrations/20240717172242_FreshMigration.cs
+    public partial class InitialMigration11 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -114,7 +112,6 @@ namespace Festiv.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Host", x => x.Id);
-<<<<<<<< HEAD:Festiv/Migrations/20240718190459_InitialMigration10.cs
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -131,8 +128,6 @@ namespace Festiv.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Parties", x => x.Id);
-========
->>>>>>>> development:Festiv/Migrations/20240717172242_FreshMigration.cs
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -271,12 +266,8 @@ namespace Festiv.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Start = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     End = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-<<<<<<<< HEAD:Festiv/Migrations/20240718190459_InitialMigration10.cs
                     PartyHostId = table.Column<int>(type: "int", nullable: true),
                     PartyId = table.Column<int>(type: "int", nullable: false)
-========
-                    PartyHostId = table.Column<int>(type: "int", nullable: true)
->>>>>>>> development:Festiv/Migrations/20240717172242_FreshMigration.cs
                 },
                 constraints: table =>
                 {
@@ -286,15 +277,12 @@ namespace Festiv.Migrations
                         column: x => x.PartyHostId,
                         principalTable: "Host",
                         principalColumn: "Id");
-<<<<<<<< HEAD:Festiv/Migrations/20240718190459_InitialMigration10.cs
                     table.ForeignKey(
                         name: "FK_PartyDetails_Parties_PartyId",
                         column: x => x.PartyId,
                         principalTable: "Parties",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-========
->>>>>>>> development:Festiv/Migrations/20240717172242_FreshMigration.cs
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -323,31 +311,25 @@ namespace Festiv.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-<<<<<<<< HEAD:Festiv/Migrations/20240718190459_InitialMigration10.cs
-========
-            migrationBuilder.CreateTable(
-                name: "Parties",
-                columns: table => new
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    DetailsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Parties", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Parties_PartyDetails_DetailsId",
-                        column: x => x.DetailsId,
-                        principalTable: "PartyDetails",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                    { new Guid("596cf31c-770a-4fee-97d2-3aeac9ae8bd2"), null, "Admin", "ADMIN" },
+                    { new Guid("eb4a059e-5d16-4494-9c25-d47be6758540"), null, "User", "USER" }
+                });
 
->>>>>>>> development:Festiv/Migrations/20240717172242_FreshMigration.cs
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfilePic", "Rating", "SecurityStamp", "TwoFactorEnabled", "UserName", "UserType" },
+                values: new object[] { new Guid("698d8490-1398-4a3f-b321-993a2c7fd8e0"), 0, "cdf1c47e-e15e-4701-b7a1-56b342328ff3", "admin@festiv.com", true, "Admin", "User", false, null, "ADMIN@FESTIV.COM", "ADMIN@FESTIV.COM", "AQAAAAIAAYagAAAAENEMnypZ2YBVRmWf0s3hGGYp/B+3lomGqkQRH0rtTmS1JVfui9RTMN5/aFRmdBdIlg==", null, false, null, 0, "", false, "admin@festiv.com", true });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { new Guid("596cf31c-770a-4fee-97d2-3aeac9ae8bd2"), new Guid("698d8490-1398-4a3f-b321-993a2c7fd8e0") });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -391,7 +373,6 @@ namespace Festiv.Migrations
                 column: "PartyDetailsId");
 
             migrationBuilder.CreateIndex(
-<<<<<<<< HEAD:Festiv/Migrations/20240718190459_InitialMigration10.cs
                 name: "IX_PartyDetails_PartyHostId",
                 table: "PartyDetails",
                 column: "PartyHostId");
@@ -401,16 +382,6 @@ namespace Festiv.Migrations
                 table: "PartyDetails",
                 column: "PartyId",
                 unique: true);
-========
-                name: "IX_Parties_DetailsId",
-                table: "Parties",
-                column: "DetailsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PartyDetails_PartyHostId",
-                table: "PartyDetails",
-                column: "PartyHostId");
->>>>>>>> development:Festiv/Migrations/20240717172242_FreshMigration.cs
         }
 
         /// <inheritdoc />
@@ -436,12 +407,6 @@ namespace Festiv.Migrations
 
             migrationBuilder.DropTable(
                 name: "GuestResponds");
-<<<<<<<< HEAD:Festiv/Migrations/20240718190459_InitialMigration10.cs
-========
-
-            migrationBuilder.DropTable(
-                name: "Parties");
->>>>>>>> development:Festiv/Migrations/20240717172242_FreshMigration.cs
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -454,12 +419,9 @@ namespace Festiv.Migrations
 
             migrationBuilder.DropTable(
                 name: "Host");
-<<<<<<<< HEAD:Festiv/Migrations/20240718190459_InitialMigration10.cs
 
             migrationBuilder.DropTable(
                 name: "Parties");
-========
->>>>>>>> development:Festiv/Migrations/20240717172242_FreshMigration.cs
         }
     }
 }
