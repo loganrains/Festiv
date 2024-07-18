@@ -7,18 +7,18 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Http.Abstractions;
 using Azure.Identity;
 using Microsoft.Build.Framework.Profiler;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Festiv.Controllers;
 
 public class UserController : Controller
 {
-    // private readonly User _user;
     private readonly FestivDbContext context;
-    // public readonly IHttpContextAccessor? _httpContextAccessor;
-
-    public UserController(FestivDbContext dbContext)
+    private readonly UserManager<User> userManager;
+    public UserController(FestivDbContext dbContext, UserManager<User> userManager)
     {
         context = dbContext;
+        this.userManager = userManager;
     }
     public IActionResult Index()
     {
@@ -33,13 +33,44 @@ public class UserController : Controller
         return RedirectToAction("Profile", new {id = UserId});
     }
 
-    [HttpGet("/User/Profile/{id}")]
-    public IActionResult Profile(string id)
+   [HttpGet("/User/Profile/{id}")]
+    public async Task<IActionResult> Profile(string id)
     {
-        User UserToView = context.Users.Where(x => x.Id.ToString() == id).SingleOrDefault();
-        return View(UserToView);
+        var userToView = context.Users.SingleOrDefault(x => x.Id.ToString() == id);
+        if (userToView == null)
+            {
+                return NotFound();
+            }
+
+        var currentUser = await userManager.GetUserAsync(User);
+        var isAdmin = await userManager.IsInRoleAsync(currentUser, "Admin");
+
+        ViewData["IsAdmin"] = isAdmin;
+
+        return View(userToView);
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> DeleteUser(string id)
+    {
+        var user = await userManager.FindByIdAsync(id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        var result = await userManager.DeleteAsync(user);
+        if (result.Succeeded)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
+        foreach (var error in result.Errors)
+        {
+            ModelState.AddModelError(string.Empty, error.Description);
+        }
+
+        return View("Error");
     }
 }
-
-        // string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-        // User currentUser = context.Users.Where(x => x.Id.ToString() == userId).SingleOrDefault();
