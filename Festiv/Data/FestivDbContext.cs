@@ -16,9 +16,10 @@ public class FestivDbContext: IdentityDbContext<User, Role, Guid>
 {
     public DbSet<User> UserList { get; set; }
     public DbSet<Party> Parties { get; set; }
-    public Role? Role {get; set;}
     public DbSet<PartyDetails> PartyDetails { get; set; }
     public DbSet<GuestRespond> GuestResponds { get; set; }
+    public DbSet<Game> Games { get; set; }
+    public DbSet<Gift> Gifts { get; set; }
 
 
     public FestivDbContext(DbContextOptions<FestivDbContext> options): base(options)
@@ -32,6 +33,26 @@ public class FestivDbContext: IdentityDbContext<User, Role, Guid>
         modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
 
             modelBuilder.Entity<Party>().HasOne(p => p.Details).WithOne(d => d.Party).HasForeignKey<PartyDetails>(d => d.PartyId);
+
+            modelBuilder.Entity<GuestRespond>()
+                .HasOne(gr => gr.Party)
+                .WithMany(p => p.GuestResponds)
+                .HasForeignKey(gr => gr.PartyId);
+
+            modelBuilder.Entity<GuestRespond>()
+                .HasOne(gr => gr.User)
+                .WithMany(u => u.GuestResponds)
+                .HasForeignKey(gr => gr.UserId);
+
+            modelBuilder.Entity<Game>()
+                .HasMany(g => g.Users)
+                .WithMany(u => u.Games)
+                .UsingEntity(j => j.ToTable("GamePlayers"));
+
+            modelBuilder.Entity<Gift>()
+                .HasOne(g => g.User)
+                .WithMany(u => u.Gifts)
+                .HasForeignKey(g => g.UserId);
 
         var adminRoleId = Guid.NewGuid();
         var userRoleId = Guid.NewGuid();
@@ -73,7 +94,7 @@ public class FestivDbContext: IdentityDbContext<User, Role, Guid>
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-           builder.Property(x=> x.FirstName);
+            builder.Property(x=> x.FirstName);
             builder.Property(x=> x.LastName);
             builder.Property(x=> x.Rating);
         }

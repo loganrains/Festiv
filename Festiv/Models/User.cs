@@ -13,6 +13,11 @@ public class User : IdentityUser<Guid>
     public string? ProfilePic {get; set;}
     public int Rating {get; set;}
     public bool UserType {get; set;}
+    public int GuestRespondId {get; set;}
+    public ICollection<GuestRespond> GuestResponds { get; set; } = new List<GuestRespond>();
+    public ICollection<Game> Games { get; set; } = new List<Game>();
+    public int GiftId { get; set; }
+    public ICollection<Gift> Gifts { get; set; } = new List<Gift>();
     public User( bool userType, string? firstName, string? lastName, string? profilePic, int rating = 1000)
     {
         FirstName = firstName;

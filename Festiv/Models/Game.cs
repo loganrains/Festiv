@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace Festiv.Models
 {
     public class Game
@@ -9,12 +10,15 @@ namespace Festiv.Models
         public string? GameName { get; set; }
         public int MinPlayers { get; set; }
         public int MaxPlayers { get; set; }
+        public ICollection<User> Users { get; set; } = new List<User>();
+        [NotMapped]
+        public List<User> WaitingPlayers { get; set; } = new List<User>();
 
-        public List<User> WaitingPlayers { get; set; }
+        [NotMapped]
+        public List<User> CurrentPlayers { get; set; } = new List<User>();
 
-        public List<User> CurrentPlayers { get; set; }
-
-        public List<List<User>> Teams { get; set; }
+        [NotMapped]
+        public List<List<User>> Teams { get; set; } = new List<List<User>>();
         public Game()
         {
         }
