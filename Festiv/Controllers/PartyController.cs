@@ -20,8 +20,8 @@ namespace Festiv.Controllers
             context = dbContext;
         }
 
-        private static List<Party> Parties = new List<Party>();
-        private static List<Game> games = new List<Game>(); 
+        private static List<Party> Parties = [];
+        private static List<Game> games = [];
 
         // GET /<controller>
         public IActionResult Index()
@@ -82,11 +82,10 @@ namespace Festiv.Controllers
 
 
 
-            
+            //Code is unreachable can we remove? - Log
             context.Parties.Add(newParty);
             context.SaveChanges();
-            
-                return RedirectToAction("Index", "Party");
+            return RedirectToAction("Index", "Party");
             }
 
             return View(addPartyViewModel);
@@ -117,6 +116,12 @@ namespace Festiv.Controllers
             }
 
             return NotFound();
+        }
+
+        [HttpGet("Party/PartyDetails/{partyid}/AddPhoto")]
+        public IActionResult AddPhoto(int partyid, string url, string alt)
+        {
+            return View(PartyDetails);
         }
     }
 }

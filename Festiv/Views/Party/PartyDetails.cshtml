@@ -22,6 +22,21 @@
             </div>
         </div>
     </div>
-    <a asp-controller="Rating" asp-action="Index">Rate Guests</a>
+    <div>
+        <a asp-controller="Rating" asp-action="Index">Rate Guests</a>
+    </div>
+    <div>
+        <div>
+            <a asp-controller="Party" asp-action="AddPhoto">Click Here to add Photo</a>
+        </div>
+        <div>
+            @foreach (Photo photo in Model.Photos)
+            {
+                <div>
+                    <img src="photo.Link" alt="photo.Name">
+                </div>
+            }
+        </div>
+    </div>
 
 </div>

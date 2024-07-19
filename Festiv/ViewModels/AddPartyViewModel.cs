@@ -26,6 +26,8 @@ public class AddPartyViewModel
 
     public Models.Host? PartyHost { get; set; }
     public List<Guest>? GuestList { get; set; }
-    public List<Game> ? Games { get; set; }
+    public List<Game>? Games { get; set; }
+
+    public List<Photo>? Photos { get; set; }
     
 }

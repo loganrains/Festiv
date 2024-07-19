@@ -19,7 +19,7 @@ namespace Festiv.Controllers
         {
             context = dbContext;
         }
-        private static List<Game> games = new List<Game>(); 
+        private static List<Game> games = new List<Game>();
 
         public IActionResult Index()
         {
