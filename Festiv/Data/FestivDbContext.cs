@@ -54,6 +54,11 @@ public class FestivDbContext: IdentityDbContext<User, Role, Guid>
                 .WithMany(u => u.Gifts)
                 .HasForeignKey(g => g.UserId);
 
+            modelBuilder.Entity<Gift>()
+                .HasOne(g => g.Party)
+                .WithMany(p => p.Gifts)
+                .HasForeignKey(g => g.PartyId);
+
         var adminRoleId = Guid.NewGuid();
         var userRoleId = Guid.NewGuid();
         var adminId = Guid.NewGuid();

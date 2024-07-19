@@ -10,7 +10,7 @@ namespace Festiv.Models
         public PartyDetails? Details { get; set; }
         public int DetailsId { get; set; }
         public ICollection<GuestRespond> GuestResponds { get; set; } = new List<GuestRespond>();
-        public int GuestRespondsId { get; set; }
+        public ICollection<Gift> Gifts { get; set; } = new List<Gift>();
         public int Id { get; set; }
 
     public Party()

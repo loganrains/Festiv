@@ -56,10 +56,15 @@ namespace Festiv.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int>("PartyId")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PartyId");
 
                     b.HasIndex("UserId");
 
@@ -167,9 +172,6 @@ namespace Festiv.Migrations
                     b.Property<int>("DetailsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("GuestRespondsId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
 
@@ -246,13 +248,13 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("bf09a51c-5608-4cb4-897f-60088b30ce3b"),
+                            Id = new Guid("1664a2c2-930b-4fa0-a012-5430fbe667a9"),
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("259de78d-913e-4b38-987a-36628708c3cd"),
+                            Id = new Guid("d5027e6a-ec8b-4fcd-9f8c-ff0d7540b098"),
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -280,12 +282,6 @@ namespace Festiv.Migrations
 
                     b.Property<string>("FirstName")
                         .HasColumnType("longtext");
-
-                    b.Property<int>("GiftId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GuestRespondId")
-                        .HasColumnType("int");
 
                     b.Property<string>("LastName")
                         .HasColumnType("longtext");
@@ -346,19 +342,17 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("04c9496f-b68a-460a-bed6-3927220980d9"),
+                            Id = new Guid("ab08cb1a-d6f9-4afe-9633-f47371ac8383"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6089d3e6-2d9c-4124-8585-34cd34fa0d0c",
+                            ConcurrencyStamp = "48399bc3-f0ae-4ac7-ba62-e71df8df6cca",
                             Email = "admin@festiv.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
-                            GiftId = 0,
-                            GuestRespondId = 0,
                             LastName = "User",
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@FESTIV.COM",
                             NormalizedUserName = "ADMIN@FESTIV.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEAJpTNnI6lhoKbCMcJPWptppgqkSpRm09K8MQnvXwLoXz/FdgMVL0rRvyxCz7aaz1Q==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEO5c3QXpwaIuN9zjGSvdTJjuZLhDXHGHxQz7FP/jMXWf+ucYzjtGJBUHvR4ZhntCug==",
                             PhoneNumberConfirmed = false,
                             Rating = 0,
                             SecurityStamp = "",
@@ -469,8 +463,8 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("04c9496f-b68a-460a-bed6-3927220980d9"),
-                            RoleId = new Guid("bf09a51c-5608-4cb4-897f-60088b30ce3b")
+                            UserId = new Guid("ab08cb1a-d6f9-4afe-9633-f47371ac8383"),
+                            RoleId = new Guid("1664a2c2-930b-4fa0-a012-5430fbe667a9")
                         });
                 });
 
@@ -495,11 +489,19 @@ namespace Festiv.Migrations
 
             modelBuilder.Entity("Festiv.Models.Gift", b =>
                 {
+                    b.HasOne("Festiv.Models.Party", "Party")
+                        .WithMany("Gifts")
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Festiv.Models.User", "User")
                         .WithMany("Gifts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Party");
 
                     b.Navigation("User");
                 });
@@ -616,6 +618,8 @@ namespace Festiv.Migrations
             modelBuilder.Entity("Festiv.Models.Party", b =>
                 {
                     b.Navigation("Details");
+
+                    b.Navigation("Gifts");
 
                     b.Navigation("GuestResponds");
                 });

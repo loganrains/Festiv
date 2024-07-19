@@ -6,6 +6,8 @@ public class Gift
     public string Name { get; set; }
     public Guid UserId { get; set; }
     public User User { get; set; }
+    public int PartyId { get; set; }
+    public Party Party { get; set; }
 
     public Gift(string name, Guid userId)
     {
