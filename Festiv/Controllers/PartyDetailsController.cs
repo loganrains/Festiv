@@ -1,23 +1,36 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Festiv.Models;
-using System.Collections.Generic;
-using System.Linq;
+using Festiv.ViewModels;
+using Festiv.Data;
+using Microsoft.AspNetCore.SignalR;
+using System.Configuration;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
+using Microsoft.EntityFrameworkCore;
 
 namespace Festiv.Controllers
 {
-    public class GameBoardController : Controller
+    public class PartyDetailsController : Controller
     {
+        private FestivDbContext context;
+
+        public PartyDetailsController (FestivDbContext dbContext)
+        {
+            context = dbContext;
+        }
         private static List<Game> games = new List<Game>(); 
 
         public IActionResult Index()
         {
-            // List<Game> games = new List<Game>();
-            // List<
-            // games.Add(new Game ("cornhole", , ));
-            return View(games);
+            var model = new AddPartyViewModel
+            {
+                Games = games
+            };
+            return View(model);
         }
 
-        public IActionResult Create()
+        public IActionResult CreateGame()
         {
             return View();
         }
@@ -27,20 +40,32 @@ namespace Festiv.Controllers
         {
             if (ModelState.IsValid)
             {
+                game.Id = games.Count + 1;
                 games.Add(game);
                 return RedirectToAction("Index");
             }
             return View(game);
         }
 
-        public IActionResult Details(int id)
+        public IActionResult GameDetails(int id)
         {
             var game = games.FirstOrDefault(g => g.Id == id);
             if (game == null)
             {
                 return NotFound();
             }
-            return View(game);
+            
+            var viewModel = new GameDetailsViewModel
+            {
+                GameId = game.Id,
+                GameName = game.GameName,
+                MinPlayers = game.MinPlayers,
+                MaxPlayers = game.MaxPlayers,
+                WaitingPlayers = game.WaitingPlayers,
+                CurrentPlayers = game.CurrentPlayers,
+                Teams = game.Teams
+            };
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -52,6 +77,10 @@ namespace Festiv.Controllers
                 return NotFound();
             }
 
+            var playersToAdd = game.WaitingPlayers.Take(game.MaxPlayers).ToList();
+            game.CurrentPlayers.AddRange(playersToAdd);
+            game.WaitingPlayers = game.WaitingPlayers.Skip(game.MaxPlayers).ToList();
+
             if (randomizerType == "split")
             {
                 game.Teams = SplitIntoTwoTeams(game.CurrentPlayers);
@@ -61,7 +90,20 @@ namespace Festiv.Controllers
                 game.Teams = GroupIntoPairs(game.CurrentPlayers);
             }
 
-            return RedirectToAction("Details", new { id = game.Id });
+            return RedirectToAction("GameDetails", new { id = game.Id });
+        }
+
+        [HttpPost]
+        public IActionResult SignUp(int id, string firstName, string lastName)
+        {
+            var game = games.FirstOrDefault(g => g.Id == id);
+            if (game == null)
+            {
+                return NotFound();
+            }
+
+            game.CurrentPlayers.Add(new User { FirstName = firstName, LastName = lastName });
+            return RedirectToAction("GameDetails", new { id = game.Id });
         }
 
         private List<List<User>> SplitIntoTwoTeams(List<User> players)

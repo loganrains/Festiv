@@ -7,14 +7,14 @@
     <!-- <AssemblyName>FestivApp</AssemblyName> -->
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-<!-- 
-  <ItemGroup>
+   <ItemGroup>
     <Content Remove="Views\Game\Index.cshtml" />
   </ItemGroup>
 
-  <ItemGroup>
+  <!-- <ItemGroup>
     <Compile Include="Views\Game\Index.cshtml" />
-  </ItemGroup> -->
+  </ItemGroup>  -->
+  
 
   <ItemGroup>
     <PackageReference Include="DotNetEnv" Version="3.0.0" />

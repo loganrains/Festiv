@@ -1,10 +1,14 @@
 @using Festiv.Models;
 @using Festiv.ViewModels;
 @using Festiv.Controllers;
-@model UserViewModel;
+@model User;
 
-   <form id="ratingUpdate" method="post">
+<h1>@Model.FirstName @Model.LastName</h1>
+<div>
+   <form action="ChangeRating" method="post">
+      <label hidden><select name="guest"><option value="@Model.Id">@Model.Id</option></select></label>
       <label>Did confirmed guest show up?<input type="checkbox" name="confirmedGuestShowedUp"/></label>
       <label>Did they bring the gift they committed to?<input type="checkbox" name="guestBroughtGift"/></label>
       <button type="submit">Rate!</button>
    </form>
+</div> 

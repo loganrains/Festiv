@@ -5,6 +5,7 @@ namespace Festiv.Models;
 
 public class PartyDetails
 {
+    public string? Name { get; set; }
     public string? Description { get; set; }
     public string? Location { get; set; }
 
@@ -13,13 +14,16 @@ public class PartyDetails
 
     public Host? PartyHost { get; set; }
     public List<Guest>? GuestList { get; set; }
+    public Party Party { get; set; }
 
     public int Id { get; set; }
+    public int PartyId { get; set; }
 
     public PartyDetails() { }
 
-    public PartyDetails(string? description, string? location, DateTime? start, DateTime? end, Host? partyHost, List<Guest>? guestList)
+    public PartyDetails(string? name, string? description, string? location, DateTime? start, DateTime? end, Host? partyHost, List<Guest>? guestList)
     {
+        Name = name;
         Description = description;
         Location = location;
         Start = start;

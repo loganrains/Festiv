@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,6 +8,7 @@ using Festiv.Models;
 using Festiv.Services;
 using Festiv.Controllers;
 using Festiv.ViewModels;
+using Microsoft.AspNetCore.Http;
 using SpotifyAPI.Web;
 using SpotifyAPI.Web.Auth;
 
@@ -22,9 +24,7 @@ var configuration = builder.Configuration;
 
    builder.Services.AddDbContext<FestivDbContext>(dbContextOptions => dbContextOptions.UseMySql(connectionString, serverVersion));
    builder.Services.AddControllersWithViews();
-
-//    Identity configuration
-   builder.Services.AddIdentity<User, IdentityRole>(
+   builder.Services.AddIdentity<User, Role>(
     options => {   
         options.Password.RequiredUniqueChars = 0;
         options.Password.RequireUppercase = false;
@@ -37,14 +37,17 @@ var configuration = builder.Configuration;
 
 
         builder.Services.AddScoped<Festiv.Models.User>();
-//    builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
-//     .AddEntityFrameworkStores<FestivDbContext>();
+        builder.Services.AddScoped<IUserStore<User>, UserStore<User, Role, FestivDbContext, Guid>>();
 
-// builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<FestivDbContext>();
+    // Register UserManager and SignInManager
+    builder.Services.AddScoped<UserManager<User>>();
+    builder.Services.AddScoped<SignInManager<User>>();
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddHttpContextAccessor();
 
 // Spotify configuration
 var spotifySettings = configuration.GetSection("Spotify").Get<SpotifySettings>();
@@ -71,7 +74,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapRazorPages();
 app.MapControllers();
 

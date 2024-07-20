@@ -6,36 +6,38 @@ namespace Festiv.Models
     {
         public int Id { get; set; }
 
-        public string? Name { get; set; }
+        public string? GameName { get; set; }
+        public int MinPlayers { get; set; }
+        public int MaxPlayers { get; set; }
 
-        public List<User>? Users { get; set; } 
+        public List<User> WaitingPlayers { get; set; }
 
-        public List<User>? CurrentPlayers { get; set; }
+        public List<User> CurrentPlayers { get; set; }
 
-        public List<List<User>>? Teams { get; set; }
-
-        public Game(string name, List<User> currentPlayers, List<User>teams)
-        {
-            Name = name;
-            CurrentPlayers = currentPlayers ?? new List<User>();
-            Users = new List<User>();
-            CurrentPlayers = new List<User>();
-            Teams = new List<List<User>>();
-        }
-
+        public List<List<User>> Teams { get; set; }
         public Game()
         {
         }
+        public Game(string gameName, List<User> waitingPlayers, List<User> currentPlayers, List<List<User>> teams, int minPlayers, int maxplayers)
+        {
+            GameName = gameName;
+            MinPlayers = minPlayers;
+            MaxPlayers = maxplayers;
+            WaitingPlayers = waitingPlayers;
+            CurrentPlayers = currentPlayers;
+            Teams = teams;
+        }
+        
 
         public override string ToString()
         {
-            return Name;
+            return GameName;
         }
 
         public override bool Equals(object? obj)
         {
-            return obj is Game @game && 
-                Id == @game.Id;
+            return obj is Game game && 
+                Id == game.Id;
         }
 
         public override int GetHashCode()
