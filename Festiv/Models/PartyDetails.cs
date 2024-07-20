@@ -16,7 +16,7 @@ public class PartyDetails
     public List<Guest>? GuestList { get; set; }
     public Party Party { get; set; }
 
-    public List<Photo> Photos { get; set; }
+    public List<Photo>? Photos { get; set; }
 
     public int Id { get; set; }
     public int PartyId { get; set; }
@@ -45,5 +45,4 @@ public class PartyDetails
     {
         return HashCode.Combine(Id);
     }
-
 }

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Festiv.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration11 : Migration
+    public partial class PhotoBoardTrial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -311,24 +311,47 @@ namespace Festiv.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "Photo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Link = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AltText = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PartyDetailsId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Photo", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Photo_PartyDetails_PartyDetailsId",
+                        column: x => x.PartyDetailsId,
+                        principalTable: "PartyDetails",
+                        principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("596cf31c-770a-4fee-97d2-3aeac9ae8bd2"), null, "Admin", "ADMIN" },
-                    { new Guid("eb4a059e-5d16-4494-9c25-d47be6758540"), null, "User", "USER" }
+                    { new Guid("1e0b90ab-60c1-4273-b791-80a6706a52af"), null, "Admin", "ADMIN" },
+                    { new Guid("c92621a6-018b-4e43-9e62-88ec5e81d58d"), null, "User", "USER" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfilePic", "Rating", "SecurityStamp", "TwoFactorEnabled", "UserName", "UserType" },
-                values: new object[] { new Guid("698d8490-1398-4a3f-b321-993a2c7fd8e0"), 0, "cdf1c47e-e15e-4701-b7a1-56b342328ff3", "admin@festiv.com", true, "Admin", "User", false, null, "ADMIN@FESTIV.COM", "ADMIN@FESTIV.COM", "AQAAAAIAAYagAAAAENEMnypZ2YBVRmWf0s3hGGYp/B+3lomGqkQRH0rtTmS1JVfui9RTMN5/aFRmdBdIlg==", null, false, null, 0, "", false, "admin@festiv.com", true });
+                values: new object[] { new Guid("12a42ff6-2fc7-471b-ac59-083189adb4d7"), 0, "76aad052-d417-41ea-a3d7-4ce625bee34b", "admin@festiv.com", true, "Admin", "User", false, null, "ADMIN@FESTIV.COM", "ADMIN@FESTIV.COM", "AQAAAAIAAYagAAAAEHLuIeeeHeC7c9/1HDgz+H/+qpspFLpV3Zq46SSKP8IpVFh5U27oRP0xqqtMKEVK3Q==", null, false, null, 0, "", false, "admin@festiv.com", true });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { new Guid("596cf31c-770a-4fee-97d2-3aeac9ae8bd2"), new Guid("698d8490-1398-4a3f-b321-993a2c7fd8e0") });
+                values: new object[] { new Guid("1e0b90ab-60c1-4273-b791-80a6706a52af"), new Guid("12a42ff6-2fc7-471b-ac59-083189adb4d7") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -382,6 +405,11 @@ namespace Festiv.Migrations
                 table: "PartyDetails",
                 column: "PartyId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Photo_PartyDetailsId",
+                table: "Photo",
+                column: "PartyDetailsId");
         }
 
         /// <inheritdoc />
@@ -407,6 +435,9 @@ namespace Festiv.Migrations
 
             migrationBuilder.DropTable(
                 name: "GuestResponds");
+
+            migrationBuilder.DropTable(
+                name: "Photo");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

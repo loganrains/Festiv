@@ -20,9 +20,6 @@ namespace Festiv.Controllers
             context = dbContext;
         }
 
-        private static List<Party> Parties = [];
-        private static List<Game> games = [];
-
         // GET /<controller>
         public IActionResult Index()
         {
@@ -31,10 +28,10 @@ namespace Festiv.Controllers
             return View(Parties);
         }
 
-    [HttpGet("Party/PartyDetails/{partyId}")]
-    public IActionResult PartyDetails(int partyId)
-    {
-        PartyDetails? requestedParty = context.PartyDetails.Find(partyId);
+        [HttpGet("Party/PartyDetails/{partyId}")]
+        public IActionResult PartyDetails(int partyId)
+        {
+            PartyDetails? requestedParty = context.PartyDetails.Find(partyId);
 
             if (requestedParty != null)
             {
@@ -70,7 +67,7 @@ namespace Festiv.Controllers
                     Description = addPartyViewModel.Description,
                     Location = addPartyViewModel.Location,
                     Start = addPartyViewModel.Start,
-                    End = addPartyViewModel.End
+                    End = addPartyViewModel.End,
                 };
 
                 newParty.Details = theDetails;
@@ -79,18 +76,10 @@ namespace Festiv.Controllers
                 context.Parties.Add(newParty);
                 await context.SaveChangesAsync();
                 return RedirectToAction("Index");
-
-
-
-            //Code is unreachable can we remove? - Log
-            context.Parties.Add(newParty);
-            context.SaveChanges();
-            return RedirectToAction("Index", "Party");
             }
-
+            
             return View(addPartyViewModel);
-
-    }
+        }
 
         [HttpGet("Party/Delete/{partyId}")]
         public IActionResult Delete(int partyId)

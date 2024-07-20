@@ -160,6 +160,30 @@ namespace Festiv.Migrations
                     b.ToTable("PartyDetails");
                 });
 
+            modelBuilder.Entity("Festiv.Models.Photo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AltText")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Link")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("PartyDetailsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartyDetailsId");
+
+                    b.ToTable("Photo");
+                });
+
             modelBuilder.Entity("Festiv.Models.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -189,13 +213,13 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b8045426-4c9a-41f6-913e-4a9071904257"),
+                            Id = new Guid("1e0b90ab-60c1-4273-b791-80a6706a52af"),
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("7c0b8ea3-5dd7-4dfb-9445-df7602cf036d"),
+                            Id = new Guid("c92621a6-018b-4e43-9e62-88ec5e81d58d"),
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -283,9 +307,9 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("297d9574-ec87-4995-8e35-e957a64a540d"),
+                            Id = new Guid("12a42ff6-2fc7-471b-ac59-083189adb4d7"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b0838cad-5b0a-4e94-a3fd-37bfa7ec6478",
+                            ConcurrencyStamp = "76aad052-d417-41ea-a3d7-4ce625bee34b",
                             Email = "admin@festiv.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -293,7 +317,7 @@ namespace Festiv.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@FESTIV.COM",
                             NormalizedUserName = "ADMIN@FESTIV.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEN0LA1iyYFdqPlhMk9GuOUvV0nBZjC14yVVZFs883nykwlKASwjoNTaJpoX8xl2SQA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHLuIeeeHeC7c9/1HDgz+H/+qpspFLpV3Zq46SSKP8IpVFh5U27oRP0xqqtMKEVK3Q==",
                             PhoneNumberConfirmed = false,
                             Rating = 0,
                             SecurityStamp = "",
@@ -389,8 +413,8 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("297d9574-ec87-4995-8e35-e957a64a540d"),
-                            RoleId = new Guid("b8045426-4c9a-41f6-913e-4a9071904257")
+                            UserId = new Guid("12a42ff6-2fc7-471b-ac59-083189adb4d7"),
+                            RoleId = new Guid("1e0b90ab-60c1-4273-b791-80a6706a52af")
                         });
                 });
 
@@ -435,6 +459,13 @@ namespace Festiv.Migrations
                     b.Navigation("Party");
 
                     b.Navigation("PartyHost");
+                });
+
+            modelBuilder.Entity("Festiv.Models.Photo", b =>
+                {
+                    b.HasOne("Festiv.Models.PartyDetails", null)
+                        .WithMany("Photos")
+                        .HasForeignKey("PartyDetailsId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -496,6 +527,8 @@ namespace Festiv.Migrations
             modelBuilder.Entity("Festiv.Models.PartyDetails", b =>
                 {
                     b.Navigation("GuestList");
+
+                    b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618
         }
