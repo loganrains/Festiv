@@ -19,6 +19,8 @@ namespace Festiv.Controllers
         // GET: /Rsvp/Index
         public IActionResult Index()
         {
+            List<Party> parties = _context.Parties.ToList();
+            ViewBag.parties = parties;
             return View();
         }
 

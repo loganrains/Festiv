@@ -1,4 +1,9 @@
-@model Festiv.Models.GuestRespond;
+@model Festiv.Models.GuestRespond
+@using Festiv.Data;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@{List<Party> Parties = ViewBag.parties;}
 
 <h1>Add Guest</h1>
 
@@ -19,6 +24,20 @@
         <label asp-for="Email" class="form-label">Email</label>
         <input asp-for="Email" class="form-control" id="Email" required>
         <span asp-validation-for="Email" class="text-danger"></span>
+    </div> 
+
+    <div class="col-md-12">
+        <label>Whose party are you going to?
+            <select name="PartyId" required>
+                <option value="">* Select One *</option>
+                @foreach (var party in Parties)
+                {
+                    <option value="@party.Id">@party.Name</option>
+                }
+            </select>
+    </div>
+    <div>
+        <input type="hidden" name="UserId" value="@UserManager.GetUserId(User)" />
     </div>
 
     <div class="col-md-12">
