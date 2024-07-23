@@ -13,7 +13,7 @@ else
 <div>
     <form action="User/GetProfile" method="post">
         <label>Whose profile do you want to see?
-            <select name="guest">
+            <select name="guest" required>
                 <option value="">* Select One *</option>
                 @foreach (var user in Model)
                 {
