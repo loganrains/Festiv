@@ -6,23 +6,23 @@ namespace Festiv.Models
 {
     public class Party
     {
-        public string? Name { get; set; }
+        public int Id { get; set; }
+         public string? Name { get; set; }
 
         public PartyDetails? Details { get; set; }
         public int DetailsId { get; set; }
     
-    public int Id { get; set; }
+        public List<Game> Games { get; set; } = new List<Game>();
+        public Party()
+        {
+        }
 
-    public Party()
-    {
-    }
-
-    public Party(string name, string description, string location, DateTime start, DateTime end, PartyDetails partyDetails)
-    {
-        Name = name;
-        Details = partyDetails;
-        DetailsId = Details.Id;
-    }
+        public Party(string name, string description, string location, DateTime start, DateTime end, PartyDetails partyDetails)
+        {
+            Name = name;
+            Details = partyDetails;
+            DetailsId = Details.Id;
+        }
 
         public override string ToString()
         {

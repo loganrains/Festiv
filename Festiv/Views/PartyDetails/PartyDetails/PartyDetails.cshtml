@@ -1,10 +1,11 @@
-@using Festiv;
-@using Festiv.Controllers;
+@using Festiv
+@using Festiv.Controllers
 @model PartyDetails
 
 
 @{
     ViewData["Title"] = "Party Details";
+    var partyId = ViewBag.PartyId;
 }
 
 <div class="text-center">
@@ -23,5 +24,17 @@
         </div>
     </div>
     <a asp-controller="Rating" asp-action="Index">Rate Guests</a>
-
+    
+    <h2>Games</h2>
+    <ul>
+        @foreach (var game in Model.Games)
+        {
+            <li>
+                <a asp-controller="PartyDetails" asp-action="GameDetails" asp-route-id ="@game.Id">@game.GameName</a>
+            </li>
+        }
+    </ul>
+    <div>
+        <a asp-controller= "PartyDetails" asp-action="CreateGame" asp-route-partyId="@partyId">Create a new game</a>
+    </div>
 </div>

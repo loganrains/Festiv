@@ -1,94 +1,154 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Festiv.Models;
 using Festiv.ViewModels;
 using Festiv.Data;
-using Microsoft.AspNetCore.SignalR;
-using System.Configuration;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using Microsoft.EntityFrameworkCore;
 
 namespace Festiv.Controllers
 {
+    [Route("PartyDetails")]
+
     public class PartyDetailsController : Controller
     {
-        private FestivDbContext context;
+        private readonly FestivDbContext context;
 
         public PartyDetailsController (FestivDbContext dbContext)
         {
             context = dbContext;
         }
-        private static List<Game> games = new List<Game>(); 
+        // private static List<Game> games = new List<Game>();
 
-        public IActionResult Index()
+
+        [HttpGet("{partyId}")]
+        public IActionResult PartyDetails(int partyId)
         {
-            var model = new AddPartyViewModel
+           Party? party = context.Parties
+            .Include(p => p.Details)
+            .Include(p => p.Games) 
+            .FirstOrDefault(p => p.Id == partyId);
+
+            if (party == null)
             {
-                Games = games
-            };
-            return View(model);
-        }
-
-        public IActionResult CreateGame()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult Create(Game game)
-        {
-            if (ModelState.IsValid)
-            {
-                game.Id = games.Count + 1;
-                games.Add(game);
-                return RedirectToAction("Index");
+                return NotFound();
             }
-            return View(game);
+
+            ViewBag.PartyId = partyId;
+
+            return View(party.Details);
         }
 
-        public IActionResult GameDetails(int id)
+        [HttpGet("CreateGame")]
+        public IActionResult CreateGame(int partyId)
         {
-            var game = games.FirstOrDefault(g => g.Id == id);
+            AddGameViewModel addGameViewModel = new AddGameViewModel
+            {
+                PartyId = partyId
+            };
+            return View(addGameViewModel);
+        }
+
+
+        [HttpPost("CreateGame")]
+        public async Task<IActionResult> CreateGame(AddGameViewModel addGameViewModel)
+        {
+            if(ModelState.IsValid)
+            {
+                Party? party = context.Parties
+                    .Include(p => p.Games)
+                    .FirstOrDefault(p => p.Id == addGameViewModel.PartyId);
+
+                if(party == null)
+                {
+                    return NotFound();
+                }
+
+                Game newGame = new Game
+                {
+                    GameName = addGameViewModel.GameName,
+                    MinPlayers = addGameViewModel.MinPlayers,
+                    MaxPlayers = addGameViewModel.MaxPlayers,
+                    WaitingPlayers = new List<User> (),
+                    CurrentPlayers = new List<User>(),
+                    Teams = new List<Team>()
+                };
+                party.Games.Add(newGame);
+                await context.SaveChangesAsync();
+                return RedirectToAction("PartyDetails", new { partyId = addGameViewModel.PartyId });
+            }
+            return View(addGameViewModel);
+        }
+
+        // [HttpPost]
+        // public IActionResult Create(Game game)
+        // {
+        //     if (ModelState.IsValid)
+        //     {
+        //         game.Id = games.Count + 1;
+        //         games.Add(game);
+        //         return RedirectToAction("Index");
+        //     }
+        //     return View(game);
+        // }
+
+        public IActionResult GameDetails(int gameId)
+        {
+            var game = context.Games
+                .Include(g => g.WaitingPlayers)
+                .Include(g => g.CurrentPlayers)
+                .Include(g => g.Teams)
+                .FirstOrDefault(game => game.Id == gameId);
+
             if (game == null)
             {
                 return NotFound();
             }
             
-            var viewModel = new GameDetailsViewModel
+            GameDetailsViewModel gameDetailsViewModel = new GameDetailsViewModel
             {
                 GameId = game.Id,
+                PartyId = game.PartyId,
                 GameName = game.GameName,
                 MinPlayers = game.MinPlayers,
                 MaxPlayers = game.MaxPlayers,
-                WaitingPlayers = game.WaitingPlayers,
-                CurrentPlayers = game.CurrentPlayers,
-                Teams = game.Teams
+                WaitingPlayers = game.WaitingPlayers.ToList(),
+                CurrentPlayers = game.CurrentPlayers.ToList(),
+                Teams = new List<Team>(),
+                
             };
-            return View(viewModel);
+            return View(gameDetailsViewModel);
         }
 
         [HttpPost]
         public IActionResult RandomizeTeams(int id, string randomizerType)
         {
-            var game = games.FirstOrDefault(g => g.Id == id);
+            Game? game = context.Games.Include(g => g.WaitingPlayers)
+                .Include(g => g.CurrentPlayers)
+                .FirstOrDefault(game => game.Id == id);
+
             if (game == null)
             {
                 return NotFound();
             }
 
             var playersToAdd = game.WaitingPlayers.Take(game.MaxPlayers).ToList();
-            game.CurrentPlayers.AddRange(playersToAdd);
+            
+            foreach(var player in playersToAdd)
+            {
+                game.CurrentPlayers.Add(player);
+            }
+
             game.WaitingPlayers = game.WaitingPlayers.Skip(game.MaxPlayers).ToList();
 
             if (randomizerType == "split")
             {
-                game.Teams = SplitIntoTwoTeams(game.CurrentPlayers);
+                game.Teams = SplitIntoTwoTeams(playersToAdd);
             }
             else if (randomizerType == "pairs")
             {
-                game.Teams = GroupIntoPairs(game.CurrentPlayers);
+                game.Teams = GroupIntoPairs(playersToAdd);
             }
+
+            context.SaveChanges();
 
             return RedirectToAction("GameDetails", new { id = game.Id });
         }
@@ -96,33 +156,43 @@ namespace Festiv.Controllers
         [HttpPost]
         public IActionResult SignUp(int id, string firstName, string lastName)
         {
-            var game = games.FirstOrDefault(g => g.Id == id);
+            var game = context.Games.FirstOrDefault(g => g.Id == id);
+
             if (game == null)
             {
                 return NotFound();
             }
 
             game.CurrentPlayers.Add(new User { FirstName = firstName, LastName = lastName });
+
+            context.SaveChanges();
+
             return RedirectToAction("GameDetails", new { id = game.Id });
         }
 
-        private List<List<User>> SplitIntoTwoTeams(List<User> players)
+        private List<Team> SplitIntoTwoTeams(List<User> players)
         {
             var shuffled = players.OrderBy(p => Guid.NewGuid()).ToList();
             int mid = shuffled.Count / 2;
-            return new List<List<User>> { shuffled.Take(mid).ToList(), shuffled.Skip(mid).ToList() };
+            return new List<Team>
+             { 
+                new Team { Members = shuffled.Take(mid).ToList() }, 
+                new Team { Members = shuffled.Skip(mid).ToList() }
+             
+             };
         }
 
-        private List<List<User>> GroupIntoPairs(List<User> players)
+        private List<Team> GroupIntoPairs(List<User> players)
         {
             var shuffled = players.OrderBy(p => Guid.NewGuid()).ToList();
-            var pairs = new List<List<User>>();
+            var pairs = new List<Team>();
+
             for (int i = 0; i < shuffled.Count; i += 2)
             {
-                var pair = new List<User> { shuffled[i] };
+                var pair = new Team { Members = new List<User> {shuffled[i]} };
                 if (i + 1 < shuffled.Count)
                 {
-                    pair.Add(shuffled[i + 1]);
+                    pair.Members.Add(shuffled[i + 1]);
                 }
                 pairs.Add(pair);
             }

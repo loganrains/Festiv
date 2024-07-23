@@ -5,16 +5,14 @@ namespace Festiv.Models
     public class Game
     {
         public int Id { get; set; }
-
         public string? GameName { get; set; }
         public int MinPlayers { get; set; }
         public int MaxPlayers { get; set; }
-
-        public List<User> WaitingPlayers { get; set; }
-
-        public List<User> CurrentPlayers { get; set; }
-
-        public List<List<User>> Teams { get; set; }
+        public ICollection<User> WaitingPlayers { get; set; } = new List<User>();
+        public ICollection<User> CurrentPlayers { get; set; } = new List<User>();
+        public ICollection<Team> Teams { get; set; } = new List<Team>();
+        public int PartyId { get; set; }
+        public Party Party { get; set; }
         public Game()
         {
         }
@@ -23,9 +21,6 @@ namespace Festiv.Models
             GameName = gameName;
             MinPlayers = minPlayers;
             MaxPlayers = maxplayers;
-            WaitingPlayers = waitingPlayers;
-            CurrentPlayers = currentPlayers;
-            Teams = teams;
         }
         
 
@@ -47,11 +42,11 @@ namespace Festiv.Models
 
     }
 
-    internal class Teams
-    {
-    }
+    // internal class Teams
+    // {
+    // }
 
-    internal class CurrentPlayers
-    {
-    }
+    // internal class CurrentPlayers
+    // {
+    // }
 }
