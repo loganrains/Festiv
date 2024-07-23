@@ -9,7 +9,6 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Http.Abstractions;
 
 
-
 namespace Festiv.Data;
 
 public class FestivDbContext: IdentityDbContext<User, Role, Guid>  
@@ -17,6 +16,7 @@ public class FestivDbContext: IdentityDbContext<User, Role, Guid>
 {
     public DbSet<User> UserList { get; set; }
     public DbSet<Party> Parties { get; set; }
+    public Role? Role {get; set;}
     public DbSet<PartyDetails> PartyDetails { get; set; }
     public DbSet<GuestRespond> GuestResponds { get; set; }
 
@@ -27,8 +27,11 @@ public class FestivDbContext: IdentityDbContext<User, Role, Guid>
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
+
+            modelBuilder.Entity<Party>().HasOne(p => p.Details).WithOne(d => d.Party).HasForeignKey<PartyDetails>(d => d.PartyId);
 
         var adminRoleId = Guid.NewGuid();
         var userRoleId = Guid.NewGuid();

@@ -74,3 +74,6 @@ public class UserController : Controller
         return View("Error");
     }
 }
+
+        // string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+        // User currentUser = context.Users.Where(x => x.Id.ToString() == userId).SingleOrDefault();
