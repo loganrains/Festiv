@@ -15,8 +15,8 @@ public class PartyDetails
     public Host? PartyHost { get; set; }
     public List<Guest>? GuestList { get; set; }
     public Party Party { get; set; }
-
-    public List<Photo>? Photos { get; set; }
+    
+    public ICollection<Photo>? Photos { get; set; } = new List<Photo>();
 
     public int Id { get; set; }
     public int PartyId { get; set; }

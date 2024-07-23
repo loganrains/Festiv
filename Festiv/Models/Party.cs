@@ -9,7 +9,8 @@ namespace Festiv.Models
         public string? Name { get; set; }
 
         public PartyDetails? Details { get; set; }
-        public int DetailsId { get; set; }
+        
+        // public int DetailsId { get; set; }
     
     public int Id { get; set; }
 
@@ -21,7 +22,6 @@ namespace Festiv.Models
     {
         Name = name;
         Details = partyDetails;
-        DetailsId = Details.Id;
     }
 
         public override string ToString()

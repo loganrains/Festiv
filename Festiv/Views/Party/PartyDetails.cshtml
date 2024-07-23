@@ -1,6 +1,6 @@
 @using Festiv;
 @using Festiv.Controllers;
-@model PartyDetails
+@model PartyDetails;
 
 
 @{
@@ -27,7 +27,7 @@
     </div>
     <div>
         <div>
-            <a asp-controller="Party" asp-action="AddPhoto">Click Here to add Photo</a>
+            <a asp-controller="Party" asp-action="AddPhoto" asp-route-partyDetailsId="@Model.Id">Click Here to add Photo</a>
         </div>
 
         @if(Model?.Photos == null || Model.Photos.Count == 0)
@@ -40,7 +40,7 @@
             @foreach (Photo photo in Model.Photos)
             {
                 <div>
-                    <img src="photo.Link" alt="photo.Name">
+                    <img src="model.photo.Link" alt="photo.AltText">
                 </div>
             }
         </div>

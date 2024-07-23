@@ -16,8 +16,9 @@ public class FestivDbContext: IdentityDbContext<User, Role, Guid>
 {
     public DbSet<User> UserList { get; set; }
     public DbSet<Party> Parties { get; set; }
-    public Role? Role {get; set;}
+    public Role? Role { get; set; }
     public DbSet<PartyDetails> PartyDetails { get; set; }
+    public DbSet<Photo> Photos { get; set; }
     public DbSet<GuestRespond> GuestResponds { get; set; }
 
 
@@ -32,6 +33,8 @@ public class FestivDbContext: IdentityDbContext<User, Role, Guid>
         modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
 
             modelBuilder.Entity<Party>().HasOne(p => p.Details).WithOne(d => d.Party).HasForeignKey<PartyDetails>(d => d.PartyId);
+            modelBuilder.Entity<PartyDetails>().HasMany(p => p.Photos).WithOne(e => e.Details).HasForeignKey(d => d.PartyDetailsId);
+            modelBuilder.Entity<Photo>().HasOne(j => j.Details).WithMany(e => e.Photos).HasForeignKey(f => f.PartyDetailsId);
 
         var adminRoleId = Guid.NewGuid();
         var userRoleId = Guid.NewGuid();

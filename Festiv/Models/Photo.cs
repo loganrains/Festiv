@@ -5,6 +5,10 @@ namespace Festiv.Models
         public string? Link { get; set; }
 
         public string? AltText { get; set; }
+
+        public int? PartyDetailsId { get; set; }
+
+        public PartyDetails? Details { get; set; }
     
         public int Id { get; set; }
 
@@ -12,10 +16,11 @@ namespace Festiv.Models
         {
         }
 
-        public Photo(string link, string altText)
+        public Photo(string link, string altText, int partyDetailsId)
         {
         Link = link;
         AltText = altText;
+        PartyDetailsId = partyDetailsId;
         }
 
         public override string ToString()

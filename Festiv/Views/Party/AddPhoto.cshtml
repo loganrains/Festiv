@@ -1,0 +1,26 @@
+@using Festiv.ViewModels;
+@model AddPhotoViewModel;
+
+@{
+    ViewData["Title"] = "Add Photo";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Add Photo</h1>
+</div>
+
+<div>
+    <form asp-controller="Party" asp-action="AddPhoto" method="post">
+
+        <label asp-for="Link">Url:</label>
+        <input asp-for="Link"><br>
+
+        <label asp-for="AltText">Description:</label>
+        <input asp-for="AltText"><br>
+
+        <input asp-for="PartyDetailsId" value="@ViewBag.Id" hidden><br>
+
+        <input type="submit" value="Create"/>
+
+    </form>
+</div>

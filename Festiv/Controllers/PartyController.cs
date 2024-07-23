@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Festiv.Controllers
 {
     public class PartyController : Controller
-    {   
+    {
         private FestivDbContext context;
 
         public PartyController (FestivDbContext dbContext)
@@ -32,6 +32,13 @@ namespace Festiv.Controllers
         public IActionResult PartyDetails(int partyId)
         {
             PartyDetails? requestedParty = context.PartyDetails.Find(partyId);
+            
+
+            Console.WriteLine(requestedParty.Photos);
+            foreach(var photo in requestedParty.Photos)
+            {
+                Console.WriteLine(photo.Link);
+            };
 
             if (requestedParty != null)
             {
@@ -41,7 +48,7 @@ namespace Festiv.Controllers
 
            return View();
         
-        }   
+        }
 
         [HttpGet]
         public IActionResult CreateEvent()
@@ -49,7 +56,7 @@ namespace Festiv.Controllers
             AddPartyViewModel addPartyViewModel = new AddPartyViewModel();
 
             return View(addPartyViewModel);
-        }   
+        }  
 
         [HttpPost]
         public async Task<IActionResult> CreateEvent(AddPartyViewModel addPartyViewModel)
@@ -107,10 +114,31 @@ namespace Festiv.Controllers
             return NotFound();
         }
 
-        [HttpGet("Party/PartyDetails/{partyid}/AddPhoto")]
-        public IActionResult AddPhoto(int partyid, string url, string alt)
+        [HttpGet("Party/AddPhoto/{partyDetailsId}")]
+        public IActionResult AddPhoto(int partyDetailsId)
         {
-            return View(PartyDetails);
+            ViewBag.Id = partyDetailsId;
+            return View();
+        }
+
+        [HttpPost()]
+        public IActionResult AddPhoto(AddPhotoViewModel addPhotoViewModel)
+        {
+            if(ModelState.IsValid)
+            {
+                Photo newPhoto = new()
+                {
+                    Link = addPhotoViewModel.Link,
+                    AltText = addPhotoViewModel.AltText,
+                    PartyDetailsId = addPhotoViewModel.PartyDetailsId
+                };
+
+                context.Photos.Add(newPhoto);
+                context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            
+            return View(addPhotoViewModel);
         }
     }
 }
