@@ -104,5 +104,7 @@ public class FestivDbContext: IdentityDbContext<User, Role, Guid>
             builder.Property(x=> x.Rating);
         }
     }
+
+    
 }
 
