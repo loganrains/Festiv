@@ -48,21 +48,21 @@ namespace Festiv.Controllers
         
     //     }   
 
-        // [HttpGet("PartyDetails/{partyId}")]
-        // public IActionResult PartyDetails(int partyId)
-        // {
-        //     var party = context.Parties
-        //         .Include(p => p.Details)
-        //         .Include(p => p.Games)
-        //         .FirstOrDefault(p => p.Id == partyId);
+        [HttpGet("PartyDetails/{partyId}")]
+        public IActionResult PartyDetails(int partyId)
+        {
+            var party = context.Parties
+                .Include(p => p.Details)
+                .Include(p => p.Games)
+                .FirstOrDefault(p => p.Id == partyId);
 
-        //     if(party == null)
-        //     {
-        //         return NotFound();
-        //     }
+            if(party == null)
+            {
+                return NotFound();
+            }
 
-        //     return View(party.Details);
-        // }
+            return View(party.Details);
+        }
 
 
         [HttpGet("CreateEvent")]

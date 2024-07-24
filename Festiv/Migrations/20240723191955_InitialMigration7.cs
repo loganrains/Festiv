@@ -441,19 +441,19 @@ namespace Festiv.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("137c45cf-f55c-4fc1-a38a-46d1becfd69b"), null, "User", "USER" },
-                    { new Guid("e68016bc-fd06-4a14-8232-4d3c57394cbb"), null, "Admin", "ADMIN" }
+                    { new Guid("f8552327-e778-4d92-aeb2-dcdace8bf163"), null, "Admin", "ADMIN" },
+                    { new Guid("fc981214-ba7d-4e62-9cbc-6908db40d3d0"), null, "User", "USER" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfilePic", "Rating", "SecurityStamp", "TwoFactorEnabled", "UserName", "UserType" },
-                values: new object[] { new Guid("1c2ad7ba-1188-44e1-aafb-11d6b6e28bbc"), 0, "857b8ea1-587c-43eb-8fcb-6e61aa789091", "admin@festiv.com", true, "Admin", "User", false, null, "ADMIN@FESTIV.COM", "ADMIN@FESTIV.COM", "AQAAAAIAAYagAAAAEMXy8HMWZePg9Sjp7s9CV1lGx10Ht9aAAwUOxXRuJdJsQKevuKc9wyESFOWmVVGr6g==", null, false, null, 0, "", false, "admin@festiv.com", true });
+                values: new object[] { new Guid("e2808e24-7d57-4cc6-8b0d-81642d13a89e"), 0, "e8e99c9b-2645-43f2-90e5-fb52d3b92830", "admin@festiv.com", true, "Admin", "User", false, null, "ADMIN@FESTIV.COM", "ADMIN@FESTIV.COM", "AQAAAAIAAYagAAAAEAgvo6cHJc6KDfsXYFXHqUHgY4A42xMJLQlcJwWBSNGuk4bvuAkVLxhK4HJ6cniF3g==", null, false, null, 0, "", false, "admin@festiv.com", true });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { new Guid("e68016bc-fd06-4a14-8232-4d3c57394cbb"), new Guid("1c2ad7ba-1188-44e1-aafb-11d6b6e28bbc") });
+                values: new object[] { new Guid("f8552327-e778-4d92-aeb2-dcdace8bf163"), new Guid("e2808e24-7d57-4cc6-8b0d-81642d13a89e") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

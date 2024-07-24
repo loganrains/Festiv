@@ -1,5 +1,5 @@
 @using Festiv.Models
-@using Festiv.ViewModels
+@model Festiv.ViewModels.GameDetailsViewModel
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -7,8 +7,30 @@
 }
 
 <h2>@Model.GameName</h2>
+<p>Minimum Players: @Model.MinPlayers</p>
+<p>Maximum Players: @Model.MaxPlayers</p>
 
-<h3>Let's play a game</h3>
+<h2>Current Players</h2>
+<ul>
+    @foreach (var player in Model.CurrentPlayers)
+    {
+        <li>@player.FirstName @player.LastName</li>
+    }
+</ul>
+
+<h2>Teams</h2>
+@foreach(var team in Model.Teams)
+{
+    <h3>Team</h3>
+    <ul>
+        @foreach (var member in team.Members)
+        {
+            <li>@member.FirstName @member.LastName</li>
+        }
+    </ul>
+}
+@* ------------------ *@
+@* <h3>Let's play a game</h3>
 <form asp-action = "SignUp" method = "post">
     <div class = "form-group">
         <label for = "NewPlayerName">Your Name</label>
@@ -30,7 +52,7 @@
         @foreach (var player in Model.WaitingPlayers)
         {
             <tr>
-                <td>@player.Name</td>
+                <td>@player.FirstName</td>
             </tr>
         }
     </tbody>
@@ -44,8 +66,9 @@
         <button type = "submit" name = "randomizerType" value = "pairs" class = "btn btn-secondary">Group into pairs</button>
     </form>
 </div>
+------------- *@
 
-<table class = "table">
+@* <table class = "table">
     <thead>
         <tr>
             <th>Name</th>
@@ -58,10 +81,10 @@
             @foreach (var player in team)
             {
                 <tr>
-                    <td>@player.Name</td>
+                    <td>@.Name</td>
                     <td>@team.Count > 1 ? team[1 - team.IndexOf(player)].Name : "No Partner"</td>
                 </tr>
             }
         }
     </tbody>
-</table>
+</table> *@

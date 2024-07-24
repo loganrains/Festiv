@@ -34,7 +34,7 @@ namespace Festiv.Controllers
 
             ViewBag.PartyId = partyId;
 
-            return View(party.Details);
+            return View("PartyDetails", party.Details);
         }
 
         [HttpGet("CreateGame")]
@@ -67,11 +67,13 @@ namespace Festiv.Controllers
                     GameName = addGameViewModel.GameName,
                     MinPlayers = addGameViewModel.MinPlayers,
                     MaxPlayers = addGameViewModel.MaxPlayers,
+                    PartyId = addGameViewModel.PartyId,
                     WaitingPlayers = new List<User> (),
                     CurrentPlayers = new List<User>(),
                     Teams = new List<Team>()
                 };
                 party.Games.Add(newGame);
+                context.Games.Add(newGame);
                 await context.SaveChangesAsync();
                 return RedirectToAction("PartyDetails", new { partyId = addGameViewModel.PartyId });
             }
@@ -89,7 +91,7 @@ namespace Festiv.Controllers
         //     }
         //     return View(game);
         // }
-
+        [HttpGet("{gameId}")]
         public IActionResult GameDetails(int gameId)
         {
             var game = context.Games

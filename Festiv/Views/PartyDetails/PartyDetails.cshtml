@@ -1,6 +1,5 @@
-@using Festiv
-@using Festiv.Controllers
-@model PartyDetails
+@using Festiv.Models
+@model Festiv.Models.PartyDetails
 
 
 @{
@@ -30,7 +29,7 @@
         @foreach (var game in Model.Games)
         {
             <li>
-                <a asp-controller="PartyDetails" asp-action="GameDetails" asp-route-id ="@game.Id">@game.GameName</a>
+                <a asp-controller="PartyDetails" asp-action="GameDetails" asp-route-gameId ="@game.Id">@game.GameName</a>
             </li>
         }
     </ul>

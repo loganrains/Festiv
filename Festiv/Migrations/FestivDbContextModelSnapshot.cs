@@ -221,13 +221,13 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e68016bc-fd06-4a14-8232-4d3c57394cbb"),
+                            Id = new Guid("f8552327-e778-4d92-aeb2-dcdace8bf163"),
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("137c45cf-f55c-4fc1-a38a-46d1becfd69b"),
+                            Id = new Guid("fc981214-ba7d-4e62-9cbc-6908db40d3d0"),
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -333,9 +333,9 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("1c2ad7ba-1188-44e1-aafb-11d6b6e28bbc"),
+                            Id = new Guid("e2808e24-7d57-4cc6-8b0d-81642d13a89e"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "857b8ea1-587c-43eb-8fcb-6e61aa789091",
+                            ConcurrencyStamp = "e8e99c9b-2645-43f2-90e5-fb52d3b92830",
                             Email = "admin@festiv.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -343,7 +343,7 @@ namespace Festiv.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@FESTIV.COM",
                             NormalizedUserName = "ADMIN@FESTIV.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMXy8HMWZePg9Sjp7s9CV1lGx10Ht9aAAwUOxXRuJdJsQKevuKc9wyESFOWmVVGr6g==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEAgvo6cHJc6KDfsXYFXHqUHgY4A42xMJLQlcJwWBSNGuk4bvuAkVLxhK4HJ6cniF3g==",
                             PhoneNumberConfirmed = false,
                             Rating = 0,
                             SecurityStamp = "",
@@ -469,8 +469,8 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("1c2ad7ba-1188-44e1-aafb-11d6b6e28bbc"),
-                            RoleId = new Guid("e68016bc-fd06-4a14-8232-4d3c57394cbb")
+                            UserId = new Guid("e2808e24-7d57-4cc6-8b0d-81642d13a89e"),
+                            RoleId = new Guid("f8552327-e778-4d92-aeb2-dcdace8bf163")
                         });
                 });
 
