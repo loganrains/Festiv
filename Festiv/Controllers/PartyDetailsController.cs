@@ -19,7 +19,7 @@ namespace Festiv.Controllers
         // private static List<Game> games = new List<Game>();
 
 
-        [HttpGet("{partyId}")]
+        [HttpGet("{partyId:int}")]
         public IActionResult PartyDetails(int partyId)
         {
            Party? party = context.Parties
@@ -91,7 +91,7 @@ namespace Festiv.Controllers
         //     }
         //     return View(game);
         // }
-        [HttpGet("{gameId}")]
+        [HttpGet("{partyId}/GameDetails/{gameId}")]
         public IActionResult GameDetails(int gameId)
         {
             var game = context.Games
