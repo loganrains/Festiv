@@ -3,6 +3,8 @@ using Festiv.Models;
 using Festiv.ViewModels;
 using Festiv.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 
 namespace Festiv.Controllers
 {
@@ -19,7 +21,7 @@ namespace Festiv.Controllers
         // private static List<Game> games = new List<Game>();
 
 
-        [HttpGet("{partyId:int}")]
+        [HttpGet("{partyId}")]
         public IActionResult PartyDetails(int partyId)
         {
            Party? party = context.Parties
@@ -32,9 +34,14 @@ namespace Festiv.Controllers
                 return NotFound();
             }
 
-            ViewBag.PartyId = partyId;
+            var partyDetails = new PartyDetailsViewModel
+            {
+                Party = party,
+                Games = party.Games.ToList()
+            };
 
-            return View("PartyDetails", party.Details);
+            ViewBag.PartyId = partyId;
+            return View(partyDetails);
         }
 
         [HttpGet("CreateGame")]
@@ -120,7 +127,7 @@ namespace Festiv.Controllers
             return View(gameDetailsViewModel);
         }
 
-        [HttpPost]
+        [HttpPost("RandomizeTeams")]
         public IActionResult RandomizeTeams(int id, string randomizerType)
         {
             Game? game = context.Games.Include(g => g.WaitingPlayers)
@@ -155,7 +162,7 @@ namespace Festiv.Controllers
             return RedirectToAction("GameDetails", new { id = game.Id });
         }
 
-        [HttpPost]
+        [HttpPost("Signup")]
         public IActionResult SignUp(int id, string firstName, string lastName)
         {
             var game = context.Games.FirstOrDefault(g => g.Id == id);

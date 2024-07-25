@@ -1,5 +1,7 @@
+@model Festiv.ViewModels.PartyDetailsViewModel
+@using Festiv.ViewModels
 @using Festiv.Models
-@model Festiv.Models.PartyDetails
+
 
 
 @{
@@ -8,17 +10,17 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">"@Model.Name at @Model.Location"</h1>
+    <h1 class="display-4">"@Model.Party?.Name at @Model.Party?.Details?.Location"</h1>
 
-    <p>@Model.Description</p>
+    <p>@Model.Party?.Details?.Description</p>
 
     <div class="container">
         <div class="row">
             <div class="col">
-                <p>Start: @Model.Start</p>
+                <p>Start: @Model.Party?.Details?.Start</p>
             </div>
             <div class="col">
-                <p>End: @Model.End</p>
+                <p>End: @Model.Party?.Details?.End</p>
             </div>
         </div>
     </div>
@@ -26,10 +28,10 @@
     
     <h2>Games</h2>
     <ul>
-        @foreach (var game in Model.Games)
+        @foreach (var game in Model.Games ?? new List<Game>())
         {
             <li>
-                <a asp-controller="PartyDetails" asp-action="GameDetails" asp-route-gameId ="@game.Id">@game.GameName</a>
+                <a asp-controller="PartyDetails" asp-action="GameDetails" asp-route-partyId ="@partyId" asp-route-gameId="@game.Id">@game.GameName</a>
             </li>
         }
     </ul>
