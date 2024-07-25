@@ -1,27 +1,56 @@
-@model Festiv.Models.GuestRespond;
+@model Festiv.Models.GuestRespond
+@using Festiv.Data;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@{List<Party> Parties = ViewBag.parties;
+    User user = await UserManager.GetUserAsync(User);}
 
+
+@if (user != null)
+{
 <h1>Add Guest</h1>
 
 <form asp-controller="Rsvp" asp-action="Add" method="post" class="row g-3">
     <div class="col-md-6">
         <label asp-for="FirstName" class="form-label">First Name</label>
-        <input asp-for="FirstName" class="form-control" id="FirstName" required>
+        <input asp-for="FirstName" class="form-control" id="FirstName" value=@user.FirstName required>
         <span asp-validation-for="FirstName" class="text-danger"></span>
     </div>
 
     <div class="col-md-6">
         <label asp-for="LastName" class="form-label">Last Name</label>
-        <input asp-for="LastName" class="form-control" id="LastName" required>
+        <input asp-for="LastName" class="form-control" id="LastName" value=@user.LastName required>
         <span asp-validation-for="LastName" class="text-danger"></span>
     </div>
 
     <div class="col-md-12">
         <label asp-for="Email" class="form-label">Email</label>
-        <input asp-for="Email" class="form-control" id="Email" required>
+        <input asp-for="Email" class="form-control" id="Email" value=@user.Email>
         <span asp-validation-for="Email" class="text-danger"></span>
+    </div> 
+
+    <div class="col-md-12">
+        <label>Whose party are you going to?
+            <select name="PartyId" required>
+                <option value="">* Select One *</option>
+                @foreach (var party in Parties)
+                {
+                    <option value="@party.Id">@party.Name</option>
+                }
+            </select>
+    </div>
+    <div>
+        <input type="hidden" name="UserId" value="@UserManager.GetUserId(User)" />
     </div>
 
     <div class="col-md-12">
         <button type="submit" class="btn btn-primary">Add Guest</button>
     </div>
 </form>
+} else 
+{
+     <div>Need to be logged in to RSVP!
+        <a asp-controller="Account" asp-action="Login">Log In Here</a>
+    </div> 
+}

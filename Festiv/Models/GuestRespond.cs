@@ -15,6 +15,16 @@ namespace  Festiv.Models
         [Required(ErrorMessage = "Please enter your Email")]
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string Email { get; set; }
+        
+        [Required(ErrorMessage = "Need to pick a party!")]
+        public int PartyId { get; set; }
+
+        public Party? Party { get; set; }
+
+        [Required(ErrorMessage = "Sign in to send RSVP")]
+        public Guid? UserId { get; set; }
+
+        public User? User { get; set; }
 
         
          public GuestRespond()

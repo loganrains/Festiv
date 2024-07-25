@@ -70,8 +70,8 @@ namespace Festiv.Controllers
         {
             AddPartyViewModel addPartyViewModel = new AddPartyViewModel();
 
-            return View(addPartyViewModel);
-        }   
+        return View(addPartyViewModel);
+    }   
 
 
         [HttpPost("CreateEvent")]
@@ -113,8 +113,8 @@ namespace Festiv.Controllers
                 return NotFound();
             }
 
-            return View(partyToDelete);
-        }
+        return View(partyToDelete);
+    }
 
         [HttpPost]
         public IActionResult DeleteConfirmed(int id)
