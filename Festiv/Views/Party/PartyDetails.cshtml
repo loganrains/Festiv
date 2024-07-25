@@ -1,10 +1,15 @@
 @using Festiv;
 @using Festiv.Controllers;
+@using Festiv.Data;
 @model PartyDetails
-
+@inject FestivDbContext DbContext
 
 @{
     ViewData["Title"] = "Party Details";
+
+    var guests = DbContext.GuestResponds
+                          .Where(gr => gr.PartyId == Model.PartyId)
+                          .ToList();
 }
 
 <div class="text-center">
@@ -23,5 +28,36 @@
         </div>
     </div>
     <a asp-controller="Rating" asp-action="Index">Rate Guests</a>
+</div>
 
+<div class="guest-list">
+    <h2>Guest List</h2>
+    @if (guests != null && guests.Count > 0)
+    {
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var guest in guests)
+                    {
+                        <tr>
+                            <td>@guest.FirstName</td>
+                            <td>@guest.LastName</td>
+                            <td>@guest.Email</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p>No guests have responded yet.</p>
+    }
 </div>
