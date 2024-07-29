@@ -163,7 +163,7 @@ namespace Festiv.Controllers
         }
 
         [HttpPost("{partyId}/GameDetails/{gameId}/SignUp")]
-        public IActionResult SignUp(int partyId,int gameId, string firstName, string lastName)
+        public async Task<IActionResult> SignUp(int partyId,int gameId, string firstName, string lastName)
         {
             var game = context.Games
             .Include(g => g.WaitingPlayers)
@@ -175,10 +175,10 @@ namespace Festiv.Controllers
             }
 
             var user = new User { FirstName = firstName, LastName = lastName };
+            context.Users.Add(user);
+            await context.SaveChangesAsync();
             game.WaitingPlayers.Add(user);
-
-            context.SaveChanges();
-
+            await context.SaveChangesAsync();
 
             return RedirectToAction("GameDetails", new {partyId = partyId, gameId = gameId });
         }

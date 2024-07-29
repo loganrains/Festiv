@@ -15,6 +15,7 @@ public class FestivDbContext: IdentityDbContext<User, Role, Guid>
 
 {
     public DbSet<User> UserList { get; set; }
+    public DbSet<User> Users { get; set; }
     public DbSet<Party> Parties { get; set; }
     public DbSet<PartyDetails> PartyDetails { get; set; }
     public DbSet<GuestRespond> GuestResponds { get; set; }
