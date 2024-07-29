@@ -9,16 +9,9 @@ namespace Festiv.Models
         public string? GameName { get; set; }
         public int MinPlayers { get; set; }
         public int MaxPlayers { get; set; }
-        public ICollection<User> Users { get; set; } = new List<User>();
-        [NotMapped]
-        public List<User> WaitingPlayers { get; set; } = new List<User>();
-
-        [NotMapped]
-        public List<User> CurrentPlayers { get; set; } = new List<User>();
-
-        [NotMapped]
-        public List<Team> Teams { get; set; } = new List<Team>();
-
+        public ICollection<User> WaitingPlayers { get; set; } = new List<User>();
+        public ICollection<User> CurrentPlayers { get; set; } = new List<User>();
+        public ICollection<Team> Teams { get; set; } = new List<Team>();
         public int PartyId { get; set; }
         public Party Party { get; set; }
         public Game()

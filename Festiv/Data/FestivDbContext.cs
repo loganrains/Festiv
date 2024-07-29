@@ -34,32 +34,79 @@ public class FestivDbContext: IdentityDbContext<User, Role, Guid>
 
         // modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
 
-            modelBuilder.Entity<Party>().HasOne(p => p.Details).WithOne(d => d.Party).HasForeignKey<PartyDetails>(d => d.PartyId);
+             modelBuilder.Entity<User>()
+                .HasKey(u => u.Id);
 
+            // Party and PartyDetail's Relationship
+            modelBuilder.Entity<Party>()
+                .HasOne(p => p.Details)
+                .WithOne(d => d.Party)
+                .HasForeignKey<PartyDetails>(d => d.PartyId);
+
+            // Party and Game's Relationship
+             modelBuilder.Entity<Party>()
+                .HasMany(p => p.Games)
+                .WithOne(g => g.Party)
+                .HasForeignKey(g => g.PartyId);
+
+            // Party and GuestResponds Relationship
             modelBuilder.Entity<GuestRespond>()
                 .HasOne(gr => gr.Party)
                 .WithMany(p => p.GuestResponds)
                 .HasForeignKey(gr => gr.PartyId);
 
+            // User and GuestResponds Relationshiop
             modelBuilder.Entity<GuestRespond>()
                 .HasOne(gr => gr.User)
                 .WithMany(u => u.GuestResponds)
                 .HasForeignKey(gr => gr.UserId);
 
-            modelBuilder.Entity<Game>()
-                .HasMany(g => g.Users)
-                .WithMany(u => u.Games)
-                .UsingEntity(j => j.ToTable("GamePlayers"));
-
+            // User and Gift's Relationship
             modelBuilder.Entity<Gift>()
                 .HasOne(g => g.User)
                 .WithMany(u => u.Gifts)
                 .HasForeignKey(g => g.UserId);
 
+            // Gift and Party's Relationship
             modelBuilder.Entity<Gift>()
                 .HasOne(g => g.Party)
                 .WithMany(p => p.Gifts)
                 .HasForeignKey(g => g.PartyId);
+
+            // Game and Team Relationship
+            modelBuilder.Entity<Game>()
+                .HasMany(g => g.Teams)
+                .WithOne(t => t.Game)
+                .HasForeignKey(t => t.GameId);
+
+            // User and Game Relationship
+            modelBuilder.Entity<Game>()
+                .HasMany(g => g.WaitingPlayers)
+                .WithMany(u => u.WaitingPlayers)
+                .UsingEntity<Dictionary<string, object>>(
+                    "GameWaitingPlayer",
+                    j => j.HasOne<User>().WithMany().HasForeignKey("UserId"),
+                    j => j.HasOne<Game>().WithMany().HasForeignKey("GameId"));
+
+            modelBuilder.Entity<Game>()
+                .HasMany(g => g.CurrentPlayers)
+                .WithMany(u => u.CurrentPlayers)
+                .UsingEntity<Dictionary<string, object>>(
+                    "GameCurrentPlayer",
+                    j => j.HasOne<User>().WithMany().HasForeignKey("UserId"),
+                    j => j.HasOne<Game>().WithMany().HasForeignKey("GameId"));
+            
+            // User and Team Relatioships
+            modelBuilder.Entity<Team>()
+                .HasMany(t =>t.Members)
+                .WithMany()
+                .UsingEntity<Dictionary<string, object>>(
+                    "TeamMember",
+                    j => j.HasOne<User>().WithMany().HasForeignKey("UserId"),
+                    j => j.HasOne<Team>().WithMany().HasForeignKey("TeamId")
+
+        );
+
 
         var adminRoleId = Guid.NewGuid();
         var userRoleId = Guid.NewGuid();

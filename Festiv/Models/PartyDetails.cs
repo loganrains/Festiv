@@ -17,7 +17,7 @@ public class PartyDetails
     public List<Guest>? GuestList { get; set; }
     public Party Party { get; set; }
 
-    public List<Game> Games { get; set; } = new List<Game>();
+    public ICollection<Game> Games { get; set; } = new List<Game>();
     public int PartyId { get; set; }
 
     public PartyDetails() { }

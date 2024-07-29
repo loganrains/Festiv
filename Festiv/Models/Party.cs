@@ -12,7 +12,7 @@ namespace Festiv.Models
         public int DetailsId { get; set; }
         public ICollection<GuestRespond> GuestResponds { get; set; } = new List<GuestRespond>();
         public ICollection<Gift> Gifts { get; set; } = new List<Gift>();
-        public List<Game> Games { get; set; } = new List<Game>();
+        public ICollection<Game> Games { get; set; } = new List<Game>();
         public Party()
         {
         }

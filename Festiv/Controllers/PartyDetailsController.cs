@@ -44,7 +44,7 @@ namespace Festiv.Controllers
             return View(partyDetails);
         }
 
-        [HttpGet("CreateGame")]
+        [HttpGet("{partyId}/CreateGame")]
         public IActionResult CreateGame(int partyId)
         {
             AddGameViewModel addGameViewModel = new AddGameViewModel
@@ -55,7 +55,7 @@ namespace Festiv.Controllers
         }
 
 
-        [HttpPost("CreateGame")]
+        [HttpPost("{partyId}/CreateGame")]
         public async Task<IActionResult> CreateGame(AddGameViewModel addGameViewModel)
         {
             if(ModelState.IsValid)
@@ -127,7 +127,7 @@ namespace Festiv.Controllers
             return View(gameDetailsViewModel);
         }
 
-        [HttpPost("RandomizeTeams")]
+        [HttpPost]
         public IActionResult RandomizeTeams(int id, string randomizerType)
         {
             Game? game = context.Games.Include(g => g.WaitingPlayers)
@@ -162,21 +162,25 @@ namespace Festiv.Controllers
             return RedirectToAction("GameDetails", new { id = game.Id });
         }
 
-        [HttpPost("Signup")]
-        public IActionResult SignUp(int id, string firstName, string lastName)
+        [HttpPost("{partyId}/GameDetails/{gameId}/_WaitingPlayersTables")]
+        public IActionResult SignUp(int id, int partyId, string firstName, string lastName)
         {
-            var game = context.Games.FirstOrDefault(g => g.Id == id);
+            var game = context.Games
+            .Include(g => g.WaitingPlayers)
+            .FirstOrDefault(g => g.Id == id);
 
             if (game == null)
             {
                 return NotFound();
             }
 
-            game.CurrentPlayers.Add(new User { FirstName = firstName, LastName = lastName });
+            var user = new User { FirstName = firstName, LastName = lastName };
+            game.WaitingPlayers.Add(user);
 
             context.SaveChanges();
 
-            return RedirectToAction("GameDetails", new { id = game.Id });
+
+            return RedirectToAction("GameDetails", new {partyId = partyId, gameId = id });
         }
 
         private List<Team> SplitIntoTwoTeams(List<User> players)

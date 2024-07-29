@@ -9,11 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Festiv.Migrations
 {
     /// <inheritdoc />
-<<<<<<<< HEAD:Festiv/Migrations/20240723191955_InitialMigration7.cs
-    public partial class InitialMigration7 : Migration
-========
-    public partial class PostGamesAddMigration : Migration
->>>>>>>> development:Festiv/Migrations/20240719174846_PostGamesAddMigration.cs
+    public partial class UpdateGameUserRelationships : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -78,23 +74,6 @@ namespace Festiv.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Games",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    GameName = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    MinPlayers = table.Column<int>(type: "int", nullable: false),
-                    MaxPlayers = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Games", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -255,31 +234,6 @@ namespace Festiv.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "GamePlayers",
-                columns: table => new
-                {
-                    GamesId = table.Column<int>(type: "int", nullable: false),
-                    UsersId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GamePlayers", x => new { x.GamesId, x.UsersId });
-                    table.ForeignKey(
-                        name: "FK_GamePlayers_AspNetUsers_UsersId",
-                        column: x => x.UsersId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_GamePlayers_Games_GamesId",
-                        column: x => x.GamesId,
-                        principalTable: "Games",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "Gifts",
                 columns: table => new
                 {
@@ -417,6 +371,8 @@ namespace Festiv.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Email = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    PartyId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     PartyDetailsId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -530,32 +486,19 @@ namespace Festiv.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-<<<<<<<< HEAD:Festiv/Migrations/20240723191955_InitialMigration7.cs
-                    { new Guid("f8552327-e778-4d92-aeb2-dcdace8bf163"), null, "Admin", "ADMIN" },
-                    { new Guid("fc981214-ba7d-4e62-9cbc-6908db40d3d0"), null, "User", "USER" }
-========
-                    { new Guid("1664a2c2-930b-4fa0-a012-5430fbe667a9"), null, "Admin", "ADMIN" },
-                    { new Guid("d5027e6a-ec8b-4fcd-9f8c-ff0d7540b098"), null, "User", "USER" }
->>>>>>>> development:Festiv/Migrations/20240719174846_PostGamesAddMigration.cs
+                    { new Guid("215f56fa-c202-40b5-95b7-71dff927e092"), null, "Admin", "ADMIN" },
+                    { new Guid("98aa710b-230c-4128-884f-6f6463d154b0"), null, "User", "USER" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfilePic", "Rating", "SecurityStamp", "TwoFactorEnabled", "UserName", "UserType" },
-<<<<<<<< HEAD:Festiv/Migrations/20240723191955_InitialMigration7.cs
-                values: new object[] { new Guid("e2808e24-7d57-4cc6-8b0d-81642d13a89e"), 0, "e8e99c9b-2645-43f2-90e5-fb52d3b92830", "admin@festiv.com", true, "Admin", "User", false, null, "ADMIN@FESTIV.COM", "ADMIN@FESTIV.COM", "AQAAAAIAAYagAAAAEAgvo6cHJc6KDfsXYFXHqUHgY4A42xMJLQlcJwWBSNGuk4bvuAkVLxhK4HJ6cniF3g==", null, false, null, 0, "", false, "admin@festiv.com", true });
-========
-                values: new object[] { new Guid("ab08cb1a-d6f9-4afe-9633-f47371ac8383"), 0, "48399bc3-f0ae-4ac7-ba62-e71df8df6cca", "admin@festiv.com", true, "Admin", "User", false, null, "ADMIN@FESTIV.COM", "ADMIN@FESTIV.COM", "AQAAAAIAAYagAAAAEO5c3QXpwaIuN9zjGSvdTJjuZLhDXHGHxQz7FP/jMXWf+ucYzjtGJBUHvR4ZhntCug==", null, false, null, 0, "", false, "admin@festiv.com", true });
->>>>>>>> development:Festiv/Migrations/20240719174846_PostGamesAddMigration.cs
+                values: new object[] { new Guid("2c8701ea-cd84-44ff-b1fa-72f9253cfa0a"), 0, "8927a848-7525-40b5-a33f-9b1b7dd9badd", "admin@festiv.com", true, "Admin", "User", false, null, "ADMIN@FESTIV.COM", "ADMIN@FESTIV.COM", "AQAAAAIAAYagAAAAEA3OQbrkR+4sIV+l+M3iepaqgh0Cr+sTPKOjmIijBvQORMJTln28MdP+vzkKsZQhiw==", null, false, null, 0, "", false, "admin@festiv.com", true });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-<<<<<<<< HEAD:Festiv/Migrations/20240723191955_InitialMigration7.cs
-                values: new object[] { new Guid("f8552327-e778-4d92-aeb2-dcdace8bf163"), new Guid("e2808e24-7d57-4cc6-8b0d-81642d13a89e") });
-========
-                values: new object[] { new Guid("1664a2c2-930b-4fa0-a012-5430fbe667a9"), new Guid("ab08cb1a-d6f9-4afe-9633-f47371ac8383") });
->>>>>>>> development:Festiv/Migrations/20240719174846_PostGamesAddMigration.cs
+                values: new object[] { new Guid("215f56fa-c202-40b5-95b7-71dff927e092"), new Guid("2c8701ea-cd84-44ff-b1fa-72f9253cfa0a") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -595,7 +538,6 @@ namespace Festiv.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-<<<<<<<< HEAD:Festiv/Migrations/20240723191955_InitialMigration7.cs
                 name: "IX_GameCurrentPlayer_UserId",
                 table: "GameCurrentPlayer",
                 column: "UserId");
@@ -613,10 +555,7 @@ namespace Festiv.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_GameWaitingPlayer_UserId",
                 table: "GameWaitingPlayer",
-========
-                name: "IX_GamePlayers_UsersId",
-                table: "GamePlayers",
-                column: "UsersId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Gifts_PartyId",
@@ -626,7 +565,6 @@ namespace Festiv.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Gifts_UserId",
                 table: "Gifts",
->>>>>>>> development:Festiv/Migrations/20240719174846_PostGamesAddMigration.cs
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -685,17 +623,13 @@ namespace Festiv.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-<<<<<<<< HEAD:Festiv/Migrations/20240723191955_InitialMigration7.cs
                 name: "GameCurrentPlayer");
 
             migrationBuilder.DropTable(
                 name: "GameWaitingPlayer");
-========
-                name: "GamePlayers");
 
             migrationBuilder.DropTable(
                 name: "Gifts");
->>>>>>>> development:Festiv/Migrations/20240719174846_PostGamesAddMigration.cs
 
             migrationBuilder.DropTable(
                 name: "Guest");
@@ -710,7 +644,7 @@ namespace Festiv.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Games");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Teams");
@@ -720,9 +654,6 @@ namespace Festiv.Migrations
 
             migrationBuilder.DropTable(
                 name: "PartyDetails");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Host");
