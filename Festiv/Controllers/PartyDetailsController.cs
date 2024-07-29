@@ -162,12 +162,12 @@ namespace Festiv.Controllers
             return RedirectToAction("GameDetails", new { id = game.Id });
         }
 
-        [HttpPost("{partyId}/GameDetails/{gameId}/_WaitingPlayersTables")]
-        public IActionResult SignUp(int id, int partyId, string firstName, string lastName)
+        [HttpPost("{partyId}/GameDetails/{gameId}/SignUp")]
+        public IActionResult SignUp(int partyId,int gameId, string firstName, string lastName)
         {
             var game = context.Games
             .Include(g => g.WaitingPlayers)
-            .FirstOrDefault(g => g.Id == id);
+            .FirstOrDefault(g => g.Id == gameId);
 
             if (game == null)
             {
@@ -180,7 +180,7 @@ namespace Festiv.Controllers
             context.SaveChanges();
 
 
-            return RedirectToAction("GameDetails", new {partyId = partyId, gameId = id });
+            return RedirectToAction("GameDetails", new {partyId = partyId, gameId = gameId });
         }
 
         private List<Team> SplitIntoTwoTeams(List<User> players)
