@@ -33,14 +33,25 @@
 
 <h3>Current Players and Teams</h3>
 <div class="form-group">
-    <form asp-action="RandomizeTeams" method="post">
-        <input type="hidden" name="id" value="@Model.GameId" />
+    <form asp-action="RandomizeTeams" asp-route-partyId="@Model.PartyId" asp-route-gameId ="@Model.GameId" method="post">
+        <input type ="hidden" name="partyId" value="@Model.PartyId" />
+        <input type="hidden" name="gameId" value="@Model.GameId" />
         <button type="submit" name="randomizerType" value="split" class="btn btn-secondary">Split into 2 teams</button>
         <button type="submit" name="randomizerType" value="pairs" class="btn btn-secondary">Group into pairs</button>
     </form>
 </div>
 
-
+<h3>Teams</h3>
+@foreach (var team in Model.Teams)
+{
+    <h4>Team</h4>
+    <ul>
+        @foreach (var member in team.Members)
+        {
+            <li>@member.FirstName @member.LastName</li>
+        }
+    </ul>
+}
 
 
 @* <h2>Current Players</h2>

@@ -87,25 +87,14 @@ namespace Festiv.Controllers
             return View(addGameViewModel);
         }
 
-        // [HttpPost]
-        // public IActionResult Create(Game game)
-        // {
-        //     if (ModelState.IsValid)
-        //     {
-        //         game.Id = games.Count + 1;
-        //         games.Add(game);
-        //         return RedirectToAction("Index");
-        //     }
-        //     return View(game);
-        // }
         [HttpGet("{partyId}/GameDetails/{gameId}")]
-        public IActionResult GameDetails(int gameId)
+        public IActionResult GameDetails(int partyId, int gameId)
         {
             var game = context.Games
                 .Include(g => g.WaitingPlayers)
                 .Include(g => g.CurrentPlayers)
                 .Include(g => g.Teams)
-                .FirstOrDefault(game => game.Id == gameId);
+                .FirstOrDefault(game => game.GameId == gameId);
 
             if (game == null)
             {
@@ -114,7 +103,7 @@ namespace Festiv.Controllers
             
             GameDetailsViewModel gameDetailsViewModel = new GameDetailsViewModel
             {
-                GameId = game.Id,
+                GameId = game.GameId,
                 PartyId = game.PartyId,
                 GameName = game.GameName,
                 MinPlayers = game.MinPlayers,
@@ -126,48 +115,12 @@ namespace Festiv.Controllers
             };
             return View(gameDetailsViewModel);
         }
-
-        [HttpPost]
-        public IActionResult RandomizeTeams(int id, string randomizerType)
-        {
-            Game? game = context.Games.Include(g => g.WaitingPlayers)
-                .Include(g => g.CurrentPlayers)
-                .FirstOrDefault(game => game.Id == id);
-
-            if (game == null)
-            {
-                return NotFound();
-            }
-
-            var playersToAdd = game.WaitingPlayers.Take(game.MaxPlayers).ToList();
-            
-            foreach(var player in playersToAdd)
-            {
-                game.CurrentPlayers.Add(player);
-            }
-
-            game.WaitingPlayers = game.WaitingPlayers.Skip(game.MaxPlayers).ToList();
-
-            if (randomizerType == "split")
-            {
-                game.Teams = SplitIntoTwoTeams(playersToAdd);
-            }
-            else if (randomizerType == "pairs")
-            {
-                game.Teams = GroupIntoPairs(playersToAdd);
-            }
-
-            context.SaveChanges();
-
-            return RedirectToAction("GameDetails", new { id = game.Id });
-        }
-
         [HttpPost("{partyId}/GameDetails/{gameId}/SignUp")]
         public async Task<IActionResult> SignUp(int partyId,int gameId, string firstName, string lastName)
         {
             var game = context.Games
             .Include(g => g.WaitingPlayers)
-            .FirstOrDefault(g => g.Id == gameId);
+            .FirstOrDefault(g => g.GameId == gameId);
 
             if (game == null)
             {
@@ -183,6 +136,58 @@ namespace Festiv.Controllers
             return RedirectToAction("GameDetails", new {partyId = partyId, gameId = gameId });
         }
 
+        [HttpPost("{partyId}/GameDetails/{gameId}/RandomizeTeams")]
+        public async Task<IActionResult>RandomizeTeams(int partyId, int gameId, string randomizerType)
+        {
+            Game? game = context.Games
+                .Include(g => g.WaitingPlayers)
+                .Include(g => g.CurrentPlayers)
+                .Include(g => g.Teams)
+                .FirstOrDefault(game => game.GameId == gameId);
+
+            if (game == null)
+            {
+                return NotFound();
+            }
+
+            var playersToAdd = game.WaitingPlayers.Take(game.MaxPlayers).ToList();
+            var remainingPlayers = game.WaitingPlayers.Skip(game.MaxPlayers).ToList();
+            
+            foreach (var player in playersToAdd)
+            {
+                game.CurrentPlayers.Add(player);
+            }
+            game.WaitingPlayers = remainingPlayers;
+
+            game.Teams.Clear();
+            if (randomizerType == "split")
+            {
+                game.Teams = SplitIntoTwoTeams(playersToAdd);
+            }
+            else if (randomizerType == "pairs")
+            {
+                game.Teams =GroupIntoPairs(playersToAdd);
+            }
+
+            context.Games.Update(game);
+            await context.SaveChangesAsync();
+
+             var gameDetailsViewModel = new GameDetailsViewModel
+            {
+                GameId = game.GameId,
+                PartyId = game.PartyId,
+                GameName = game.GameName,
+                MinPlayers = game.MinPlayers,
+                MaxPlayers = game.MaxPlayers,
+                WaitingPlayers = game.WaitingPlayers.ToList(),
+                CurrentPlayers = game.CurrentPlayers.ToList(),
+                Teams = game.Teams.ToList()
+    };
+
+            return View("GameDetails", gameDetailsViewModel);
+        }
+
+        
         private List<Team> SplitIntoTwoTeams(List<User> players)
         {
             var shuffled = players.OrderBy(p => Guid.NewGuid()).ToList();
@@ -193,6 +198,7 @@ namespace Festiv.Controllers
                 new Team { Members = shuffled.Skip(mid).ToList() }
              
              };
+            
         }
 
         private List<Team> GroupIntoPairs(List<User> players)

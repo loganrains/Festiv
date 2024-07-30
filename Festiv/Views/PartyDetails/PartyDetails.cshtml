@@ -31,7 +31,7 @@
         @foreach (var game in Model.Games ?? new List<Game>())
         {
             <li>
-                <a asp-controller="PartyDetails" asp-action="GameDetails" asp-route-partyId ="@partyId" asp-route-gameId="@game.Id">@game.GameName</a>
+                <a asp-controller="PartyDetails" asp-action="GameDetails" asp-route-partyId ="@partyId" asp-route-gameId="@game.GameId">@game.GameName</a>
             </li>
         }
     </ul>

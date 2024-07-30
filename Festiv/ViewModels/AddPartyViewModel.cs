@@ -23,6 +23,7 @@ public class AddPartyViewModel
 
     [Required(ErrorMessage = "End is Required")]
     public DateTime End { get; set; }
+    public int PartyId { get; set; }
     public PartyDetails? Details { get; set;}
 
     public Models.Host? PartyHost { get; set; }

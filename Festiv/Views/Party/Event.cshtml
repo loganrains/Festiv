@@ -28,7 +28,7 @@
             @foreach (var game in Model.Games)
             {
                 <li>
-                    <a asp-action ="GameDetails" asp-route-id = "@game.Id">@game.GameName</a>
+                    <a asp-action ="GameDetails" asp-route-partyid = "@Model.PartyId" asp-route-gameId ="@game.GameId">@game.GameName</a>
                 </li>
             }
         </ul>
