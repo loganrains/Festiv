@@ -18,8 +18,6 @@ namespace Festiv.Controllers
         {
             context = dbContext;
         }
-        // private static List<Game> games = new List<Game>();
-
 
         [HttpGet("{partyId}")]
         public IActionResult PartyDetails(int partyId)
@@ -94,6 +92,7 @@ namespace Festiv.Controllers
                 .Include(g => g.WaitingPlayers)
                 .Include(g => g.CurrentPlayers)
                 .Include(g => g.Teams)
+                .ThenInclude(t => t.Members)
                 .FirstOrDefault(game => game.GameId == gameId);
 
             if (game == null)
@@ -115,33 +114,34 @@ namespace Festiv.Controllers
             };
             return View(gameDetailsViewModel);
         }
+
         [HttpPost("{partyId}/GameDetails/{gameId}/SignUp")]
-        public async Task<IActionResult> SignUp(int partyId,int gameId, string firstName, string lastName)
-        {
-            var game = context.Games
-            .Include(g => g.WaitingPlayers)
-            .FirstOrDefault(g => g.GameId == gameId);
+public async Task<IActionResult> SignUp(int partyId, int gameId, string firstName, string lastName)
+{
+    var game = context.Games
+        .Include(g => g.WaitingPlayers)
+        .FirstOrDefault(g => g.GameId == gameId);
 
-            if (game == null)
-            {
-                return NotFound();
-            }
+    if (game == null)
+    {
+        return NotFound();
+    }
 
-            var user = new User { FirstName = firstName, LastName = lastName };
-            context.Users.Add(user);
-            await context.SaveChangesAsync();
-            game.WaitingPlayers.Add(user);
-            await context.SaveChangesAsync();
+    var user = new User { FirstName = firstName, LastName = lastName };
+    game.WaitingPlayers.Add(user);
+    await context.SaveChangesAsync();
 
-            return RedirectToAction("GameDetails", new {partyId = partyId, gameId = gameId });
-        }
+    return RedirectToAction("GameDetails", new { partyId = partyId, gameId = gameId });
+}
+
 
         [HttpPost("{partyId}/GameDetails/{gameId}/RandomizeTeams")]
-        public async Task<IActionResult>RandomizeTeams(int partyId, int gameId, string randomizerType)
+        public async Task<IActionResult> RandomizeTeams(int partyId, int gameId, string randomizerType)
         {
             Game? game = context.Games
                 .Include(g => g.WaitingPlayers)
                 .Include(g => g.CurrentPlayers)
+                // .Include(t => t.Members)
                 .Include(g => g.Teams)
                 .FirstOrDefault(game => game.GameId == gameId);
 
@@ -150,28 +150,28 @@ namespace Festiv.Controllers
                 return NotFound();
             }
 
-            var playersToAdd = game.WaitingPlayers.Take(game.MaxPlayers).ToList();
-            var remainingPlayers = game.WaitingPlayers.Skip(game.MaxPlayers).ToList();
-            
-            foreach (var player in playersToAdd)
-            {
-                game.CurrentPlayers.Add(player);
-            }
-            game.WaitingPlayers = remainingPlayers;
-
             game.Teams.Clear();
+
+            if(!game.CurrentPlayers.Any())
+            {
+                game.CurrentPlayers = game.WaitingPlayers.ToList();
+                game.WaitingPlayers.Clear();
+            }
+
+            List<User> playerToShuffle = game.CurrentPlayers.ToList();
+
             if (randomizerType == "split")
             {
-                game.Teams = SplitIntoTwoTeams(playersToAdd);
+                game.Teams = SplitIntoTwoTeams(playerToShuffle);
             }
             else if (randomizerType == "pairs")
             {
-                game.Teams =GroupIntoPairs(playersToAdd);
+                game.Teams = GroupIntoPairs(playerToShuffle);
             }
 
             context.Games.Update(game);
             await context.SaveChangesAsync();
-
+            
              var gameDetailsViewModel = new GameDetailsViewModel
             {
                 GameId = game.GameId,
@@ -182,7 +182,7 @@ namespace Festiv.Controllers
                 WaitingPlayers = game.WaitingPlayers.ToList(),
                 CurrentPlayers = game.CurrentPlayers.ToList(),
                 Teams = game.Teams.ToList()
-    };
+            };
 
             return View("GameDetails", gameDetailsViewModel);
         }

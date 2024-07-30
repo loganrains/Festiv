@@ -28,7 +28,13 @@
 </form>
 
 <div id="waitingPlayersSection">
-    @await Html.PartialAsync("_WaitingPlayersTables", Model.WaitingPlayers)
+    <h3>Waiting Players</h3>
+    <ul>
+        @foreach (var player in Model.WaitingPlayers)
+        {
+            <li>@player.FirstName @player.LastName</li>
+        }
+    </ul>
 </div>
 
 <h3>Current Players and Teams</h3>

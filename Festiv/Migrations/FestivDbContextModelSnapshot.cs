@@ -54,6 +54,31 @@ namespace Festiv.Migrations
                     b.ToTable("Games");
                 });
 
+            modelBuilder.Entity("Festiv.Models.GameSignUp", b =>
+                {
+                    b.Property<int>("GameSignUpId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("GameSignUpId"));
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("PartyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("GameSignUpId");
+
+                    b.ToTable("GameSignUp");
+                });
+
             modelBuilder.Entity("Festiv.Models.Gift", b =>
                 {
                     b.Property<int>("Id")
@@ -265,13 +290,13 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c3e0f975-7fda-4eb9-b138-35c32698908f"),
+                            Id = new Guid("65317ce3-57e9-4efb-9f6a-772240fbe40c"),
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("8e9617f2-b29a-4beb-a9f1-6912101d9a28"),
+                            Id = new Guid("fb8cee6e-7867-4d48-8fa1-1e30270080c7"),
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -279,16 +304,16 @@ namespace Festiv.Migrations
 
             modelBuilder.Entity("Festiv.Models.Team", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("TeamId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("TeamId"));
 
                     b.Property<int>("GameId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("TeamId");
 
                     b.HasIndex("GameId");
 
@@ -356,6 +381,9 @@ namespace Festiv.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
@@ -377,9 +405,9 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("5581f020-7343-490d-98a8-eaa7f6e96fad"),
+                            Id = new Guid("891a22c1-93ab-48ef-9098-cc2858ec305a"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1e0a67fd-1ad4-4de0-8d22-ada400eefbba",
+                            ConcurrencyStamp = "cb681896-b801-464d-9e22-a42532a99228",
                             Email = "admin@festiv.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -387,11 +415,12 @@ namespace Festiv.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@FESTIV.COM",
                             NormalizedUserName = "ADMIN@FESTIV.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEDwz0ecxKVezsa9lIlYGVgVrabRpTHm1678UqEGaiBMuVlD3lfOuU22V+2L19bqK4w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEC4Lz3Z6mbzwtANhANjyKYmkkCKUpnmCpQAHdijcPOAedpj4P/F/ARPY/ZoKL976EQ==",
                             PhoneNumberConfirmed = false,
                             Rating = 0,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
+                            UserId = 0,
                             UserName = "admin@festiv.com",
                             UserType = true
                         });
@@ -513,8 +542,8 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("5581f020-7343-490d-98a8-eaa7f6e96fad"),
-                            RoleId = new Guid("c3e0f975-7fda-4eb9-b138-35c32698908f")
+                            UserId = new Guid("891a22c1-93ab-48ef-9098-cc2858ec305a"),
+                            RoleId = new Guid("65317ce3-57e9-4efb-9f6a-772240fbe40c")
                         });
                 });
 
