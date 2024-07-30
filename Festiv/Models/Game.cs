@@ -5,20 +5,15 @@ namespace Festiv.Models
 {
     public class Game
     {
-        public int Id { get; set; }
-
+        public int GameId { get; set; }
         public string? GameName { get; set; }
         public int MinPlayers { get; set; }
         public int MaxPlayers { get; set; }
-        public ICollection<User> Users { get; set; } = new List<User>();
-        [NotMapped]
         public List<User> WaitingPlayers { get; set; } = new List<User>();
-
-        [NotMapped]
         public List<User> CurrentPlayers { get; set; } = new List<User>();
-
-        [NotMapped]
-        public List<List<User>> Teams { get; set; } = new List<List<User>>();
+        public List<Team> Teams { get; set; } = new List<Team>();
+        public int PartyId { get; set; }
+        public Party Party { get; set; }
         public Game()
         {
         }
@@ -27,9 +22,6 @@ namespace Festiv.Models
             GameName = gameName;
             MinPlayers = minPlayers;
             MaxPlayers = maxplayers;
-            WaitingPlayers = waitingPlayers;
-            CurrentPlayers = currentPlayers;
-            Teams = teams;
         }
         
 
@@ -41,21 +33,14 @@ namespace Festiv.Models
         public override bool Equals(object? obj)
         {
             return obj is Game game && 
-                Id == game.Id;
+                GameId == game.GameId;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Id);
+            return HashCode.Combine(GameId);
         }
 
     }
 
-    internal class Teams
-    {
-    }
-
-    internal class CurrentPlayers
-    {
-    }
 }

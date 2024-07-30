@@ -1,0 +1,17 @@
+@model List<Festiv.Models.User>
+
+<table class ="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var player in Model)
+        {
+            <tr>
+                <td>@player.FirstName @player.LastName</td>
+            </tr>
+        }
+    </tbody>
+</table>

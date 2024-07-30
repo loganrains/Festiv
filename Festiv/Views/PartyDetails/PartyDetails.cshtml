@@ -1,0 +1,41 @@
+@model Festiv.ViewModels.PartyDetailsViewModel
+@using Festiv.ViewModels
+@using Festiv.Models
+
+
+
+@{
+    ViewData["Title"] = "Party Details";
+    var partyId = ViewBag.PartyId;
+}
+
+<div class="text-center">
+    <h1 class="display-4">"@Model.Party?.Name at @Model.Party?.Details?.Location"</h1>
+
+    <p>@Model.Party?.Details?.Description</p>
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <p>Start: @Model.Party?.Details?.Start</p>
+            </div>
+            <div class="col">
+                <p>End: @Model.Party?.Details?.End</p>
+            </div>
+        </div>
+    </div>
+    <a asp-controller="Rating" asp-action="Index">Rate Guests</a>
+    
+    <h2>Games</h2>
+    <ul>
+        @foreach (var game in Model.Games ?? new List<Game>())
+        {
+            <li>
+                <a asp-controller="PartyDetails" asp-action="GameDetails" asp-route-partyId ="@partyId" asp-route-gameId="@game.GameId">@game.GameName</a>
+            </li>
+        }
+    </ul>
+    <div>
+        <a asp-controller= "PartyDetails" asp-action="CreateGame" asp-route-partyId="@partyId">Create a new game</a>
+    </div>
+</div>

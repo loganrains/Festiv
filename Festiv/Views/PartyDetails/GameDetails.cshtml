@@ -1,0 +1,66 @@
+@using Festiv.Models
+@model Festiv.ViewModels.GameDetailsViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Game Details";
+}
+
+<h2>@Model.GameName</h2>
+<p>Minimum Players: @Model.MinPlayers</p>
+<p>Maximum Players: @Model.MaxPlayers</p>
+
+<h3>Let's play a game</h3>
+<form asp-action="SignUp" asp-route-partyId="@Model.PartyId" asp-route-gameId="@Model.GameId" method="post">
+    <input type="hidden" name="partyId" value="@Model.PartyId" />
+    <input type="hidden" name="gameId" value="@Model.GameId" />
+    <div class="form-group">
+        <label for="firstName">First Name:</label>
+        <input type="text" class="form-control" id="firstName" name="firstName" />
+    </div>
+    <div class="form-group">
+        <label for="lastName">Last Name:</label>
+        <input type="text" class="form-control" id="lastName" name="lastName" />
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+    </div>
+</form>
+
+<div id="waitingPlayersSection">
+    <h3>Waiting Players</h3>
+    <ul>
+        @foreach (var player in Model.WaitingPlayers)
+        {
+            <li>@player.FirstName @player.LastName</li>
+        }
+    </ul>
+</div>
+
+<h3>Current Players and Teams</h3>
+<div class="form-group">
+    <form asp-action="RandomizeTeams" asp-route-partyId="@Model.PartyId" asp-route-gameId ="@Model.GameId" method="post">
+        <input type ="hidden" name="partyId" value="@Model.PartyId" />
+        <input type="hidden" name="gameId" value="@Model.GameId" />
+        <button type="submit" name="randomizerType" value="split" class="btn btn-secondary">Split into 2 teams</button>
+        <button type="submit" name="randomizerType" value="pairs" class="btn btn-secondary">Group into pairs</button>
+    </form>
+</div>
+
+<h3>Teams</h3>
+@foreach (var team in Model.Teams)
+{
+    <h4>Team</h4>
+    <ul>
+        @foreach (var member in team.Members)
+        {
+            <li>@member.FirstName @member.LastName</li>
+        }
+    </ul>
+}
+
+<div>
+    <a asp-action="PartyDetails" asp-route-partyId="@Model.PartyId" >Back to the party</a>
+</div>
+
+

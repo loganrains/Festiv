@@ -5,6 +5,7 @@ namespace Festiv.Models;
 
 public class PartyDetails
 {
+    public int Id { get; set; }
     public string? Name { get; set; }
     public string? Description { get; set; }
     public string? Location { get; set; }
@@ -16,7 +17,7 @@ public class PartyDetails
     public List<Guest>? GuestList { get; set; }
     public Party Party { get; set; }
 
-    public int Id { get; set; }
+    public ICollection<Game> Games { get; set; } = new List<Game>();
     public int PartyId { get; set; }
 
     public PartyDetails() { }

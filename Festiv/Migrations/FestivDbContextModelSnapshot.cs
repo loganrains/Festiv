@@ -24,11 +24,11 @@ namespace Festiv.Migrations
 
             modelBuilder.Entity("Festiv.Models.Game", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("GameId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("GameId"));
 
                     b.Property<string>("GameName")
                         .HasColumnType("longtext");
@@ -39,9 +39,44 @@ namespace Festiv.Migrations
                     b.Property<int>("MinPlayers")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<int?>("PartyDetailsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PartyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("GameId");
+
+                    b.HasIndex("PartyDetailsId");
+
+                    b.HasIndex("PartyId");
 
                     b.ToTable("Games");
+                });
+
+            modelBuilder.Entity("Festiv.Models.GameSignUp", b =>
+                {
+                    b.Property<int>("GameSignUpId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("GameSignUpId"));
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("PartyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("GameSignUpId");
+
+                    b.ToTable("GameSignUp");
                 });
 
             modelBuilder.Entity("Festiv.Models.Gift", b =>
@@ -94,6 +129,12 @@ namespace Festiv.Migrations
                     b.Property<int?>("PartyDetailsId")
                         .HasColumnType("int");
 
+                    b.Property<int>("PartyId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PartyDetailsId");
@@ -124,7 +165,8 @@ namespace Festiv.Migrations
                     b.Property<int>("PartyId")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid?>("UserId")
+                        .IsRequired()
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
@@ -248,16 +290,34 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c731ed30-620d-45e3-92c3-613db7c55c2c"),
+                            Id = new Guid("4a342684-90e5-4ca5-87c8-50d9a276e776"),
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("ac24df23-20d0-4dfc-99ea-4d26322040c3"),
+                            Id = new Guid("c59e3e6a-e459-4f3e-9a93-9d77e72f533c"),
                             Name = "User",
                             NormalizedName = "USER"
                         });
+                });
+
+            modelBuilder.Entity("Festiv.Models.Team", b =>
+                {
+                    b.Property<int>("TeamId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("TeamId"));
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TeamId");
+
+                    b.HasIndex("GameId");
+
+                    b.ToTable("Teams");
                 });
 
             modelBuilder.Entity("Festiv.Models.User", b =>
@@ -321,6 +381,9 @@ namespace Festiv.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
@@ -342,9 +405,9 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d4fba812-68d2-48de-b019-c1e2c57aa5b4"),
+                            Id = new Guid("d92bb57b-2900-4427-8a7a-6159e46b2c27"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "bde752a3-9bdd-423b-8503-08eeeedac71f",
+                            ConcurrencyStamp = "f7d1c55c-e7b3-49a0-a697-c50212308ad3",
                             Email = "admin@festiv.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -352,29 +415,45 @@ namespace Festiv.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@FESTIV.COM",
                             NormalizedUserName = "ADMIN@FESTIV.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPLkY/e3f1nIiVQzFNyV9LI3G7rk0rAtHRGAARQvWuMhQwectkXMdkpkRG9sRmawGQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEAeThbpLRx3XA9WTTwcSLY8x17+JW+FtBW31gCqlNsrNjFqGLcDCcJfce1g2tbg8KQ==",
                             PhoneNumberConfirmed = false,
                             Rating = 0,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
+                            UserId = 0,
                             UserName = "admin@festiv.com",
                             UserType = true
                         });
                 });
 
-            modelBuilder.Entity("GameUser", b =>
+            modelBuilder.Entity("GameCurrentPlayer", b =>
                 {
-                    b.Property<int>("GamesId")
+                    b.Property<int>("GameId")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UsersId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
 
-                    b.HasKey("GamesId", "UsersId");
+                    b.HasKey("GameId", "UserId");
 
-                    b.HasIndex("UsersId");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("GamePlayers", (string)null);
+                    b.ToTable("GameCurrentPlayer");
+                });
+
+            modelBuilder.Entity("GameWaitingPlayer", b =>
+                {
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("GameId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("GameWaitingPlayer");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -463,8 +542,8 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("d4fba812-68d2-48de-b019-c1e2c57aa5b4"),
-                            RoleId = new Guid("c731ed30-620d-45e3-92c3-613db7c55c2c")
+                            UserId = new Guid("d92bb57b-2900-4427-8a7a-6159e46b2c27"),
+                            RoleId = new Guid("4a342684-90e5-4ca5-87c8-50d9a276e776")
                         });
                 });
 
@@ -485,6 +564,36 @@ namespace Festiv.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("TeamMember", b =>
+                {
+                    b.Property<int>("TeamId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("TeamId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TeamMember");
+                });
+
+            modelBuilder.Entity("Festiv.Models.Game", b =>
+                {
+                    b.HasOne("Festiv.Models.PartyDetails", null)
+                        .WithMany("Games")
+                        .HasForeignKey("PartyDetailsId");
+
+                    b.HasOne("Festiv.Models.Party", "Party")
+                        .WithMany("Games")
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
                 });
 
             modelBuilder.Entity("Festiv.Models.Gift", b =>
@@ -549,17 +658,43 @@ namespace Festiv.Migrations
                     b.Navigation("PartyHost");
                 });
 
-            modelBuilder.Entity("GameUser", b =>
+            modelBuilder.Entity("Festiv.Models.Team", b =>
+                {
+                    b.HasOne("Festiv.Models.Game", "Game")
+                        .WithMany("Teams")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Game");
+                });
+
+            modelBuilder.Entity("GameCurrentPlayer", b =>
                 {
                     b.HasOne("Festiv.Models.Game", null)
                         .WithMany()
-                        .HasForeignKey("GamesId")
+                        .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Festiv.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("UsersId")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("GameWaitingPlayer", b =>
+                {
+                    b.HasOne("Festiv.Models.Game", null)
+                        .WithMany()
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Festiv.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -615,9 +750,31 @@ namespace Festiv.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("TeamMember", b =>
+                {
+                    b.HasOne("Festiv.Models.Team", null)
+                        .WithMany()
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Festiv.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Festiv.Models.Game", b =>
+                {
+                    b.Navigation("Teams");
+                });
+
             modelBuilder.Entity("Festiv.Models.Party", b =>
                 {
                     b.Navigation("Details");
+
+                    b.Navigation("Games");
 
                     b.Navigation("Gifts");
 
@@ -626,6 +783,8 @@ namespace Festiv.Migrations
 
             modelBuilder.Entity("Festiv.Models.PartyDetails", b =>
                 {
+                    b.Navigation("Games");
+
                     b.Navigation("GuestList");
                 });
 
