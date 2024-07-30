@@ -7,11 +7,11 @@ namespace Festiv.Models
     public class Party
     {
         public string? Name { get; set; }
-
         public PartyDetails? Details { get; set; }
         public int DetailsId { get; set; }
-    
-    public int Id { get; set; }
+        public ICollection<GuestRespond> GuestResponds { get; set; } = new List<GuestRespond>();
+        public ICollection<Gift> Gifts { get; set; } = new List<Gift>();
+        public int Id { get; set; }
 
     public Party()
     {
