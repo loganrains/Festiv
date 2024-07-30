@@ -1,4 +1,16 @@
-@model List<Festiv.Models.GuestRespond>
+@using Microsoft.AspNetCore.Identity
+@using Festiv.Models
+@using Festiv.Data
+@using Microsoft.EntityFrameworkCore
+@model List<GuestRespond>
+@inject UserManager<User> UserManager
+@inject FestivDbContext DbContext
+
+@{ 
+    User user = await UserManager.GetUserAsync(User);
+    var userPartyIds = Model.Where(gr => gr.UserId == user.Id).Select(gr => gr.PartyId).Distinct().ToList();
+    var parties = await DbContext.Parties.ToListAsync(); // Fetch parties from the database
+}
 
 <h1>Guest List</h1>
 
@@ -11,16 +23,24 @@
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email</th>
+                    <th>Party Name</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var guest in Model)
                 {
-                    <tr>
-                        <td>@guest.FirstName</td>
-                        <td>@guest.LastName</td>
-                        <td>@guest.Email</td>
-                    </tr>
+                    // Check if the guest is attending a party the user is also attending
+                    @if (userPartyIds.Contains(guest.PartyId))
+                    {
+                        var party = parties.FirstOrDefault(p => p.Id == guest.PartyId);
+                        var partyName = party?.Name ?? "Unknown";
+                        <tr>
+                            <td>@guest.FirstName</td>
+                            <td>@guest.LastName</td>
+                            <td>@guest.Email</td>
+                            <td>@partyName</td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>
