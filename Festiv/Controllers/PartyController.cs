@@ -19,10 +19,7 @@ namespace Festiv.Controllers
         public PartyController (FestivDbContext dbContext)
         {
             context = dbContext;
-        }
-
-        // private static List<Party> Parties = new List<Party>();
-        // private static List<Game> games = new List<Game>(); 
+        } 
 
         // GET /<controller>
         [HttpGet]
@@ -32,21 +29,7 @@ namespace Festiv.Controllers
         
             return View(parties);
         }
-
-    // [HttpGet("PartyDetails/{partyId}")]
-    // public IActionResult PartyDetails(int partyId)
-    // {
-    //     PartyDetails? requestedParty = context.PartyDetails.Find(partyId);
-
-    //         if (requestedParty != null)
-    //         {
-    //             ViewBag.Name = context.PartyDetails.Find(partyId);
-    //             return View("PartyDetails", requestedParty);
-    //         }
-
-    //        return View();
-        
-    //     }   
+  
 
         [HttpGet("PartyDetails/{partyId}")]
         public IActionResult PartyDetails(int partyId)

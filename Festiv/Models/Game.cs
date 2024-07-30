@@ -43,11 +43,4 @@ namespace Festiv.Models
 
     }
 
-    // internal class Teams
-    // {
-    // }
-
-    // internal class CurrentPlayers
-    // {
-    // }
 }

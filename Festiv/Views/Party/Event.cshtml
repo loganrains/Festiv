@@ -35,30 +35,3 @@
     }
 </div>
 
-@* <h1>@Model.Name</h1>
-
-<div>
-    <h4>Teams</h4>
-    <form asp-action="RandomizeTeams" method="post">
-        <input type="hidden" asp-for = "Id" />
-        <button type = "submit" name="randomizerType" value="split">Split into 2 Teams</button>
-        <button type = "submit" name="randomizerType" value="pairs">Group into Pairs</button>
-    </form>
-
-    <ul>
-        @foreach (var team in Model.Teams)
-        {
-            <li>
-                @foreach(var player in team)
-                {
-                    @player.FirstName <br />
-                }
-            </li>
-        }
-    </ul>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div> *@
-
