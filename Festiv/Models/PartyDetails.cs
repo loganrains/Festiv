@@ -16,14 +16,14 @@ public class PartyDetails
     public List<Guest>? GuestList { get; set; }
     public Party Party { get; set; }
     
-    public ICollection<Photo>? Photos { get; set; } = new List<Photo>();
+    public Photo? Photo { get; set; }
 
     public int Id { get; set; }
     public int PartyId { get; set; }
 
     public PartyDetails() { }
 
-    public PartyDetails(string? name, string? description, string? location, DateTime? start, DateTime? end, Host? partyHost, List<Guest>? guestList, List<Photo>? photos)
+    public PartyDetails(string? name, string? description, string? location, DateTime? start, DateTime? end, Host? partyHost, List<Guest>? guestList, Photo? photo)
     {
         Name = name;
         Description = description;
@@ -32,7 +32,7 @@ public class PartyDetails
         End = end;
         PartyHost = partyHost;
         GuestList = guestList;
-        Photos = photos;
+        Photo = photo;
     }
 
     public override bool Equals(object? obj)

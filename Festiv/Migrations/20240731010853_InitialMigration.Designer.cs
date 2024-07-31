@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Festiv.Migrations
 {
     [DbContext(typeof(FestivDbContext))]
-    [Migration("20240723040525_DoopyMigration")]
-    partial class DoopyMigration
+    [Migration("20240731010853_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -179,9 +179,10 @@ namespace Festiv.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PartyDetailsId");
+                    b.HasIndex("PartyDetailsId")
+                        .IsUnique();
 
-                    b.ToTable("Photos");
+                    b.ToTable("Photo");
                 });
 
             modelBuilder.Entity("Festiv.Models.Role", b =>
@@ -213,13 +214,13 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("4edb8781-56be-455c-a50c-4f5556877362"),
+                            Id = new Guid("a197802e-c951-4c56-ba0d-6fd70638f080"),
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("61f993fa-988c-4db0-a961-ea7c10dc55b7"),
+                            Id = new Guid("2fa08924-a7bc-4664-b88e-122be030d9f3"),
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -307,9 +308,9 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("160a44d1-15e1-4ab5-a62f-8a6c92410f6b"),
+                            Id = new Guid("67aad553-cdfb-4440-94cf-1964f8dd8482"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "4d9d5c30-d520-4050-857b-e3178d9676a8",
+                            ConcurrencyStamp = "2f138030-ece2-400d-9186-f94fe4bff9c1",
                             Email = "admin@festiv.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -317,7 +318,7 @@ namespace Festiv.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@FESTIV.COM",
                             NormalizedUserName = "ADMIN@FESTIV.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEG+fYCVtKHMkJK4eRyFspEaltJr6cPsBXPSQWZbfxenb+Fo/JPf7afNFkhU80+2CdQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEG6ZGrR5LKZ35w3S++sXFc7z43AOSc5FneJRUhe2nLv4/Exj/qh44wpXIfcz33waFA==",
                             PhoneNumberConfirmed = false,
                             Rating = 0,
                             SecurityStamp = "",
@@ -413,8 +414,8 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("160a44d1-15e1-4ab5-a62f-8a6c92410f6b"),
-                            RoleId = new Guid("4edb8781-56be-455c-a50c-4f5556877362")
+                            UserId = new Guid("67aad553-cdfb-4440-94cf-1964f8dd8482"),
+                            RoleId = new Guid("a197802e-c951-4c56-ba0d-6fd70638f080")
                         });
                 });
 
@@ -464,8 +465,8 @@ namespace Festiv.Migrations
             modelBuilder.Entity("Festiv.Models.Photo", b =>
                 {
                     b.HasOne("Festiv.Models.PartyDetails", "Details")
-                        .WithMany("Photos")
-                        .HasForeignKey("PartyDetailsId");
+                        .WithOne("Photo")
+                        .HasForeignKey("Festiv.Models.Photo", "PartyDetailsId");
 
                     b.Navigation("Details");
                 });
@@ -530,7 +531,7 @@ namespace Festiv.Migrations
                 {
                     b.Navigation("GuestList");
 
-                    b.Navigation("Photos");
+                    b.Navigation("Photo");
                 });
 #pragma warning restore 612, 618
         }

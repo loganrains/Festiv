@@ -32,13 +32,6 @@ namespace Festiv.Controllers
         public IActionResult PartyDetails(int partyId)
         {
             PartyDetails? requestedParty = context.PartyDetails.Find(partyId);
-            
-
-            Console.WriteLine(requestedParty.Photos);
-            foreach(var photo in requestedParty.Photos)
-            {
-                Console.WriteLine(photo.Link);
-            };
 
             if (requestedParty != null)
             {
@@ -75,6 +68,7 @@ namespace Festiv.Controllers
                     Location = addPartyViewModel.Location,
                     Start = addPartyViewModel.Start,
                     End = addPartyViewModel.End,
+                    Photo = null
                 };
 
                 newParty.Details = theDetails;
@@ -124,6 +118,9 @@ namespace Festiv.Controllers
         [HttpPost()]
         public IActionResult AddPhoto(AddPhotoViewModel addPhotoViewModel)
         {
+            
+            int? partyDetailsId = addPhotoViewModel.PartyDetailsId;
+
             if(ModelState.IsValid)
             {
                 Photo newPhoto = new()
@@ -133,7 +130,9 @@ namespace Festiv.Controllers
                     PartyDetailsId = addPhotoViewModel.PartyDetailsId
                 };
 
-                context.Photos.Add(newPhoto);
+                PartyDetails? requestedParty = context.PartyDetails.Find(partyDetailsId);
+
+                requestedParty.Photo = newPhoto;
                 context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }

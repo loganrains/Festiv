@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Festiv.Migrations
 {
     /// <inheritdoc />
-    public partial class DoopyMigration : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -311,7 +311,7 @@ namespace Festiv.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Photos",
+                name: "Photo",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -324,9 +324,9 @@ namespace Festiv.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Photos", x => x.Id);
+                    table.PrimaryKey("PK_Photo", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Photos_PartyDetails_PartyDetailsId",
+                        name: "FK_Photo_PartyDetails_PartyDetailsId",
                         column: x => x.PartyDetailsId,
                         principalTable: "PartyDetails",
                         principalColumn: "Id");
@@ -338,19 +338,19 @@ namespace Festiv.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("4edb8781-56be-455c-a50c-4f5556877362"), null, "Admin", "ADMIN" },
-                    { new Guid("61f993fa-988c-4db0-a961-ea7c10dc55b7"), null, "User", "USER" }
+                    { new Guid("2fa08924-a7bc-4664-b88e-122be030d9f3"), null, "User", "USER" },
+                    { new Guid("a197802e-c951-4c56-ba0d-6fd70638f080"), null, "Admin", "ADMIN" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfilePic", "Rating", "SecurityStamp", "TwoFactorEnabled", "UserName", "UserType" },
-                values: new object[] { new Guid("160a44d1-15e1-4ab5-a62f-8a6c92410f6b"), 0, "4d9d5c30-d520-4050-857b-e3178d9676a8", "admin@festiv.com", true, "Admin", "User", false, null, "ADMIN@FESTIV.COM", "ADMIN@FESTIV.COM", "AQAAAAIAAYagAAAAEG+fYCVtKHMkJK4eRyFspEaltJr6cPsBXPSQWZbfxenb+Fo/JPf7afNFkhU80+2CdQ==", null, false, null, 0, "", false, "admin@festiv.com", true });
+                values: new object[] { new Guid("67aad553-cdfb-4440-94cf-1964f8dd8482"), 0, "2f138030-ece2-400d-9186-f94fe4bff9c1", "admin@festiv.com", true, "Admin", "User", false, null, "ADMIN@FESTIV.COM", "ADMIN@FESTIV.COM", "AQAAAAIAAYagAAAAEG6ZGrR5LKZ35w3S++sXFc7z43AOSc5FneJRUhe2nLv4/Exj/qh44wpXIfcz33waFA==", null, false, null, 0, "", false, "admin@festiv.com", true });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { new Guid("4edb8781-56be-455c-a50c-4f5556877362"), new Guid("160a44d1-15e1-4ab5-a62f-8a6c92410f6b") });
+                values: new object[] { new Guid("a197802e-c951-4c56-ba0d-6fd70638f080"), new Guid("67aad553-cdfb-4440-94cf-1964f8dd8482") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -406,9 +406,10 @@ namespace Festiv.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Photos_PartyDetailsId",
-                table: "Photos",
-                column: "PartyDetailsId");
+                name: "IX_Photo_PartyDetailsId",
+                table: "Photo",
+                column: "PartyDetailsId",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -436,7 +437,7 @@ namespace Festiv.Migrations
                 name: "GuestResponds");
 
             migrationBuilder.DropTable(
-                name: "Photos");
+                name: "Photo");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

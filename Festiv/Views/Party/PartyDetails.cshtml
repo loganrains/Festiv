@@ -2,13 +2,12 @@
 @using Festiv.Controllers;
 @model PartyDetails;
 
-
 @{
     ViewData["Title"] = "Party Details";
 }
 
 <div class="text-center">
-    <h1 class="display-4">"@Model.Name at @Model.Location"</h1>
+    <h1 class="display-4">@Model.Name at @Model.Location</h1>
 
     <p>@Model.Description</p>
 
@@ -30,20 +29,17 @@
             <a asp-controller="Party" asp-action="AddPhoto" asp-route-partyDetailsId="@Model.Id">Click Here to add Photo</a>
         </div>
 
-        @if(Model?.Photos == null || Model.Photos.Count == 0)
+        @if(Model?.Photo == null )
         {
             <p>Pics or it didn't happen</p>
         }
         else
         {
-        <div>
-            @foreach (Photo photo in Model.Photos)
-            {
-                <div>
-                    <img src="model.photo.Link" alt="photo.AltText">
-                </div>
-            }
-        </div>
+            <div>
+                
+                <img src="@Model.Photo.Link" alt="@Model.Photo.AltText">
+               
+            </div>
         }
     </div>
 </div>
