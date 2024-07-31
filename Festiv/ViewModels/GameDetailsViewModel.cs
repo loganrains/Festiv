@@ -16,6 +16,7 @@ namespace Festiv.ViewModels
         [Required(ErrorMessage = "Need players for game")]
         public List<User>? WaitingPlayers { get; set; }
         public List<User>? CurrentPlayers { get; set; } 
-        public List<List<User>>? Teams { get; set; }
+        public List<Team>? Teams { get; set; }
+        public int PartyId { get; set; }
     }
 }
