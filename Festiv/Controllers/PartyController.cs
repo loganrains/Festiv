@@ -68,7 +68,7 @@ namespace Festiv.Controllers
                     Location = addPartyViewModel.Location,
                     Start = addPartyViewModel.Start,
                     End = addPartyViewModel.End,
-                    Photo = null
+                    Photo = addPartyViewModel.Photo
                 };
 
                 newParty.Details = theDetails;
@@ -108,36 +108,30 @@ namespace Festiv.Controllers
             return NotFound();
         }
 
-        [HttpGet("Party/AddPhoto/{partyDetailsId}")]
-        public IActionResult AddPhoto(int partyDetailsId)
-        {
-            ViewBag.Id = partyDetailsId;
-            return View();
-        }
+        //Saved incase we have time to try the photoboard again
+        // [HttpGet("Party/AddPhoto/{partyDetailsId}")]
+        // public IActionResult AddPhoto(int partyDetailsId)
+        // {
+        //     ViewBag.Id = partyDetailsId;
+        //     return View();
+        // }
 
-        [HttpPost()]
-        public IActionResult AddPhoto(AddPhotoViewModel addPhotoViewModel)
-        {
+        // [HttpPost()]
+        // public IActionResult AddPhoto(AddPhotoViewModel addPhotoViewModel)
+        // {
             
-            int? partyDetailsId = addPhotoViewModel.PartyDetailsId;
+        //     int? partyDetailsId = addPhotoViewModel.PartyDetailsId;
 
-            if(ModelState.IsValid)
-            {
-                Photo newPhoto = new()
-                {
-                    Link = addPhotoViewModel.Link,
-                    AltText = addPhotoViewModel.AltText,
-                    PartyDetailsId = addPhotoViewModel.PartyDetailsId
-                };
+        //     if(ModelState.IsValid)
+        //     {
 
-                PartyDetails? requestedParty = context.PartyDetails.Find(partyDetailsId);
+        //         PartyDetails? requestedParty = context.PartyDetails.Find(partyDetailsId);
 
-                requestedParty.Photo = newPhoto;
-                context.SaveChanges();
-                return RedirectToAction(nameof(Index));
-            }
+        //         context.SaveChanges();
+        //         return RedirectToAction(nameof(Index));
+        //     }
             
-            return View(addPhotoViewModel);
-        }
+        //     return View(addPhotoViewModel);
+        // }
     }
 }

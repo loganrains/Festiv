@@ -24,10 +24,12 @@ public class AddPartyViewModel
     [Required(ErrorMessage = "End is Required")]
     public DateTime End { get; set; }
 
+    public string? Photo { get; set; }
+
     public Models.Host? PartyHost { get; set; }
     public List<Guest>? GuestList { get; set; }
     public List<Game>? Games { get; set; }
 
-    public Photo? Photo { get; set; }
+    // public Photo? Photo { get; set; }
     
 }

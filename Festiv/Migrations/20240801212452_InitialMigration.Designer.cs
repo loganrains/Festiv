@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Festiv.Migrations
 {
     [DbContext(typeof(FestivDbContext))]
-    [Migration("20240731010853_InitialMigration")]
+    [Migration("20240801212452_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -147,6 +147,10 @@ namespace Festiv.Migrations
                     b.Property<int>("PartyId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Photo")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime?>("Start")
                         .HasColumnType("datetime(6)");
 
@@ -158,31 +162,6 @@ namespace Festiv.Migrations
                         .IsUnique();
 
                     b.ToTable("PartyDetails");
-                });
-
-            modelBuilder.Entity("Festiv.Models.Photo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AltText")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Link")
-                        .HasColumnType("longtext");
-
-                    b.Property<int?>("PartyDetailsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PartyDetailsId")
-                        .IsUnique();
-
-                    b.ToTable("Photo");
                 });
 
             modelBuilder.Entity("Festiv.Models.Role", b =>
@@ -214,13 +193,13 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a197802e-c951-4c56-ba0d-6fd70638f080"),
+                            Id = new Guid("100a4ed6-67bb-4b45-a970-834949033e09"),
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("2fa08924-a7bc-4664-b88e-122be030d9f3"),
+                            Id = new Guid("213082c9-5d5f-4cd4-b349-961138b4dcc0"),
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -308,9 +287,9 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("67aad553-cdfb-4440-94cf-1964f8dd8482"),
+                            Id = new Guid("a3cfa957-db40-4b1a-8bfa-8a1a71694b28"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2f138030-ece2-400d-9186-f94fe4bff9c1",
+                            ConcurrencyStamp = "dff5ae40-751e-4a78-87cb-3edd391724cb",
                             Email = "admin@festiv.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -318,7 +297,7 @@ namespace Festiv.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@FESTIV.COM",
                             NormalizedUserName = "ADMIN@FESTIV.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEG6ZGrR5LKZ35w3S++sXFc7z43AOSc5FneJRUhe2nLv4/Exj/qh44wpXIfcz33waFA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIJtFvU7VTCZY41v0XZchm7GxU4OxrbJqcGtJ/sznKpZAklVOqtNc9guXNmG1BNDDA==",
                             PhoneNumberConfirmed = false,
                             Rating = 0,
                             SecurityStamp = "",
@@ -414,8 +393,8 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("67aad553-cdfb-4440-94cf-1964f8dd8482"),
-                            RoleId = new Guid("a197802e-c951-4c56-ba0d-6fd70638f080")
+                            UserId = new Guid("a3cfa957-db40-4b1a-8bfa-8a1a71694b28"),
+                            RoleId = new Guid("100a4ed6-67bb-4b45-a970-834949033e09")
                         });
                 });
 
@@ -460,15 +439,6 @@ namespace Festiv.Migrations
                     b.Navigation("Party");
 
                     b.Navigation("PartyHost");
-                });
-
-            modelBuilder.Entity("Festiv.Models.Photo", b =>
-                {
-                    b.HasOne("Festiv.Models.PartyDetails", "Details")
-                        .WithOne("Photo")
-                        .HasForeignKey("Festiv.Models.Photo", "PartyDetailsId");
-
-                    b.Navigation("Details");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -530,8 +500,6 @@ namespace Festiv.Migrations
             modelBuilder.Entity("Festiv.Models.PartyDetails", b =>
                 {
                     b.Navigation("GuestList");
-
-                    b.Navigation("Photo");
                 });
 #pragma warning restore 612, 618
         }

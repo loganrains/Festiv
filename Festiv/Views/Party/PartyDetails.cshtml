@@ -21,13 +21,10 @@
             </div>
         </div>
     </div>
-    <div>
-        <a asp-controller="Rating" asp-action="Index">Rate Guests</a>
-    </div>
-    <div>
         <div>
+        @* <div>
             <a asp-controller="Party" asp-action="AddPhoto" asp-route-partyDetailsId="@Model.Id">Click Here to add Photo</a>
-        </div>
+        </div> *@
 
         @if(Model?.Photo == null )
         {
@@ -37,9 +34,13 @@
         {
             <div>
                 
-                <img src="@Model.Photo.Link" alt="@Model.Photo.AltText">
+                <img src="@Model.Photo" alt="Photo of @Model.Name" style="width: 500px; height: auto;">
                
             </div>
         }
     </div>
+    <div>
+        <a asp-controller="Rating" asp-action="Index">Rate Guests</a>
+    </div>
+
 </div>
