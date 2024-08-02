@@ -57,6 +57,7 @@ namespace Festiv.Controllers
                 Games = party.Games.ToList(),
                 CurrentTrack = currentTrack,
                 PlaylistId = playlistId 
+                MissedConnections = _context.MissedConnections.ToList()
             };
 
             return View(partyDetailsViewModel);
