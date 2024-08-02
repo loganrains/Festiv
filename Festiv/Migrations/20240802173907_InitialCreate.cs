@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Festiv.Migrations
 {
     /// <inheritdoc />
-    public partial class AddMissedConnection : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -505,19 +505,19 @@ namespace Festiv.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("5d06e9fd-7fc9-4c01-b28b-e901a2eeca75"), null, "User", "USER" },
-                    { new Guid("fd85c196-4d0f-45b5-be0b-65d8f46ac604"), null, "Admin", "ADMIN" }
+                    { new Guid("00a55a20-0f44-4e0b-b2f6-81b3fdfaf7f0"), null, "Admin", "ADMIN" },
+                    { new Guid("4eb3a168-2b63-4bdf-b45d-dfc25b7e4d1d"), null, "User", "USER" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfilePic", "Rating", "SecurityStamp", "TwoFactorEnabled", "UserName", "UserType" },
-                values: new object[] { new Guid("cb093557-041c-4e95-a177-62dae9526163"), 0, "850f6f7c-f5e6-4f2c-8053-88e16daafa30", "admin@festiv.com", true, "Admin", "User", false, null, "ADMIN@FESTIV.COM", "ADMIN@FESTIV.COM", "AQAAAAIAAYagAAAAEOulKe0S0Tc6kvK64OfHNl+lY6sDguXtj8Vs1egT7fb59oRAaweCOxLjPAUySc4RPw==", null, false, null, 0, "", false, "admin@festiv.com", true });
+                values: new object[] { new Guid("bd61c037-f9c5-41f0-8699-9eee9291eb00"), 0, "a490783b-7bb5-463d-af89-92917c6de99c", "admin@festiv.com", true, "Admin", "User", false, null, "ADMIN@FESTIV.COM", "ADMIN@FESTIV.COM", "AQAAAAIAAYagAAAAEBKEzCY1fwjh18MKXT+cLYr2K7+XO6fRYPlW3prAas7q8hurDXnOnWGwaSfkMPjgvQ==", null, false, null, 0, "", false, "admin@festiv.com", true });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { new Guid("fd85c196-4d0f-45b5-be0b-65d8f46ac604"), new Guid("cb093557-041c-4e95-a177-62dae9526163") });
+                values: new object[] { new Guid("00a55a20-0f44-4e0b-b2f6-81b3fdfaf7f0"), new Guid("bd61c037-f9c5-41f0-8699-9eee9291eb00") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Festiv.Migrations
 {
     [DbContext(typeof(FestivDbContext))]
-    [Migration("20240802173135_AddMissedConnection")]
-    partial class AddMissedConnection
+    [Migration("20240802173907_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -293,13 +293,13 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("fd85c196-4d0f-45b5-be0b-65d8f46ac604"),
+                            Id = new Guid("00a55a20-0f44-4e0b-b2f6-81b3fdfaf7f0"),
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("5d06e9fd-7fc9-4c01-b28b-e901a2eeca75"),
+                            Id = new Guid("4eb3a168-2b63-4bdf-b45d-dfc25b7e4d1d"),
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -405,9 +405,9 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("cb093557-041c-4e95-a177-62dae9526163"),
+                            Id = new Guid("bd61c037-f9c5-41f0-8699-9eee9291eb00"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "850f6f7c-f5e6-4f2c-8053-88e16daafa30",
+                            ConcurrencyStamp = "a490783b-7bb5-463d-af89-92917c6de99c",
                             Email = "admin@festiv.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -415,7 +415,7 @@ namespace Festiv.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@FESTIV.COM",
                             NormalizedUserName = "ADMIN@FESTIV.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEOulKe0S0Tc6kvK64OfHNl+lY6sDguXtj8Vs1egT7fb59oRAaweCOxLjPAUySc4RPw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBKEzCY1fwjh18MKXT+cLYr2K7+XO6fRYPlW3prAas7q8hurDXnOnWGwaSfkMPjgvQ==",
                             PhoneNumberConfirmed = false,
                             Rating = 0,
                             SecurityStamp = "",
@@ -541,8 +541,8 @@ namespace Festiv.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("cb093557-041c-4e95-a177-62dae9526163"),
-                            RoleId = new Guid("fd85c196-4d0f-45b5-be0b-65d8f46ac604")
+                            UserId = new Guid("bd61c037-f9c5-41f0-8699-9eee9291eb00"),
+                            RoleId = new Guid("00a55a20-0f44-4e0b-b2f6-81b3fdfaf7f0")
                         });
                 });
 
