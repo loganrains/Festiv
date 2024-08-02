@@ -41,8 +41,8 @@
         @foreach(Party party in Model)
         {
             <li>
-                <a asp-controller="PartyDetails" asp-action="Details" asp-route-partyId="@party.Id">@party.Name</a>
-                <a href= "/PartyDetails/@party.Id">My Fun Party</a>
+                <a asp-controller="PartyDetails" asp-action="Index" asp-route-partyId="@party.Id">@party.Name</a>
+                @* <a href="/PartyDetails/foo/@party.Id">wedding</a> *@
 
                 | <a asp-controller="Party" asp-action="Delete" asp-route-partyId="@party.Id">Delete</a>
             </li>

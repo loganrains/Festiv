@@ -23,7 +23,7 @@ namespace Festiv.Controllers
         }
 
         [HttpGet("{partyId}")]
-        public async Task<IActionResult> PartyDetails(int partyId)
+        public async Task<IActionResult> Index(int partyId)
         {
             Console.WriteLine($"Got here with PartyDetails controller {partyId}");
             // Fetch party and related details
@@ -42,7 +42,10 @@ namespace Festiv.Controllers
 
             if (string.IsNullOrEmpty(accessToken))
             {
-                return RedirectToAction("Login", "Spotify");
+                // return RedirectToAction("Login", "Spotify");
+                string route = $"/Spotify/login/{partyId}";
+                Console.WriteLine(route);
+                return Redirect(route);
             }
 
             // Fetch current track details from Spotify
@@ -60,7 +63,7 @@ namespace Festiv.Controllers
                 MissedConnections = _context.MissedConnections.ToList()
             };
 
-            return View(partyDetailsViewModel);
+            return View("PartyDetails", partyDetailsViewModel);
         }
 
         [HttpGet("{partyId}/CreateGame")]

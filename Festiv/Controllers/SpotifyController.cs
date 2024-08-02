@@ -11,26 +11,30 @@ namespace Festiv.Controllers
     public class SpotifyController : Controller
     {
         private readonly SpotifyService _spotifyService;
-        private object partyId;
+        // private object partyId;
+        [TempData]
+        public int PartyId {get; set;}
 
         public SpotifyController(SpotifyService spotifyService)
         {
             _spotifyService = spotifyService;
         }
 
-        public IActionResult Login(string partyId)
+        [HttpGet("/spotify/login/{partyId}")]
+        public IActionResult Login(int partyId)
         {
             Console.WriteLine($"Spotify Login {partyId}");
-            TempData["PartyId"] = partyId;
+            PartyId = partyId;
             string clientId = "5275b4abc3474605bec58bb4c9d83d23";
             string redirectUri = Url.Action("Callback", "Spotify", null, Request.Scheme);
+            Console.WriteLine($"{Uri.EscapeDataString(redirectUri)}");
             string scopes = "playlist-modify-public";
             string spotifyUrl = $"https://accounts.spotify.com/authorize?client_id={clientId}&response_type=code&redirect_uri={Uri.EscapeDataString(redirectUri)}&scope={Uri.EscapeDataString(scopes)}";
 
             return Redirect(spotifyUrl);
         }
 
-        [HttpGet("Callback")]
+        [HttpGet("/Callback")]
         public async Task<IActionResult> Callback(string code)
         {  
             string redirectUri = Url.Action("Callback", "Spotify", null, Request.Scheme);
@@ -39,9 +43,10 @@ namespace Festiv.Controllers
             // Save access token for use in adding tracks
             HttpContext.Session.SetString("SpotifyAccessToken", accessToken);
 
-            partyId = TempData["PartyId"];
+            // partyId = TempData["PartyId"];
+            Console.WriteLine($"Callback... {PartyId}");
 
-            return Redirect($"/PartyDetails/{partyId}");
+            return Redirect($"/PartyDetails/{PartyId}");
         }   
 
 
