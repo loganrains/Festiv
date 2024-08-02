@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Festiv.Migrations
 {
     /// <inheritdoc />
-    public partial class AddTeamsToGame : Migration
+    public partial class AddMissedConnection : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -40,7 +40,6 @@ namespace Festiv.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
                     FirstName = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LastName = table.Column<string>(type: "longtext", nullable: true)
@@ -79,25 +78,6 @@ namespace Festiv.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "GameSignUp",
-                columns: table => new
-                {
-                    GameSignUpId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    GameId = table.Column<int>(type: "int", nullable: false),
-                    PartyId = table.Column<int>(type: "int", nullable: false),
-                    FirstName = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    LastName = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GameSignUp", x => x.GameSignUpId);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "Host",
                 columns: table => new
                 {
@@ -113,6 +93,25 @@ namespace Festiv.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Host", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "MissedConnections",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UserName = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PersonDescription = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ContactInfo = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MissedConnections", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -506,19 +505,19 @@ namespace Festiv.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("4a342684-90e5-4ca5-87c8-50d9a276e776"), null, "Admin", "ADMIN" },
-                    { new Guid("c59e3e6a-e459-4f3e-9a93-9d77e72f533c"), null, "User", "USER" }
+                    { new Guid("5d06e9fd-7fc9-4c01-b28b-e901a2eeca75"), null, "User", "USER" },
+                    { new Guid("fd85c196-4d0f-45b5-be0b-65d8f46ac604"), null, "Admin", "ADMIN" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfilePic", "Rating", "SecurityStamp", "TwoFactorEnabled", "UserId", "UserName", "UserType" },
-                values: new object[] { new Guid("d92bb57b-2900-4427-8a7a-6159e46b2c27"), 0, "f7d1c55c-e7b3-49a0-a697-c50212308ad3", "admin@festiv.com", true, "Admin", "User", false, null, "ADMIN@FESTIV.COM", "ADMIN@FESTIV.COM", "AQAAAAIAAYagAAAAEAeThbpLRx3XA9WTTwcSLY8x17+JW+FtBW31gCqlNsrNjFqGLcDCcJfce1g2tbg8KQ==", null, false, null, 0, "", false, 0, "admin@festiv.com", true });
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfilePic", "Rating", "SecurityStamp", "TwoFactorEnabled", "UserName", "UserType" },
+                values: new object[] { new Guid("cb093557-041c-4e95-a177-62dae9526163"), 0, "850f6f7c-f5e6-4f2c-8053-88e16daafa30", "admin@festiv.com", true, "Admin", "User", false, null, "ADMIN@FESTIV.COM", "ADMIN@FESTIV.COM", "AQAAAAIAAYagAAAAEOulKe0S0Tc6kvK64OfHNl+lY6sDguXtj8Vs1egT7fb59oRAaweCOxLjPAUySc4RPw==", null, false, null, 0, "", false, "admin@festiv.com", true });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { new Guid("4a342684-90e5-4ca5-87c8-50d9a276e776"), new Guid("d92bb57b-2900-4427-8a7a-6159e46b2c27") });
+                values: new object[] { new Guid("fd85c196-4d0f-45b5-be0b-65d8f46ac604"), new Guid("cb093557-041c-4e95-a177-62dae9526163") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -646,9 +645,6 @@ namespace Festiv.Migrations
                 name: "GameCurrentPlayer");
 
             migrationBuilder.DropTable(
-                name: "GameSignUp");
-
-            migrationBuilder.DropTable(
                 name: "GameWaitingPlayer");
 
             migrationBuilder.DropTable(
@@ -659,6 +655,9 @@ namespace Festiv.Migrations
 
             migrationBuilder.DropTable(
                 name: "GuestResponds");
+
+            migrationBuilder.DropTable(
+                name: "MissedConnections");
 
             migrationBuilder.DropTable(
                 name: "TeamMember");

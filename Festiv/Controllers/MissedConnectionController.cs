@@ -1,7 +1,7 @@
 // Controllers/MissedConnectionsController.cs
 using Microsoft.AspNetCore.Mvc;
-using Festiv.Data;
 using Festiv.Models;
+using Festiv.Data;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,14 +1,18 @@
+// Models/MissedConnection.cs
 using System.ComponentModel.DataAnnotations;
 
-namespace Festive.Models
+namespace Festiv.Models
 {
-    public class MissedConnections
+    public class MissedConnection
     {
         public int Id { get; set; }
+
         [Required]
-        public string? Name { get; set; }
+        public string? UserName { get; set; }
+
         [Required]
-        public string? Description { get; set; }
+        public string? PersonDescription { get; set; }
+
         [Required]
         public string? ContactInfo { get; set; }
     }

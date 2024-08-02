@@ -7,7 +7,6 @@ using System;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http.Abstractions;
-using Festive.Models;
 
 
 namespace Festiv.Data;
@@ -23,7 +22,7 @@ public class FestivDbContext: IdentityDbContext<User, Role, Guid>
     public DbSet<Game> Games { get; set; }
     public DbSet<Team> Teams { get; set; }
     public DbSet<Gift> Gifts { get; set; }
-    public DbSet<MissedConnections> MissedConnections { get; set; }
+    public DbSet<MissedConnection> MissedConnections { get; set; }
 
 
     public FestivDbContext(DbContextOptions<FestivDbContext> options): base(options)
