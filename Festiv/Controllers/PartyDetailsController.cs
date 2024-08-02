@@ -2,84 +2,101 @@ using Microsoft.AspNetCore.Mvc;
 using Festiv.Models;
 using Festiv.ViewModels;
 using Festiv.Data;
+using Festiv.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Festiv.Controllers
 {
     [Route("PartyDetails")]
-
     public class PartyDetailsController : Controller
     {
-        private readonly FestivDbContext context;
+        private readonly FestivDbContext _context;
+        private readonly SpotifyService _spotifyService;
 
-        public PartyDetailsController (FestivDbContext dbContext)
+        public PartyDetailsController(FestivDbContext context, SpotifyService spotifyService)
         {
-            context = dbContext;
+            _context = context;
+            _spotifyService = spotifyService;
         }
 
         [HttpGet("{partyId}")]
-        public IActionResult PartyDetails(int partyId)
+        public async Task<IActionResult> PartyDetails(int partyId)
         {
-           Party? party = context.Parties
-            .Include(p => p.Details)
-            .Include(p => p.Games) 
-            .FirstOrDefault(p => p.Id == partyId);
+            // Fetch party and related details
+            var party = await _context.Parties
+                .Include(p => p.Details)
+                .Include(p => p.Games)
+                .FirstOrDefaultAsync(p => p.Id == partyId);
 
             if (party == null)
             {
                 return NotFound();
             }
 
-            var partyDetails = new PartyDetailsViewModel
+            // Get access token from the session
+            var accessToken = HttpContext.Session.GetString("SpotifyAccessToken");
+
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                // Redirect to Spotify login if the access token is missing
+                return RedirectToAction("Login", "Spotify");
+            }
+
+            // Fetch current track details from Spotify
+            var currentTrack = await _spotifyService.GetTrackAsync("4iV5W9uYEdYUVa79Axb7Rh", accessToken);
+
+            // Prepare view model with party details, games, and current track
+            var partyDetailsViewModel = new PartyDetailsViewModel
             {
                 Party = party,
-                Games = party.Games.ToList()
+                Games = party.Games.ToList(),
+                CurrentTrack = currentTrack,
+                PlaylistId = "37i9dQZF1DWXti3N4Wp5xy?si=732ec57f58c4404a" // Set the playlist ID
             };
 
             ViewBag.PartyId = partyId;
-            return View(partyDetails);
+            return View(partyDetailsViewModel);
         }
 
         [HttpGet("{partyId}/CreateGame")]
         public IActionResult CreateGame(int partyId)
         {
-            AddGameViewModel addGameViewModel = new AddGameViewModel
+            var addGameViewModel = new AddGameViewModel
             {
                 PartyId = partyId
             };
             return View(addGameViewModel);
         }
 
-
         [HttpPost("{partyId}/CreateGame")]
         public async Task<IActionResult> CreateGame(AddGameViewModel addGameViewModel)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                Party? party = context.Parties
+                var party = await _context.Parties
                     .Include(p => p.Games)
-                    .FirstOrDefault(p => p.Id == addGameViewModel.PartyId);
+                    .FirstOrDefaultAsync(p => p.Id == addGameViewModel.PartyId);
 
-                if(party == null)
+                if (party == null)
                 {
                     return NotFound();
                 }
 
-                Game newGame = new Game
+                var newGame = new Game
                 {
                     GameName = addGameViewModel.GameName,
                     MinPlayers = addGameViewModel.MinPlayers,
                     MaxPlayers = addGameViewModel.MaxPlayers,
                     PartyId = addGameViewModel.PartyId,
-                    WaitingPlayers = new List<User> (),
+                    WaitingPlayers = new List<User>(),
                     CurrentPlayers = new List<User>(),
                     Teams = new List<Team>()
                 };
                 party.Games.Add(newGame);
-                context.Games.Add(newGame);
-                await context.SaveChangesAsync();
+                _context.Games.Add(newGame);
+                await _context.SaveChangesAsync();
                 return RedirectToAction("PartyDetails", new { partyId = addGameViewModel.PartyId });
             }
             return View(addGameViewModel);
@@ -88,19 +105,19 @@ namespace Festiv.Controllers
         [HttpGet("{partyId}/GameDetails/{gameId}")]
         public IActionResult GameDetails(int partyId, int gameId)
         {
-            var game = context.Games
+            var game = _context.Games
                 .Include(g => g.WaitingPlayers)
                 .Include(g => g.CurrentPlayers)
                 .Include(g => g.Teams)
                 .ThenInclude(t => t.Members)
-                .FirstOrDefault(game => game.GameId == gameId);
+                .FirstOrDefault(g => g.GameId == gameId);
 
             if (game == null)
             {
                 return NotFound();
             }
-            
-            GameDetailsViewModel gameDetailsViewModel = new GameDetailsViewModel
+
+            var gameDetailsViewModel = new GameDetailsViewModel
             {
                 GameId = game.GameId,
                 PartyId = game.PartyId,
@@ -109,41 +126,39 @@ namespace Festiv.Controllers
                 MaxPlayers = game.MaxPlayers,
                 WaitingPlayers = game.WaitingPlayers.ToList(),
                 CurrentPlayers = game.CurrentPlayers.ToList(),
-                Teams = new List<Team>(),
-                
+                Teams = game.Teams.ToList()
             };
+
             return View(gameDetailsViewModel);
         }
 
         [HttpPost("{partyId}/GameDetails/{gameId}/SignUp")]
-public async Task<IActionResult> SignUp(int partyId, int gameId, string firstName, string lastName)
-{
-    var game = context.Games
-        .Include(g => g.WaitingPlayers)
-        .FirstOrDefault(g => g.GameId == gameId);
+        public async Task<IActionResult> SignUp(int partyId, int gameId, string firstName, string lastName)
+        {
+            var game = await _context.Games
+                .Include(g => g.WaitingPlayers)
+                .FirstOrDefaultAsync(g => g.GameId == gameId);
 
-    if (game == null)
-    {
-        return NotFound();
-    }
+            if (game == null)
+            {
+                return NotFound();
+            }
 
-    var user = new User { FirstName = firstName, LastName = lastName };
-    game.WaitingPlayers.Add(user);
-    await context.SaveChangesAsync();
+            var user = new User { FirstName = firstName, LastName = lastName };
+            game.WaitingPlayers.Add(user);
+            await _context.SaveChangesAsync();
 
-    return RedirectToAction("GameDetails", new { partyId = partyId, gameId = gameId });
-}
-
+            return RedirectToAction("GameDetails", new { partyId = partyId, gameId = gameId });
+        }
 
         [HttpPost("{partyId}/GameDetails/{gameId}/RandomizeTeams")]
         public async Task<IActionResult> RandomizeTeams(int partyId, int gameId, string randomizerType)
         {
-            Game? game = context.Games
+            var game = await _context.Games
                 .Include(g => g.WaitingPlayers)
                 .Include(g => g.CurrentPlayers)
-                // .Include(t => t.Members)
                 .Include(g => g.Teams)
-                .FirstOrDefault(game => game.GameId == gameId);
+                .FirstOrDefaultAsync(g => g.GameId == gameId);
 
             if (game == null)
             {
@@ -152,7 +167,7 @@ public async Task<IActionResult> SignUp(int partyId, int gameId, string firstNam
 
             game.Teams.Clear();
 
-            if(!game.CurrentPlayers.Any())
+            if (!game.CurrentPlayers.Any())
             {
                 game.CurrentPlayers = game.WaitingPlayers.ToList();
                 game.WaitingPlayers.Clear();
@@ -169,10 +184,10 @@ public async Task<IActionResult> SignUp(int partyId, int gameId, string firstNam
                 game.Teams = GroupIntoPairs(playerToShuffle);
             }
 
-            context.Games.Update(game);
-            await context.SaveChangesAsync();
-            
-             var gameDetailsViewModel = new GameDetailsViewModel
+            _context.Games.Update(game);
+            await _context.SaveChangesAsync();
+
+            var gameDetailsViewModel = new GameDetailsViewModel
             {
                 GameId = game.GameId,
                 PartyId = game.PartyId,
@@ -187,18 +202,15 @@ public async Task<IActionResult> SignUp(int partyId, int gameId, string firstNam
             return View("GameDetails", gameDetailsViewModel);
         }
 
-        
         private List<Team> SplitIntoTwoTeams(List<User> players)
         {
             var shuffled = players.OrderBy(p => Guid.NewGuid()).ToList();
             int mid = shuffled.Count / 2;
             return new List<Team>
-             { 
-                new Team { Members = shuffled.Take(mid).ToList() }, 
+            {
+                new Team { Members = shuffled.Take(mid).ToList() },
                 new Team { Members = shuffled.Skip(mid).ToList() }
-             
-             };
-            
+            };
         }
 
         private List<Team> GroupIntoPairs(List<User> players)
@@ -208,7 +220,7 @@ public async Task<IActionResult> SignUp(int partyId, int gameId, string firstNam
 
             for (int i = 0; i < shuffled.Count; i += 2)
             {
-                var pair = new Team { Members = new List<User> {shuffled[i]} };
+                var pair = new Team { Members = new List<User> { shuffled[i] } };
                 if (i + 1 < shuffled.Count)
                 {
                     pair.Members.Add(shuffled[i + 1]);
@@ -216,6 +228,18 @@ public async Task<IActionResult> SignUp(int partyId, int gameId, string firstNam
                 pairs.Add(pair);
             }
             return pairs;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddTrackToPlaylist(string trackUri, string playlistId)
+        {
+            var accessToken = HttpContext.Session.GetString("SpotifyAccessToken");
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                return Unauthorized("Spotify access token is missing.");
+            }
+            await _spotifyService.AddTrackToPlaylist(accessToken, trackUri);
+            return RedirectToAction("PartyDetails", new { partyId = ViewBag.PartyId });
         }
     }
 }

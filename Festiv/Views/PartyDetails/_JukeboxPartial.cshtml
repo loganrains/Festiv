@@ -1,0 +1,11 @@
+@model Festiv.ViewModels.JukeboxViewModel
+
+<h2>Jukebox</h2>
+
+<form asp-controller="PartyDetails" asp-action="AddTrackToPlaylist" method="post">
+    <label for="trackUri">Track URI:</label>
+    <input type="text" id="trackUri" name="trackUri" required />
+    <input type="hidden" name="playlistId" value="@Model.PlaylistId" />
+    <button type="submit">Add to Playlist</button>
+</form>
+

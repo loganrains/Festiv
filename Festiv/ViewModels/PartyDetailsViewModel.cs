@@ -8,5 +8,7 @@ namespace Festiv.ViewModels
     {
         public Party? Party { get; set; }
         public List<Game>? Games { get; set; } = new List<Game>();
+        public string? CurrentTrack { get; set; }
+        public string? PlaylistId { get; set; }
     }
 }

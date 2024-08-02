@@ -17,7 +17,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Load configuation in appsettings.json
 var configuration = builder.Configuration;
 
-
 // MySql database configuation
    var connectionString = "server=localhost;user=festiv;password=festiv;database=festiv";
    var serverVersion = new MySqlServerVersion(new Version(8, 0, 36));
@@ -45,19 +44,22 @@ var configuration = builder.Configuration;
 
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddHttpContextAccessor();
 
 // Spotify configuration
-var spotifySettings = configuration.GetSection("Spotify").Get<SpotifySettings>();
-
-builder.Services.AddSingleton<ISpotifyClient>(ServiceProvider =>
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options => 
 {
-    var config = SpotifyClientConfig.CreateDefault()
-        .WithAuthenticator(new ClientCredentialsAuthenticator(spotifySettings.ClientId, spotifySettings.ClientSecret));
-    return new SpotifyClient(config);
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
 });
+builder.Services.AddControllersWithViews();
+
+// Register SpotifyService with HttpClient
+builder.Services.AddHttpClient<SpotifyService>();
+builder.Services.AddScoped<SpotifyService>();
 
 var app = builder.Build();
 
@@ -76,6 +78,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapRazorPages();
 app.MapControllers();

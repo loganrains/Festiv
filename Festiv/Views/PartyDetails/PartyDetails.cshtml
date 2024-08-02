@@ -38,4 +38,11 @@
     <div>
         <a asp-controller= "PartyDetails" asp-action="CreateGame" asp-route-partyId="@partyId">Create a new game</a>
     </div>
+
+    
+    <div>
+        <h2>Currently Playing</h2>
+        <p>@Model.CurrentTrack</p>
+        @await Html.PartialAsync("_JukeboxPartial", new Festiv.ViewModels.JukeboxViewModel { PlaylistId = Model.PlaylistId})
+    </div>
 </div>
