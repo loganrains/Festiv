@@ -91,8 +91,27 @@ namespace Festiv.Services
         public async Task AddTrackToPlaylist(string accessToken, string trackUri)
         {
             var spotify = new SpotifyClient(accessToken);
+            string trackId = ExtractTrackId(trackUri);
+            string formattedTrackUri = $"spotify:track:{trackId}";
+
             var playlistId = "37i9dQZF1DWXti3N4Wp5xy?si=cf044e8a63aa467c"; // Example playlist ID
-            await spotify.Playlists.AddItems(playlistId, new PlaylistAddItemsRequest(new List<string> { trackUri }));
+            await spotify.Playlists.AddItems(playlistId, new PlaylistAddItemsRequest(new List<string> { formattedTrackUri }));
+        }
+
+        private string ExtractTrackId(string trackUri)
+        {
+            if (trackUri.Contains("spotify:track:"))
+            {
+                return trackUri.Replace("spotify:track:", "");
+            }   
+            else if (trackUri.Contains("?si="))
+            {
+                return trackUri.Split("?si=")[0];
+            }
+            else
+            {   
+                return trackUri;
+            }
         }
 
         public string GetSpotifyAuthorizationUrl()
@@ -103,20 +122,19 @@ namespace Festiv.Services
 
         public async Task<string> GetTrackAsync(string trackId, string accessToken)
         {
-            var client = _httpClientFactory.CreateClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            var response = await client.GetAsync($"https://api.spotify.com/v1/tracks/{trackId}");
+           var client = _httpClientFactory.CreateClient();
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        var response = await client.GetAsync($"https://api.spotify.com/v1/tracks/{trackId}");
 
-            // Log response content
-            if (!response.IsSuccessStatusCode)
-            {
-                var responseContent = await response.Content.ReadAsStringAsync();
-                throw new HttpRequestException($"Request failed with status code {response.StatusCode}: {responseContent}");
-            }
+        if (!response.IsSuccessStatusCode)
+        {
+            var responseContent = await response.Content.ReadAsStringAsync();
+            throw new HttpRequestException($"Request failed with status code {response.StatusCode}: {responseContent}");
+        }
 
-            var content = await response.Content.ReadAsStringAsync();
-            var trackInfo = JObject.Parse(content);
-            return trackInfo["name"].ToString();
+        var content = await response.Content.ReadAsStringAsync();
+        var trackInfo = JObject.Parse(content);
+        return trackInfo["name"].ToString();
         }
 
 

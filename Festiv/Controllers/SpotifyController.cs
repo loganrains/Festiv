@@ -56,16 +56,23 @@ namespace Festiv.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddTrack(string trackUri)
+        public async Task<IActionResult> AddTrack(string trackUri, string playlistId)
         {
             var accessToken = HttpContext.Session.GetString("SpotifyAcessToken");
             if(string.IsNullOrEmpty(accessToken))
             {
                 return RedirectToAction("Index");
             }
-
-            await _spotifyService.AddTrackToPlaylist(accessToken, trackUri);
-            return RedirectToAction("Jukebox");
+            try
+            {
+                await _spotifyService.AddTrackToPlaylist(accessToken, trackUri);
+                return RedirectToAction("PartyDetails", new { partyId = ViewBag.PartyId });
+            }
+            catch (Exception ex)
+            {
+            // Log the exception (ex)
+            return StatusCode(500, "An error occurred while adding the track to the playlist.");
+            }
         }
     }
 }
