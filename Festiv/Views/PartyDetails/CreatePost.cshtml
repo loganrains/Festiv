@@ -1,0 +1,20 @@
+@model Festiv.Models.MissedConnection
+
+<form asp-action="Create" method="post">
+    <div>
+        <label asp-for="UserName"></label>
+        <input asp-for="UserName" />
+        <span asp-validation-for="UserName"></span>
+    </div>
+    <div>
+        <label asp-for="PersonDescription"></label>
+        <textarea asp-for="PersonDescription"></textarea>
+        <span asp-validation-for="PersonDescription"></span>
+    </div>
+    <div>
+        <label asp-for="ContactInfo"></label>
+        <input asp-for="ContactInfo" />
+        <span asp-validation-for="ContactInfo"></span>
+    </div>
+    <button type="submit">Submit</button>
+</form>

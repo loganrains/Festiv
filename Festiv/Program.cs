@@ -85,8 +85,19 @@ app.MapRazorPages();
 app.MapControllers();
 
 app.MapControllerRoute(
+    name: "partyDetails",
+    pattern: "PartyDetails/{partyId}",
+    defaults: new { controller = "PartyDetails", action = "PartyDetails" });
+
+app.MapControllerRoute(
+    name: "spotify",
+    pattern: "Spotify/{action}/{id?}",
+    defaults: new { controller = "Spotify", action = "Index" });
+
+app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller}/{action}/{id?}",
+    defaults: new { controller = "Home", action = "Index" });
 
 app.Run();
 

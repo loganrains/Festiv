@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 using Festiv.Models;
+using Festive.Models;
 
 namespace Festiv.ViewModels
 {
@@ -10,5 +11,6 @@ namespace Festiv.ViewModels
         public List<Game>? Games { get; set; } = new List<Game>();
         public string? CurrentTrack { get; set; }
         public string? PlaylistId { get; set; }
+        public IEnumerable<MissedConnections> MissedConnections { get; set;}
     }
 }

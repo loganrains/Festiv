@@ -11,37 +11,39 @@ namespace Festiv.Controllers
     public class SpotifyController : Controller
     {
         private readonly SpotifyService _spotifyService;
+        private object partyId;
 
         public SpotifyController(SpotifyService spotifyService)
         {
             _spotifyService = spotifyService;
         }
 
-        public IActionResult PartyDetails(string partyId)
+        public IActionResult Login(string partyId)
         {
-            return View();
-        }
-
-        public IActionResult Login()
-        {
+            Console.WriteLine($"Spotify Login {partyId}");
+            TempData["PartyId"] = partyId;
             string clientId = "5275b4abc3474605bec58bb4c9d83d23";
             string redirectUri = Url.Action("Callback", "Spotify", null, Request.Scheme);
-            string scopes ="user-read-private user-read-email";
+            string scopes = "playlist-modify-public";
             string spotifyUrl = $"https://accounts.spotify.com/authorize?client_id={clientId}&response_type=code&redirect_uri={Uri.EscapeDataString(redirectUri)}&scope={Uri.EscapeDataString(scopes)}";
 
             return Redirect(spotifyUrl);
         }
 
-
+        [HttpGet("Callback")]
         public async Task<IActionResult> Callback(string code)
-        {
-            var accessToken = await _spotifyService.GetAccessTokenAsync(code, Url.Action("Callback", "Spotify", null, Request.Scheme));
+        {  
+            string redirectUri = Url.Action("Callback", "Spotify", null, Request.Scheme);
+            var accessToken = await _spotifyService.GetAccessTokenAsync(code, redirectUri);
 
             // Save access token for use in adding tracks
             HttpContext.Session.SetString("SpotifyAccessToken", accessToken);
 
-            return RedirectToAction("PartyDetails/{partyId}");
-        }
+            partyId = TempData["PartyId"];
+
+            return Redirect($"/PartyDetails/{partyId}");
+        }   
+
 
         public IActionResult Jukebox()
         {

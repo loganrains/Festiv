@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SpotifyAPI.Web;
 using Festiv.Models;
 
 namespace Festiv.Services
@@ -13,15 +14,17 @@ namespace Festiv.Services
     public class SpotifyService
     {
         private string _accessToken;
-        private readonly string _clientId = "5275b4abc3474605bec58bb4c9d83d23";
-        private readonly string _clientSecret = "ac77b16089d94d3e8f028e77f2e4e1aa";
+        private readonly string _clientId;
+        private readonly string _clientSecret;
         private readonly string _redirectUri;
         private readonly string _playlistId;
-        private readonly HttpClient _httpClient;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConfiguration _configuration;
 
-        public SpotifyService(HttpClient httpClient, IConfiguration configuration)
+        public SpotifyService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
-            _httpClient = httpClient;
+            _httpClientFactory = httpClientFactory;
+            _configuration = configuration;
             _clientId = configuration["Spotify:ClientId"];
             _clientSecret = configuration["Spotify:ClientSecret"];
             _redirectUri = configuration["Spotify:RedirectUri"];
@@ -30,26 +33,27 @@ namespace Festiv.Services
 
         public async Task<string> GetAccessTokenAsync(string code, string redirectUri)
         {
-            var tokenRequest = new HttpRequestMessage(HttpMethod.Post, "https://accounts.spotify.com/api/token")
+            var tokenRequest = new HttpRequestMessage(HttpMethod.Post, "https://accounts.spotify.com/api/token");
+            var postData = new List<KeyValuePair<string, string>>
             {
-                Content = new FormUrlEncodedContent(new Dictionary<string, string>
-                {
-                    {"grant_type", "authorization_code"},
-                    {"code", code},
-                    {"redirect_uri", _redirectUri},
-                    {"client_id", _clientId},
-                    {"client_secret", _clientSecret}
-                })
+                new KeyValuePair<string, string>("grant_type", "authorization_code"),
+                new KeyValuePair<string, string>("code", code),
+                new KeyValuePair<string, string>("redirect_uri", redirectUri),
+                new KeyValuePair<string, string>("client_id", _clientId),
+                new KeyValuePair<string, string>("client_secret", _clientSecret)
             };
 
-            var response = await _httpClient.SendAsync(tokenRequest);
-            response.EnsureSuccessStatusCode();
-
+            tokenRequest.Content = new FormUrlEncodedContent(postData);
+    
+            var client = _httpClientFactory.CreateClient();
+            var response = await client.SendAsync(tokenRequest);
             var responseContent = await response.Content.ReadAsStringAsync();
-            var tokenResponse = JsonConvert.DeserializeObject<SpotifyTokenResponse>(responseContent);
-
-            return tokenResponse.AccessToken;
+    
+            var tokenResponse = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(responseContent);
+    
+            return tokenResponse["access_token"].ToString();
         }
+
 
         public async Task<bool> EnsureAccessTokenAsync()
         {
@@ -72,7 +76,8 @@ namespace Festiv.Services
             });
             tokenRequest.Content = content;
 
-            var response = await _httpClient.SendAsync(tokenRequest);
+            var client = _httpClientFactory.CreateClient();
+            var response = await client.SendAsync(tokenRequest);
             if (response.IsSuccessStatusCode)
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
@@ -85,9 +90,9 @@ namespace Festiv.Services
 
         public async Task AddTrackToPlaylist(string accessToken, string trackUri)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, $"https://api.spotify.com/v1/playlists/{_playlistId}/tracks?uris={trackUri}");
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            await _httpClient.SendAsync(request);
+            var spotify = new SpotifyClient(accessToken);
+            var playlistId = "37i9dQZF1DWXti3N4Wp5xy?si=cf044e8a63aa467c"; // Example playlist ID
+            await spotify.Playlists.AddItems(playlistId, new PlaylistAddItemsRequest(new List<string> { trackUri }));
         }
 
         public string GetSpotifyAuthorizationUrl()
@@ -96,28 +101,30 @@ namespace Festiv.Services
             return $"https://accounts.spotify.com/authorize?client_id={_clientId}&response_type=code&redirect_uri={Uri.EscapeDataString(_redirectUri)}&scope={Uri.EscapeDataString(scope)}";
         }
 
-    public async Task<string> GetTrackAsync(string trackId, string accessToken)
-    {
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-        var response = await _httpClient.GetAsync($"https://api.spotify.com/v1/tracks/{trackId}");
-
-        // Log response content
-        if (!response.IsSuccessStatusCode)
+        public async Task<string> GetTrackAsync(string trackId, string accessToken)
         {
-            var responseContent = await response.Content.ReadAsStringAsync();
-            throw new HttpRequestException($"Request failed with status code {response.StatusCode}: {responseContent}");
-        }
+            var client = _httpClientFactory.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            var response = await client.GetAsync($"https://api.spotify.com/v1/tracks/{trackId}");
 
-        var content = await response.Content.ReadAsStringAsync();
-        var trackInfo = JObject.Parse(content);
-        return trackInfo["name"].ToString();
-    }
+            // Log response content
+            if (!response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException($"Request failed with status code {response.StatusCode}: {responseContent}");
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+            var trackInfo = JObject.Parse(content);
+            return trackInfo["name"].ToString();
+        }
 
 
         public async Task<SpotifyTokenResponse> GetPlaylistAsync(string accessToken)
         {
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            var response = await _httpClient.GetAsync("https://api.spotify.com/v1/me/playlists");
+            var client = _httpClientFactory.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            var response = await client.GetAsync("https://api.spotify.com/v1/me/playlists");
 
             if (response.IsSuccessStatusCode)
             {

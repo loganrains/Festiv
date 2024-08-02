@@ -6,6 +6,7 @@ using Festiv.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.Elfie.Serialization;
 
 namespace Festiv.Controllers
 {
@@ -24,6 +25,7 @@ namespace Festiv.Controllers
         [HttpGet("{partyId}")]
         public async Task<IActionResult> PartyDetails(int partyId)
         {
+            Console.WriteLine($"Got here with PartyDetails controller {partyId}");
             // Fetch party and related details
             var party = await _context.Parties
                 .Include(p => p.Details)
@@ -40,23 +42,23 @@ namespace Festiv.Controllers
 
             if (string.IsNullOrEmpty(accessToken))
             {
-                // Redirect to Spotify login if the access token is missing
                 return RedirectToAction("Login", "Spotify");
             }
 
             // Fetch current track details from Spotify
-            var currentTrack = await _spotifyService.GetTrackAsync("4iV5W9uYEdYUVa79Axb7Rh", accessToken);
-
+            var trackId = "5rb9QrpfcKFHM1EUbSIurX?si=e048ed81e62345d7";
+            var currentTrack = await _spotifyService.GetTrackAsync(trackId, accessToken);
+            var playlistId = "37i9dQZF1DWXti3N4Wp5xy?si=732ec57f58c4404a";
             // Prepare view model with party details, games, and current track
+            Console.WriteLine($"Done Login {partyId}");
             var partyDetailsViewModel = new PartyDetailsViewModel
             {
                 Party = party,
                 Games = party.Games.ToList(),
                 CurrentTrack = currentTrack,
-                PlaylistId = "37i9dQZF1DWXti3N4Wp5xy?si=732ec57f58c4404a" // Set the playlist ID
+                PlaylistId = playlistId 
             };
 
-            ViewBag.PartyId = partyId;
             return View(partyDetailsViewModel);
         }
 
@@ -229,6 +231,7 @@ namespace Festiv.Controllers
             }
             return pairs;
         }
+
 
         [HttpPost]
         public async Task<IActionResult> AddTrackToPlaylist(string trackUri, string playlistId)
